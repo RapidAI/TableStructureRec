@@ -44,14 +44,11 @@ class LinelessTableRecognition:
         self.ocr = RapidOCR()
 
     def __call__(self, content: Dict[str, Any]) -> str:
+        ss = time.perf_counter()
         img = self.load_img(content)
 
-        s = time.perf_counter()
         ocr_res, _ = self.ocr(img)
-        ocr_elapse = time.perf_counter() - s
-        print(f"ocr elapse:{ocr_elapse:.5f}")
 
-        ss = time.perf_counter()
         input_info = self.preprocess(img)
         try:
             polygons, slct_logi = self.infer(input_info)
@@ -65,14 +62,13 @@ class LinelessTableRecognition:
             logi_points = self.sort_logi_by_polygons(
                 sorted_polygons, polygons, logi_points
             )
+
+            table_str = plot_html_table(logi_points, cell_box_map)
             table_elapse = time.perf_counter() - ss
-            print(f"table rec: {table_elapse:.4f}")
+            return table_str, table_elapse
         except Exception:
             logging.warning(traceback.format_exc())
-            return ""
-        else:
-            table_str = plot_html_table(logi_points, cell_box_map)
-            return table_str
+            return "", 0.0
 
     def preprocess(self, img: np.ndarray) -> Dict[str, Any]:
         height, width = img.shape[:2]
@@ -160,8 +156,9 @@ def main():
     args = parser.parse_args()
 
     table_rec = LinelessTableRecognition()
-    table_str = table_rec(args.img_path)
+    table_str, elapse = table_rec(args.img_path)
     print(table_str)
+    print(f"cost: {elapse:.5f}")
 
 
 if __name__ == "__main__":

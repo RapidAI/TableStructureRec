@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ❓ Questions
+    url: https://github.com/RapidAI/TableStructureRec/discussions/categories/q-a
+    about: Please use the community forum for help and questions regarding ProcessLaTeXFormulaTools Docs
+  - name: 💡 Feature requests and ideas
+    url: https://github.com/RapidAI/TableStructureRec/discussions/new?category=feature-requests
+    about: Please vote for and post new feature ideas in the community forum

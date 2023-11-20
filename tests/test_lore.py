@@ -30,7 +30,7 @@ def test_input_normal(img_path, table_str_len, td_nums):
     img_path = test_file_dir / img_path
     img = cv2.imread(str(img_path))
 
-    table_str = table_recog(img)
+    table_str, _ = table_recog(img)
 
     assert len(table_str) >= table_str_len
     assert table_str.count("td") == td_nums

@@ -1,0 +1,77 @@
+name: Push lineless_table_rec to pypi
+
+on:
+  push:
+    # branches: [ main ]
+    # paths:
+      # - 'label_convert/**'
+      # - 'docs/doc_whl.md'
+      # - 'setup.py'
+      # - '.github/workflows/gen_whl_to_pypi.yml'
+    tags:
+      - v*
+
+jobs:
+  UnitTesting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull latest code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+          architecture: 'x64'
+
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
+      - name: Unit testings
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+
+          wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/lineless_table_rec_models.zip
+          unzip lineless_table_rec_models.zip
+          mv lineless_table_rec_models/*.onnx lineless_table_rec/models/
+
+          pytest tests/test*.py
+
+  GenerateWHL_PushPyPi:
+    needs: UnitTesting
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+          architecture: 'x64'
+
+      - name: Run setup.py
+        run: |
+          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install wheel get_pypi_latest_version
+
+          wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/lineless_table_rec_models.zip
+          unzip lineless_table_rec_models.zip
+          mv lineless_table_rec_models/*.onnx lineless_table_rec/models/
+
+          python setup_lineless_table_rec.py bdist_wheel ${{ github.event.head_commit.message }}
+
+      - name: Publish distribution 📦 to Test PyPI
+        uses: pypa/gh-action-pypi-publish@v1.5.0
+        with:
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+          packages_dir:  dist/
+
+      # - name: Publish distribution 📦 to PyPI
+      #   uses: pypa/gh-action-pypi-publish@v1.5.0
+      #   with:
+      #     password: ${{ secrets.PYPI_API_TOKEN }}
+      #     packages_dir: dist/

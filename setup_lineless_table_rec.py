@@ -1,45 +1,50 @@
 # -*- encoding: utf-8 -*-
 # @Author: SWHL
 # @Contact: liekkaskono@163.com
-import re
 import sys
-from typing import List
+from typing import List, Union
+from pathlib import Path
+from get_pypi_latest_version import GetPyPiLatestVersion
 
 import setuptools
 
 
-def extract_version(message: str) -> str:
-    pattern = r"\d+\.(?:\d+\.)*\d+"
-    matched_versions = re.findall(pattern, message)
-    if matched_versions:
-        return matched_versions[0]
-    return ""
+def get_readme() -> str:
+    root_dir = Path(__file__).resolve().parent
+    readme_path = str(root_dir / "docs" / "doc_lineless_table_rec.md")
+    with open(readme_path, "r", encoding="utf-8") as f:
+        readme = f.read()
+    return readme
 
 
-def read_txt(txt_path: str) -> List:
-    if not isinstance(txt_path, str):
-        txt_path = str(txt_path)
-
+def read_txt(txt_path: Union[Path, str]) -> List[str]:
     with open(txt_path, "r", encoding="utf-8") as f:
-        data = list(map(lambda x: x.rstrip("\n"), f))
+        data = [v.rstrip("\n") for v in f]
     return data
 
 
 MODULE_NAME = "lineless_table_rec"
 
-if len(sys.argv) > 2:
-    argv_str = "".join(sys.argv[2:])
-    version = extract_version(argv_str)
-else:
-    version = "2."
+obtainer = GetPyPiLatestVersion()
+try:
+    latest_version = obtainer(MODULE_NAME)
+except Exception:
+    latest_version = "0.0.0"
 
+VERSION_NUM = obtainer.version_add_one(latest_version)
+
+if len(sys.argv) > 2:
+    match_str = " ".join(sys.argv[2:])
+    matched_versions = obtainer.extract_version(match_str)
+    if matched_versions:
+        VERSION_NUM = matched_versions
 sys.argv = sys.argv[:2]
 
 setuptools.setup(
     name=MODULE_NAME,
-    version=version,
+    version=VERSION_NUM,
     platforms="Any",
-    description="无线表格还原库",
+    description="",
     author="SWHL",
     author_email="liekkaskono@163.com",
     install_requires=read_txt("requirements.txt"),
