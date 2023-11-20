@@ -49,10 +49,13 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     author="SWHL",
     author_email="liekkaskono@163.com",
+    url="https://github.com/RapidAI/TableStructureRec",
+    license="Apache-2.0",
     install_requires=read_txt("requirements.txt"),
     include_package_data=True,
     packages=[MODULE_NAME, f"{MODULE_NAME}.models"],
     package_data={"": ["*.onnx"]},
+    keywords=["tsr,ocr,table-recognition"],
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
