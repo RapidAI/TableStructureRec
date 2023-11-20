@@ -24,7 +24,7 @@ Logical structure: represents the row/column relationship of cells (such as the 
 Physical structure: includes not only the logical structure, but also the cell's bounding box, content and other information, emphasizing the physical location of the cell.
 
 <div align='center'>
-   <img src="https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/TSRFramework.jpg">
+   <img src="https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/TSRFramework.jpg" width=70%>
 </div>
 
 Figure from: [Improving Table Structure Recognition with Visual-Alignment Sequential Coordinate Modeling](https://openaccess.thecvf.com/content/CVPR2023/html/Huang_Improving_Table_Structure_Recognition_With_Visual-Alignment_Sequential_Coordinate_Modeling_CVPR_2023_paper.html)
