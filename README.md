@@ -17,7 +17,7 @@
 
 
 ### Documentation
-Full documentation can be found on [docs](), in Chinese.
+Full documentation can be found on [docs](https://rapidai.github.io/TableStructureRec/docs/), in Chinese.
 
 ### Acknowledgements
 [PaddleOCR Table](https://github.com/PaddlePaddle/PaddleOCR/blob/4b17511491adcfd0f3e2970895d06814d1ce56cc/ppstructure/table/README_ch.md)

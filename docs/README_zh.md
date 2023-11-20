@@ -20,7 +20,7 @@
 
 
 ### 文档
-完整文档请移步：[docs](https://swhl.github.io/ProcessLaTeXFormulaTools/docs)
+完整文档请移步：[docs](https://rapidai.github.io/TableStructureRec/docs/)
 
 ### 致谢
 [PaddleOCR 表格识别](https://github.com/PaddlePaddle/PaddleOCR/blob/4b17511491adcfd0f3e2970895d06814d1ce56cc/ppstructure/table/README_ch.md)
@@ -31,8 +31,8 @@
 
 ### 贡献者
 <p align="left">
-  <a href="https://github.com/SWHL/ProcessLaTeXFormulaTools/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=SWHL/ProcessLaTeXFormulaTools" width="8%"/>
+  <a href="https://github.com/RapidAI/TableStructureRec/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=RapidAI/TableStructureRec" width="8%"/>
   </a>
 </p>
 
