@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docs on TableStructureRec Documentation</title>
+    <link>https://rapidai.github.io/TableStructureRec/docs/</link>
+    <description>Recent content in Docs on TableStructureRec Documentation</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 08 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rapidai.github.io/TableStructureRec/docs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>概览</title>
+      <link>https://rapidai.github.io/TableStructureRec/docs/overview/</link>
+      <pubDate>Mon, 01 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://rapidai.github.io/TableStructureRec/docs/overview/</guid>
+      <description>📊 表格结构识别 简介 link该仓库是用来对文档中表格做结构化识别的推理库，包括来自PaddleOCR的表格结构识别算法模型、来自阿里读光有线和无线表格识别算法模型等。
+该仓库将表格识别前后处理做了完善，并结合OCR，保证表格识别部分可用。</description>
+    </item>
+    
+    <item>
+      <title>快速开始</title>
+      <link>https://rapidai.github.io/TableStructureRec/docs/quickstart/</link>
+      <pubDate>Wed, 10 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://rapidai.github.io/TableStructureRec/docs/quickstart/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>在线demo</title>
+      <link>https://rapidai.github.io/TableStructureRec/docs/online_demo/</link>
+      <pubDate>Mon, 15 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://rapidai.github.io/TableStructureRec/docs/online_demo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>给作者加油</title>
+      <link>https://rapidai.github.io/TableStructureRec/docs/sponsor/</link>
+      <pubDate>Fri, 07 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://rapidai.github.io/TableStructureRec/docs/sponsor/</guid>
+      <description>写在前面 linkI like open source and AI technology because I think open source and AI will bring convenience and help to people in need, and will also make the world a better place. By donating to these projects, you can join me in making AI bring warmth and beauty to more people.
+我喜欢开源，喜欢AI技术，因为我认为开源和AI会为有需要的人带来方便和帮助，也会让这个世界变得更好。通过对这些项目的捐赠，您可以和我一道让AI为更多人带来温暖和美好。
+知识星球RapidAI私享群 link这里的提问会优先得到回答和支持，也会享受到RapidAI组织后续持续优质的服务，欢迎大家的加入。
+支付宝或微信打赏 (Alipay reward or WeChat reward) link通过支付宝或者微信给作者打赏，请写好备注。 Give the author a reward through Alipay or WeChat.</description>
+    </item>
+    
+    <item>
+      <title>常见问题</title>
+      <link>https://rapidai.github.io/TableStructureRec/docs/faq/</link>
+      <pubDate>Sat, 08 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://rapidai.github.io/TableStructureRec/docs/faq/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>更新日志</title>
+      <link>https://rapidai.github.io/TableStructureRec/docs/changelog/</link>
+      <pubDate>Sat, 08 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://rapidai.github.io/TableStructureRec/docs/changelog/</guid>
+      <description>2023-11-19 update: link 添加无线表格识别算法（LORE）的推理代码 </description>
+    </item>
+    
+  </channel>
+</rss>
