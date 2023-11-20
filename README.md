@@ -12,9 +12,22 @@
 </div>
 
 ### Introduction
+This repo is an inference library used for structured recognition of tables in documents, including table structure recognition algorithm models from PaddleOCR, wired and wireless table recognition algorithm models from Alibaba Duguang, etc.
+
+The repo has improved the pre- and post-processing of form recognition and combined with OCR to ensure that the form recognition part can be used directly.
 
 ### What is Table Structure Recognition?
+Table Structure Recognition (TSR) aims to extract the logical or physical structure of table images, thereby converting unstructured table images into machine-readable formats.
 
+Logical structure: represents the row/column relationship of cells (such as the same row, the same column) and the span information of cells.
+
+Physical structure: includes not only the logical structure, but also the cell's bounding box, content and other information, emphasizing the physical location of the cell.
+
+<div align='center'>
+   <img src="https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/TSRFramework.jpg">
+</div>
+
+Figure from: [Improving Table Structure Recognition with Visual-Alignment Sequential Coordinate Modeling](https://openaccess.thecvf.com/content/CVPR2023/html/Huang_Improving_Table_Structure_Recognition_With_Visual-Alignment_Sequential_Coordinate_Modeling_CVPR_2023_paper.html)
 
 ### Documentation
 Full documentation can be found on [docs](https://rapidai.github.io/TableStructureRec/docs/), in Chinese.
@@ -26,17 +39,12 @@ Full documentation can be found on [docs](https://rapidai.github.io/TableStructu
 
 [LORE](https://www.modelscope.cn/models/damo/cv_resnet-transformer_table-structure-recognition_lore/summary)
 
-### Code Contributors
-<p align="left">
-  <a href="https://github.com/RapidAI/TableStructureRec/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=RapidAI/TableStructureRec" width="8%"/>
-  </a>
-</p>
 
 ### Contributing
-- Pull requests are welcome. For major changes, please open an issue first
+Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
-- Please make sure to update tests as appropriate.
+
+Please make sure to update tests as appropriate.
 
 ### [Sponsor](https://rapidai.github.io/Knowledge-QA-LLM/docs/sponsor/)
 If you want to sponsor the project, you can directly click the **Buy me a coffee** image, please write a note (e.g. your github account name) to facilitate adding to the sponsorship list below.
