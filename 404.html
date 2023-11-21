@@ -16,6 +16,31 @@
     
 
 
+
+
+
+    
+    
+
+    
+    
+
+    
+    
+        
+        
+            
+                
+            
+                
+            
+                
+            
+        
+
+
+
+
 <html lang="en-us" dir="ltr"><head>
     <meta charset="utf-8" />
     <title>TableStructureRec Documentation</title>
@@ -52,7 +77,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
     <link href="https://fonts.googleapis.com/css?family=Inter:300,400,600,700|Fira+Code:500,700&display=block" rel="stylesheet">
 
-    <link rel="stylesheet" href="/TableStructureRec/scss/style.min.6b64a5235d8d514196725e9d83ba69976d83035d04da47902aaa654606b9ca5c59ec04bd9353e328155f17f2c60a8b1f.css" integrity="sha384-a2SlI12NUUGWcl6dg7ppl22DA10E2keQKqplRga5ylxZ7AS9k1PjKBVfF/LGCosf"/>
+    <link rel="stylesheet" href="/TableStructureRec/scss/style.min.ae570d1fdd616e6efbf7ce036e17b8a895081d102a05c3b18634cf62913e05d6bee2891650e9463131cfe295c7b5de6e.css" integrity="sha384-rlcNH91hbm77984Dbhe4qJUIHRAqBcOxhjTPYpE&#43;Bda&#43;4okWUOlGMTHP4pXHtd5u"/>
     
     
     
@@ -176,28 +201,19 @@
 
         
             <script type="text/javascript" src="https://rapidai.github.io/TableStructureRec/js/bundle.min.d26bada42aacabf0a605636aba0bce9543bb24ed6b0f215dfa05077278d571a26b3e2cea8da2843e8256ffc49825559c.js" integrity="sha384-0mutpCqsq/CmBWNqugvOlUO7JO1rDyFd&#43;gUHcnjVcaJrPizqjaKEPoJW/8SYJVWc"></script>
+
         
-            <script>
-                
-                const viewers = document.querySelectorAll(".image-compare");
-                let configs = [
-                    
-                        
-                            {"addCircle":true,"addCircleBlur":false,"labelOptions":{"after":"Light","before":"Dark","onHover":false},"showLabels":true,"startingPoint":50},
-                        
-                    
-                        
-                            {"addCircle":true,"addCircleBlur":false,"controlColor":"#3C4257","labelOptions":{"after":"Life Saver","before":"Inter","onHover":false},"showLabels":true,"startingPoint":25},
-                        
-                    
-                        
-                            {"addCircle":true,"addCircleBlur":true,"labelOptions":{"after":"Cardinal","before":"Blue","onHover":false},"showLabels":true,"startingPoint":25},
-                        
-                    
-                ];
-                viewers.forEach((element, i) => {
+        
+        <script>
+            const viewers = document.querySelectorAll(".image-compare");
+            let configs = [
+                {"addCircle":true,"addCircleBlur":false,"labelOptions":{"after":"Light","before":"Dark","onHover":false},"showLabels":true,"startingPoint":50},{"addCircle":true,"addCircleBlur":false,"controlColor":"#3C4257","labelOptions":{"after":"Life Saver","before":"Inter","onHover":false},"showLabels":true,"startingPoint":25},{"addCircle":true,"addCircleBlur":true,"labelOptions":{"after":"Cardinal","before":"Blue","onHover":false},"showLabels":true,"startingPoint":25}
+            ];
+            viewers.forEach((element, i) => {
                 let view = new ImageCompare(element, configs[i]).mount();
-                });
-            </script>
+            });
+        </script>
+        
+
     </body>
 </html>

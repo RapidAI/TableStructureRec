@@ -18,7 +18,7 @@
 
 <html lang="en-us"><head>
     <meta charset="utf-8" />
-    <title>更新日志 | TableStructureRec Documentation</title>
+    <title>LORE: 无线表格结构识别算法 | TableStructureRec Documentation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Documentation, Hugo, Hugo Theme, Bootstrap" />
     <meta name="author" content="Colin Wilson - Lotus Labs" />
@@ -32,15 +32,15 @@
 <link rel="icon" type="image/png" sizes="32x32" href="https://rapidai.github.io/TableStructureRec/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://rapidai.github.io/TableStructureRec/favicon-16x16.png">
 <link rel="manifest" crossorigin="use-credentials" href="https://rapidai.github.io/TableStructureRec/site.webmanifest">
-<meta property="og:title" content="更新日志" />
-<meta property="og:description" content="2023-11-20 update: link 发布lineless_table_rec==0.0.1包 2023-11-19 update: link 添加无线表格识别算法（LORE）的推理代码 " />
+<meta property="og:title" content="LORE: 无线表格结构识别算法" />
+<meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://rapidai.github.io/TableStructureRec/docs/changelog/" /><meta property="og:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_9482349035022799562.png"/><meta property="article:section" content="docs" />
+<meta property="og:url" content="https://rapidai.github.io/TableStructureRec/docs/blog/lineless_table_rec/" /><meta property="og:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_9741811481529021646.png"/><meta property="article:section" content="docs" />
 
 <meta property="article:modified_time" content="2023-11-21T09:41:44+08:00" /><meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_9482349035022799562.png"/>
-<meta name="twitter:title" content="更新日志"/>
-<meta name="twitter:description" content="2023-11-20 update: link 发布lineless_table_rec==0.0.1包 2023-11-19 update: link 添加无线表格识别算法（LORE）的推理代码 "/>
+<meta name="twitter:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_9741811481529021646.png"/>
+<meta name="twitter:title" content="LORE: 无线表格结构识别算法"/>
+<meta name="twitter:description" content=""/>
 
     
     <script>(()=>{var t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,e=localStorage.getItem("theme");t&&e===null&&(localStorage.setItem("theme","dark"),document.documentElement.setAttribute("data-dark-mode","")),t&&e==="dark"&&document.documentElement.setAttribute("data-dark-mode",""),e==="dark"&&document.documentElement.setAttribute("data-dark-mode","")})()</script>
@@ -135,17 +135,17 @@
                 
                     
                     
-                        <li class="sidebar-dropdown  ">
+                        <li class="sidebar-dropdown  current active">
                             <button class="btn">
                                 <i class="material-icons me-2">article</i>
                                 博客
                             </button>
-                            <div class="sidebar-submenu ">
+                            <div class="sidebar-submenu d-block">
                                 <ul>
                                     
                                         
                                         
-                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/lineless_table_rec/">LORE: 无线表格结构识别算法</a></li>
+                                            <li class="current "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/lineless_table_rec/">LORE: 无线表格结构识别算法</a></li>
                                         
                                     
                                 </ul>
@@ -177,7 +177,7 @@
                 
                     
                         
-                        <li class="current">
+                        <li class="">
                             <a class="sidebar-root-link" href="https://rapidai.github.io/TableStructureRec/docs/changelog/">
                                 <i class="material-icons me-2">update</i>
                                 
@@ -331,10 +331,18 @@
                     <meta itemprop="position" content='1' />
                 </li>
             
+            
+                <li class="breadcrumb-item text-capitalize" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a itemprop="item" href="/TableStructureRec/docs/blog/">
+                        <span itemprop="name">博客</span>
+                    </a>
+                    <meta itemprop="position" content='2' />
+                </li>
+            
         
             <li class="breadcrumb-item text-capitalize active" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <span itemprop="name">更新日志</span>
-                <meta itemprop="position" content='2' />
+                <span itemprop="name">LORE: 无线表格结构识别算法</span>
+                <meta itemprop="position" content='3' />
             </li>
         
     </ul>
@@ -342,56 +350,22 @@
                                     
                                     <div class="row flex-xl-nowrap">
                                         
-                                        <div class="docs-toc col-xl-3    d-xl-block"><toc>
+                                        <div class="docs-toc col-xl-3  visually-hidden  d-xl-block"><toc>
     <div class="fw-bold text-uppercase mb-2">On this page</div>
-    <nav id="toc">
-  <ul>
-    <li>
-      <ul>
-        <li>
-          <ul>
-            <li>
-              <ul>
-                <li><a href="#2023-11-20-update">2023-11-20 update:</a></li>
-                <li><a href="#2023-11-19-update">2023-11-19 update:</a></li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</nav>
+    <nav id="toc"></nav>
     </toc></div>
                                         
                                         
-                                        <div class="docs-toc-mobile    d-print-none d-xl-none">
+                                        <div class="docs-toc-mobile  visually-hidden  d-print-none d-xl-none">
                                             <button id="toc-dropdown-btn" class="btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-offset="0,0" aria-expanded="false">
                                                 Table of Contents
                                             </button>
-<nav id="toc-mobile">
-  <ul class="dropdown-menu">
-    <li>
-      <ul>
-        <li>
-          <ul>
-            <li>
-              <ul>
-                <li><a href="#2023-11-20-update">2023-11-20 update:</a></li>
-                <li><a href="#2023-11-19-update">2023-11-19 update:</a></li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</nav></div>
-                                        <div class="docs-content col-12 col-xl-9 mt-0">
+<nav id="toc-mobile"></nav></div>
+                                        <div class="docs-content col-12  mt-0">
                                             <div class="mb-0 d-flex">
                                                 
                                                 <h1 class="content-title mb-0">
-                                                    更新日志
+                                                    LORE: 无线表格结构识别算法
                                                     
                                                 </h1>
                                             </div>
@@ -402,13 +376,7 @@
                                                 
     
     <div data-prismjs-copy="" data-prismjs-copy-success="" data-prismjs-copy-error="">
-        <h4 id="2023-11-20-update">2023-11-20 update: <a href="#2023-11-20-update" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h4><ul>
-<li>发布<code>lineless_table_rec==0.0.1</code>包</li>
-</ul>
-<h4 id="2023-11-19-update">2023-11-19 update: <a href="#2023-11-19-update" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h4><ul>
-<li>添加无线表格识别算法（LORE）的推理代码</li>
-</ul>
-
+        
     </div>
 
     
@@ -427,7 +395,7 @@
 
 <div class="gitinfo d-flex flex-wrap justify-content-between align-items-center opacity-85 pt-3">
     <div id="edit-this-page" class="mt-1">
-        <a href="https://github.com/RapidAI/TableStructureRec/blob/main/content/docs/changelog.md" alt="更新日志" rel="noopener noreferrer" target="_blank">
+        <a href="https://github.com/RapidAI/TableStructureRec/blob/main/content/docs/blog/lineless_table_rec.md" alt="LORE: 无线表格结构识别算法" rel="noopener noreferrer" target="_blank">
             
             <span class="me-1 align-text-bottom">
                 
@@ -463,11 +431,22 @@
 
 	<div class="row flex-xl-nowrap ">
 	<div class="col-sm-6 pt-2 doc-next">
-		<a href="/TableStructureRec/docs/faq/">
+		<a href="/TableStructureRec/docs/install_usage/lineless_table_rec/">
 			<div class="card h-100 my-1">
 				<div class="card-body py-2">
-                    <p class="card-title fs-5 fw-semibold lh-base mb-0"><i class="material-icons align-middle">navigate_before</i> 常见问题</p>
+                    <p class="card-title fs-5 fw-semibold lh-base mb-0"><i class="material-icons align-middle">navigate_before</i> lineless_table_rec</p>
 					<p class="card-text ms-2"></p>
+					
+				</div>
+			</div>
+		</a>
+        </div>
+	<div class="col-sm-6 pt-2 doc-prev">
+		<a class="ms-auto" href="/TableStructureRec/docs/sponsor/">
+			<div class="card h-100 my-1 text-end">
+				<div class="card-body py-2">
+                    <p class="card-title fs-5 fw-semibold lh-base mb-0">给作者加油 <i class="material-icons align-middle">navigate_next</i></p>
+					<p class="card-text me-2"></p>
 					
 				</div>
 			</div>

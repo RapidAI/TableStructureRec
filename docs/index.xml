@@ -6,7 +6,7 @@
     <description>Recent content in Docs on TableStructureRec Documentation</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rapidai.github.io/TableStructureRec/docs/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 21 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rapidai.github.io/TableStructureRec/docs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>概览</title>
       <link>https://rapidai.github.io/TableStructureRec/docs/overview/</link>
@@ -15,15 +15,6 @@
       <guid>https://rapidai.github.io/TableStructureRec/docs/overview/</guid>
       <description>📊 表格结构识别 简介 link该仓库是用来对文档中表格做结构化识别的推理库，包括来自PaddleOCR的表格结构识别算法模型、来自阿里读光有线和无线表格识别算法模型等。
 该仓库将表格识别前后处理做了完善，并结合OCR，保证表格识别部分可用。</description>
-    </item>
-    
-    <item>
-      <title>快速开始</title>
-      <link>https://rapidai.github.io/TableStructureRec/docs/quickstart/</link>
-      <pubDate>Wed, 10 Aug 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://rapidai.github.io/TableStructureRec/docs/quickstart/</guid>
-      <description></description>
     </item>
     
     <item>
@@ -62,7 +53,7 @@
       <pubDate>Sat, 08 Oct 2022 00:00:00 +0000</pubDate>
       
       <guid>https://rapidai.github.io/TableStructureRec/docs/changelog/</guid>
-      <description>2023-11-19 update: link 添加无线表格识别算法（LORE）的推理代码 </description>
+      <description>2023-11-20 update: link 发布lineless_table_rec==0.0.1包 2023-11-19 update: link 添加无线表格识别算法（LORE）的推理代码 </description>
     </item>
     
   </channel>

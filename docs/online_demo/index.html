@@ -104,17 +104,6 @@
                 
                     
                         
-                        <li class="">
-                            <a class="sidebar-root-link" href="https://rapidai.github.io/TableStructureRec/docs/quickstart/">
-                                <i class="material-icons me-2">rocket_launch</i>
-                                
-                                快速开始
-                            </a>
-                        </li>
-                    
-                
-                    
-                        
                         <li class="current">
                             <a class="sidebar-root-link" href="https://rapidai.github.io/TableStructureRec/docs/online_demo/">
                                 <i class="material-icons me-2">language</i>
@@ -125,13 +114,42 @@
                     
                 
                     
-                        
-                        <li class="">
-                            <a class="sidebar-root-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/">
+                    
+                        <li class="sidebar-dropdown  ">
+                            <button class="btn">
+                                <i class="material-icons me-2">package</i>
+                                安装及使用
+                            </button>
+                            <div class="sidebar-submenu ">
+                                <ul>
+                                    
+                                        
+                                        
+                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/install_usage/lineless_table_rec/">lineless_table_rec</a></li>
+                                        
+                                    
+                                </ul>
+                            </div>
+                        </li>
+                    
+                
+                    
+                    
+                        <li class="sidebar-dropdown  ">
+                            <button class="btn">
                                 <i class="material-icons me-2">article</i>
-                                
                                 博客
-                            </a>
+                            </button>
+                            <div class="sidebar-submenu ">
+                                <ul>
+                                    
+                                        
+                                        
+                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/lineless_table_rec/">LORE: 无线表格结构识别算法</a></li>
+                                        
+                                    
+                                </ul>
+                            </div>
                         </li>
                     
                 
@@ -405,21 +423,21 @@
 
 	<div class="row flex-xl-nowrap ">
 	<div class="col-sm-6 pt-2 doc-next">
-		<a href="/TableStructureRec/docs/quickstart/">
+		<a href="/TableStructureRec/docs/overview/">
 			<div class="card h-100 my-1">
 				<div class="card-body py-2">
-                    <p class="card-title fs-5 fw-semibold lh-base mb-0"><i class="material-icons align-middle">navigate_before</i> 快速开始</p>
-					<p class="card-text ms-2">故事的开始，只需3步。</p>
+                    <p class="card-title fs-5 fw-semibold lh-base mb-0"><i class="material-icons align-middle">navigate_before</i> 概览</p>
+					<p class="card-text ms-2"></p>
 					
 				</div>
 			</div>
 		</a>
         </div>
 	<div class="col-sm-6 pt-2 doc-prev">
-		<a class="ms-auto" href="/TableStructureRec/docs/sponsor/">
+		<a class="ms-auto" href="/TableStructureRec/docs/install_usage/lineless_table_rec/">
 			<div class="card h-100 my-1 text-end">
 				<div class="card-body py-2">
-                    <p class="card-title fs-5 fw-semibold lh-base mb-0">给作者加油 <i class="material-icons align-middle">navigate_next</i></p>
+                    <p class="card-title fs-5 fw-semibold lh-base mb-0">lineless_table_rec <i class="material-icons align-middle">navigate_next</i></p>
 					<p class="card-text me-2"></p>
 					
 				</div>
@@ -643,6 +661,20 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
     
@@ -661,15 +693,6 @@
     index.add(
             {
                 id:  1 ,
-                href: "\/TableStructureRec\/docs\/quickstart\/",
-                title: "快速开始",
-                description: "故事的开始，只需3步。",
-                content: ""
-            }
-        );
-    index.add(
-            {
-                id:  2 ,
                 href: "\/TableStructureRec\/docs\/online_demo\/",
                 title: "在线demo",
                 description: "",
@@ -678,7 +701,25 @@
         );
     index.add(
             {
+                id:  2 ,
+                href: "\/TableStructureRec\/docs\/install_usage\/",
+                title: "安装及使用",
+                description: "",
+                content: ""
+            }
+        );
+    index.add(
+            {
                 id:  3 ,
+                href: "\/TableStructureRec\/docs\/install_usage\/lineless_table_rec\/",
+                title: "lineless_table_rec",
+                description: "简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。 在这里，我门做的工作主要包括以下两点： 将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 from lineless_table_rec import LinelessTableRecognition engine = LinelessTableRecognition() img_path = \"tests/test_files/lineless_table_recognition.jpg\" table_str, elapse = engine(img_path) print(table_str) print(elapse) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） 姓名 年龄 性别 身高/m 体重/kg BMI/(kg/m²) Duke 34 男 1.",
+                content: " 简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。\n在这里，我门做的工作主要包括以下两点：\n将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 from lineless_table_rec import LinelessTableRecognition engine = LinelessTableRecognition() img_path = \"tests/test_files/lineless_table_recognition.jpg\" table_str, elapse = engine(img_path) print(table_str) print(elapse) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） 姓名 年龄 性别 身高/m 体重/kg BMI/(kg/m²) Duke 34 男 1.74 70 23 Ella 26 女 1.60 58 23 Eartha 女 1.34 29 16 Thelonious 6 男 1.07 17 15 TARO 22 男 1.728 65 21.7 HANAKO 22 女 1.60 53 20.7 NARMAN 38 男 1.76 73 NAOMI 23 女 1.63 60 "
+            }
+        );
+    index.add(
+            {
+                id:  4 ,
                 href: "\/TableStructureRec\/docs\/blog\/",
                 title: "博客",
                 description: "",
@@ -687,7 +728,16 @@
         );
     index.add(
             {
-                id:  4 ,
+                id:  5 ,
+                href: "\/TableStructureRec\/docs\/blog\/lineless_table_rec\/",
+                title: "LORE: 无线表格结构识别算法",
+                description: "",
+                content: ""
+            }
+        );
+    index.add(
+            {
+                id:  6 ,
                 href: "\/TableStructureRec\/docs\/sponsor\/",
                 title: "给作者加油",
                 description: "写在前面 linkI like open source and AI technology because I think open source and AI will bring convenience and help to people in need, and will also make the world a better place. By donating to these projects, you can join me in making AI bring warmth and beauty to more people.\n我喜欢开源，喜欢AI技术，因为我认为开源和AI会为有需要的人带来方便和帮助，也会让这个世界变得更好。通过对这些项目的捐赠，您可以和我一道让AI为更多人带来温暖和美好。\n知识星球RapidAI私享群 link这里的提问会优先得到回答和支持，也会享受到RapidAI组织后续持续优质的服务，欢迎大家的加入。\n支付宝或微信打赏 (Alipay reward or WeChat reward) link通过支付宝或者微信给作者打赏，请写好备注。 Give the author a reward through Alipay or WeChat.",
@@ -696,7 +746,7 @@
         );
     index.add(
             {
-                id:  5 ,
+                id:  7 ,
                 href: "\/TableStructureRec\/docs\/faq\/",
                 title: "常见问题",
                 description: "",
@@ -705,16 +755,16 @@
         );
     index.add(
             {
-                id:  6 ,
+                id:  8 ,
                 href: "\/TableStructureRec\/docs\/changelog\/",
                 title: "更新日志",
-                description: "2023-11-19 update: link 添加无线表格识别算法（LORE）的推理代码 ",
-                content: "2023-11-19 update: link 添加无线表格识别算法（LORE）的推理代码 "
+                description: "2023-11-20 update: link 发布lineless_table_rec==0.0.1包 2023-11-19 update: link 添加无线表格识别算法（LORE）的推理代码 ",
+                content: "2023-11-20 update: link 发布lineless_table_rec==0.0.1包 2023-11-19 update: link 添加无线表格识别算法（LORE）的推理代码 "
             }
         );
     index.add(
             {
-                id:  7 ,
+                id:  9 ,
                 href: "\/TableStructureRec\/docs\/",
                 title: "Docs",
                 description: "",
