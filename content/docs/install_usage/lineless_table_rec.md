@@ -3,7 +3,7 @@ weight: 3510
 lastmod: "2023-11-21"
 draft: false
 author: "SWHL"
-title: "lineless_table_rec"
+title: "（无线表格结构识别）lineless_table_rec"
 icon: "table"
 toc: true
 description: ""
@@ -16,12 +16,15 @@ description: ""
   <a href="https://pypi.org/project/lineless-table-rec/"><img alt="PyPI" src="https://img.shields.io/pypi/v/lineless-table-rec"></a>
 </p>
 
+
 ### 简介
 `lineless_table_rec`库源于[阿里读光-LORE无线表格结构识别模型](https://www.modelscope.cn/models/damo/cv_resnet-transformer_table-structure-recognition_lore/summary)。
 
-在这里，我门做的工作主要包括以下两点：
+在这里，我们做的工作主要包括以下两点：
 1. 将模型转换为ONNX格式，便于部署
 2. 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容
+
+{{< alert context="info" text="该库仅提供推理代码，如有训练模型需求，请移步[LORE-TSR](https://github.com/AlibabaResearch/AdvancedLiterateMachinery/tree/main/DocumentUnderstanding/LORE-TSR)" />}}
 
 ### 安装
 ```bash {linenos=table}
