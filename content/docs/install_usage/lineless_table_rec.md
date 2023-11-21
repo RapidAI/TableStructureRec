@@ -6,7 +6,7 @@ author: "SWHL"
 title: "lineless_table_rec"
 icon: "table"
 toc: true
-description: ""‘
+description: ""
 ---
 
 <p>
