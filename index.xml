@@ -27,14 +27,15 @@
     </item>
     
     <item>
-      <title>lineless_table_rec</title>
+      <title>（无线表格结构识别）lineless_table_rec</title>
       <link>https://rapidai.github.io/TableStructureRec/docs/install_usage/lineless_table_rec/</link>
       <pubDate>Tue, 21 Nov 2023 00:00:00 +0000</pubDate>
       
       <guid>https://rapidai.github.io/TableStructureRec/docs/install_usage/lineless_table_rec/</guid>
       <description>简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。
-在这里，我门做的工作主要包括以下两点：
-将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 from lineless_table_rec import LinelessTableRecognition engine = LinelessTableRecognition() img_path = &amp;#34;tests/test_files/lineless_table_recognition.jpg&amp;#34; table_str, elapse = engine(img_path) print(table_str) print(elapse) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） &amp;lt;html&amp;gt; &amp;lt;body&amp;gt; &amp;lt;table&amp;gt; &amp;lt;tbody&amp;gt; &amp;lt;tr&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;姓名&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;年龄&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;性别&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;身高/m&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;体重/kg&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;BMI/(kg/m²)&amp;lt;/td&amp;gt; &amp;lt;/tr&amp;gt; &amp;lt;tr&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;Duke&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;34&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;男&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;1.</description>
+在这里，我们做的工作主要包括以下两点：
+将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR
+安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 from lineless_table_rec import LinelessTableRecognition engine = LinelessTableRecognition() img_path = &amp;#34;tests/test_files/lineless_table_recognition.jpg&amp;#34; table_str, elapse = engine(img_path) print(table_str) print(elapse) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） &amp;lt;html&amp;gt; &amp;lt;body&amp;gt; &amp;lt;table&amp;gt; &amp;lt;tbody&amp;gt; &amp;lt;tr&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;姓名&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;年龄&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;性别&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;身高/m&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;体重/kg&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;BMI/(kg/m²)&amp;lt;/td&amp;gt; &amp;lt;/tr&amp;gt; &amp;lt;tr&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;Duke&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;34&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;男&amp;lt;/td&amp;gt; &amp;lt;td rowspan=&amp;#34;1&amp;#34; colspan=&amp;#34;1&amp;#34;&amp;gt;1.</description>
     </item>
     
     <item>
