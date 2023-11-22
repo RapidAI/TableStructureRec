@@ -1,15 +1,12 @@
-name: Push lineless_table_rec to pypi
+name: Push wired_table_rec to pypi
 
 on:
   push:
-    # branches: [ main ]
-    # paths:
-      # - 'label_convert/**'
-      # - 'docs/doc_whl.md'
-      # - 'setup.py'
-      # - '.github/workflows/gen_whl_to_pypi.yml'
-    tags:
-      - v*
+    branches: [ main ]
+    paths:
+      - 'wired_table_rec/**'
+    # tags:
+    #   - v*
 
 jobs:
   UnitTesting:
