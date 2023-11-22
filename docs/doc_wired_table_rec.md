@@ -1,0 +1,1 @@
+### See [Documentation](https://rapidai.github.io/TableStructureRec/docs/install_usage/wired_table_rec/)
