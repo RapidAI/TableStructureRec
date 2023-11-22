@@ -25,7 +25,7 @@ Cycle-CenterNet算法来自论文[Parsing Table Structure in the Wild](https://a
 3）第二步的拼接将单元格从“离散”变为“连续”，因此用后处理算法获得单元格的行列信息。
 
 <div align="center">
-    <img src="https://github.com/wangwen-whu/WTW-Dataset/blob/7a9c00f7d22a10d37d27b812608839c97596d966/demo/20210816_210413.gif">
+    <img src="https://raw.githubusercontent.com/wangwen-whu/WTW-Dataset/7a9c00f7d22a10d37d27b812608839c97596d966/demo/20210816_210413.gif">
 </div>
 
 ### 参考资料
