@@ -3,7 +3,7 @@ weight: 3510
 lastmod: "2023-11-21"
 draft: false
 author: "SWHL"
-title: "（无线表格结构识别）lineless_table_rec"
+title: "lineless_table_rec"
 icon: "table"
 toc: true
 description: ""
