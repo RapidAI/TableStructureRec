@@ -9,6 +9,9 @@ toc: true
 description: ""
 ---
 
+#### 2023-11-22 update:
+- 发布`wired_table_rec==0.0.1`包
+
 #### 2023-11-20 update:
 - 发布`lineless_table_rec==0.0.1`包
 
