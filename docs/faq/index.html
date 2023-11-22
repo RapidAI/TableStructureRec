@@ -150,12 +150,12 @@
                                     
                                         
                                         
-                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/wired_table_rec/">Cycle-CenterNet: 无线表格结构识别算法</a></li>
+                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/lineless_table_rec/">LORE: 无线表格结构识别算法</a></li>
                                         
                                     
                                         
                                         
-                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/lineless_table_rec/">LORE: 无线表格结构识别算法</a></li>
+                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/wired_table_rec/">Cycle-CenterNet: 有线表格结构识别算法</a></li>
                                         
                                     
                                 </ul>
@@ -762,19 +762,19 @@
     index.add(
             {
                 id:  6 ,
-                href: "\/TableStructureRec\/docs\/blog\/wired_table_rec\/",
-                title: "Cycle-CenterNet: 无线表格结构识别算法",
-                description: "引言 linkCycle-CenterNet算法来自论文Parsing Table Structure in the Wild，是阿里的一篇工作。\n该工作主要解决拍照和截屏场景下有线结构识别问题。\n基本原理 link本模型是以自底向上的方式:\n1）基于单元格中心点回归出到4个顶点的距离，解码出单元格bbox；同时基于单元格顶点，回归出到共用该顶点的单元格的中心点距离，解码出gbox。\n2）基于gbox(group box)，将离散的bbox拼接起来得到精准完整的电子表格；\n3）第二步的拼接将单元格从“离散”变为“连续”，因此用后处理算法获得单元格的行列信息。\n参考资料 link 读光-表格结构识别-有线表格 ",
-                content: "引言 linkCycle-CenterNet算法来自论文Parsing Table Structure in the Wild，是阿里的一篇工作。\n该工作主要解决拍照和截屏场景下有线结构识别问题。\n基本原理 link本模型是以自底向上的方式:\n1）基于单元格中心点回归出到4个顶点的距离，解码出单元格bbox；同时基于单元格顶点，回归出到共用该顶点的单元格的中心点距离，解码出gbox。\n2）基于gbox(group box)，将离散的bbox拼接起来得到精准完整的电子表格；\n3）第二步的拼接将单元格从“离散”变为“连续”，因此用后处理算法获得单元格的行列信息。\n参考资料 link 读光-表格结构识别-有线表格 "
+                href: "\/TableStructureRec\/docs\/blog\/lineless_table_rec\/",
+                title: "LORE: 无线表格结构识别算法",
+                description: "引言 linkLORE算法来自论文LORE: Logical Location Regression Network for Table Structure Recognition，是阿里的一篇工作。\n该工作主要解决无线表格结构识别问题，具体包括文档中涉及到一些三线表之类表格结构识别。对于有线的表格支持较差。\n基本原理 link主要原理为:\n1）基于无线单元格中心点回归出到4个顶点的距离，解码出单元格bbox；\n2）结合视觉特征与单元格bbox信息，采用两个级联回归器兼顾全局与局部注意力，直接对单元格的逻辑坐标进行回归；\n3）模型训练时显式利用单元格间与单元格内逻辑约束对模型进行优化。\n参考资料 link 读光-表格结构识别-无线表格 ",
+                content: "引言 linkLORE算法来自论文LORE: Logical Location Regression Network for Table Structure Recognition，是阿里的一篇工作。\n该工作主要解决无线表格结构识别问题，具体包括文档中涉及到一些三线表之类表格结构识别。对于有线的表格支持较差。\n基本原理 link主要原理为:\n1）基于无线单元格中心点回归出到4个顶点的距离，解码出单元格bbox；\n2）结合视觉特征与单元格bbox信息，采用两个级联回归器兼顾全局与局部注意力，直接对单元格的逻辑坐标进行回归；\n3）模型训练时显式利用单元格间与单元格内逻辑约束对模型进行优化。\n参考资料 link 读光-表格结构识别-无线表格 "
             }
         );
     index.add(
             {
                 id:  7 ,
-                href: "\/TableStructureRec\/docs\/blog\/lineless_table_rec\/",
-                title: "LORE: 无线表格结构识别算法",
-                description: "引言 linkLORE算法来自论文LORE: Logical Location Regression Network for Table Structure Recognition，是阿里的一篇工作。\n该工作主要解决无线表格结构识别问题，具体包括文档中涉及到一些三线表之类表格结构识别。对于有线的表格支持较差。\n基本原理 link主要原理为:\n1）基于无线单元格中心点回归出到4个顶点的距离，解码出单元格bbox；\n2）结合视觉特征与单元格bbox信息，采用两个级联回归器兼顾全局与局部注意力，直接对单元格的逻辑坐标进行回归；\n3）模型训练时显式利用单元格间与单元格内逻辑约束对模型进行优化。\n参考资料 link 读光-表格结构识别-无线表格 ",
-                content: "引言 linkLORE算法来自论文LORE: Logical Location Regression Network for Table Structure Recognition，是阿里的一篇工作。\n该工作主要解决无线表格结构识别问题，具体包括文档中涉及到一些三线表之类表格结构识别。对于有线的表格支持较差。\n基本原理 link主要原理为:\n1）基于无线单元格中心点回归出到4个顶点的距离，解码出单元格bbox；\n2）结合视觉特征与单元格bbox信息，采用两个级联回归器兼顾全局与局部注意力，直接对单元格的逻辑坐标进行回归；\n3）模型训练时显式利用单元格间与单元格内逻辑约束对模型进行优化。\n参考资料 link 读光-表格结构识别-无线表格 "
+                href: "\/TableStructureRec\/docs\/blog\/wired_table_rec\/",
+                title: "Cycle-CenterNet: 有线表格结构识别算法",
+                description: "引言 linkCycle-CenterNet算法来自论文Parsing Table Structure in the Wild，是阿里的一篇工作。\n该工作主要解决拍照和截屏场景下有线结构识别问题。\n基本原理 link本模型是以自底向上的方式:\n1）基于单元格中心点回归出到4个顶点的距离，解码出单元格bbox；同时基于单元格顶点，回归出到共用该顶点的单元格的中心点距离，解码出gbox。\n2）基于gbox(group box)，将离散的bbox拼接起来得到精准完整的电子表格；\n3）第二步的拼接将单元格从“离散”变为“连续”，因此用后处理算法获得单元格的行列信息。\n参考资料 link 读光-表格结构识别-有线表格 ",
+                content: "引言 linkCycle-CenterNet算法来自论文Parsing Table Structure in the Wild，是阿里的一篇工作。\n该工作主要解决拍照和截屏场景下有线结构识别问题。\n基本原理 link本模型是以自底向上的方式:\n1）基于单元格中心点回归出到4个顶点的距离，解码出单元格bbox；同时基于单元格顶点，回归出到共用该顶点的单元格的中心点距离，解码出gbox。\n2）基于gbox(group box)，将离散的bbox拼接起来得到精准完整的电子表格；\n3）第二步的拼接将单元格从“离散”变为“连续”，因此用后处理算法获得单元格的行列信息。\n参考资料 link 读光-表格结构识别-有线表格 "
             }
         );
     index.add(
