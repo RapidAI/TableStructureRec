@@ -18,6 +18,10 @@ This repo is an inference library used for structured recognition of tables in d
 
 The repo has improved the pre- and post-processing of form recognition and combined with OCR to ensure that the form recognition part can be used directly.
 
+The repo will continue to focus on the field of table recognition, integrate the latest and most useful table recognition algorithms, and strive to create the most valuable table recognition tool library.
+
+Welcome everyone to continue to pay attention.
+
 ### What is Table Structure Recognition?
 Table Structure Recognition (TSR) aims to extract the logical or physical structure of table images, thereby converting unstructured table images into machine-readable formats.
 
