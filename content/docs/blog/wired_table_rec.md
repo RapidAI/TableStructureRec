@@ -1,9 +1,9 @@
 ---
-weight: 3710
-lastmod: "2023-11-21"
+weight: 3720
+lastmod: "2023-11-22"
 draft: false
 author: "SWHL"
-title: "Cycle-CenterNet: 无线表格结构识别算法"
+title: "Cycle-CenterNet: 有线表格结构识别算法"
 icon: "table"
 toc: true
 description: ""
