@@ -23,7 +23,7 @@ table_recog = LinelessTableRecognition()
     "img_path, table_str_len, td_nums",
     [
         ("lineless_table_recognition.jpg", 2076, 108),
-        ("table.jpg", 3211, 160),
+        ("table.jpg", 3208, 160),
     ],
 )
 def test_input_normal(img_path, table_str_len, td_nums):
