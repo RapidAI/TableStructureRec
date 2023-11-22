@@ -127,7 +127,12 @@
                                     
                                         
                                         
-                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/install_usage/lineless_table_rec/">（无线表格结构识别）lineless_table_rec</a></li>
+                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/install_usage/lineless_table_rec/">lineless_table_rec</a></li>
+                                        
+                                    
+                                        
+                                        
+                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/install_usage/wired_table_rec/">wired_table_rec</a></li>
                                         
                                     
                                 </ul>
@@ -144,6 +149,11 @@
                             </button>
                             <div class="sidebar-submenu ">
                                 <ul>
+                                    
+                                        
+                                        
+                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/wired_table_rec/">Cycle-CenterNet: 无线表格结构识别算法</a></li>
+                                        
                                     
                                         
                                         
@@ -702,6 +712,20 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
     
@@ -739,7 +763,7 @@
             {
                 id:  3 ,
                 href: "\/TableStructureRec\/docs\/install_usage\/lineless_table_rec\/",
-                title: "（无线表格结构识别）lineless_table_rec",
+                title: "lineless_table_rec",
                 description: "简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。 在这里，我们做的工作主要包括以下两点： 将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR 安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 from lineless_table_rec import LinelessTableRecognition engine = LinelessTableRecognition() img_path = \"tests/test_files/lineless_table_recognition.jpg\" table_str, elapse = engine(img_path) print(table_str) print(elapse) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） 姓名 年龄 性别 身高/m 体重/kg BMI/(kg/m²) Duke 34 男 1.",
                 content: " 简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。\n在这里，我们做的工作主要包括以下两点：\n将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR\n安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 from lineless_table_rec import LinelessTableRecognition engine = LinelessTableRecognition() img_path = \"tests/test_files/lineless_table_recognition.jpg\" table_str, elapse = engine(img_path) print(table_str) print(elapse) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） 姓名 年龄 性别 身高/m 体重/kg BMI/(kg/m²) Duke 34 男 1.74 70 23 Ella 26 女 1.60 58 23 Eartha 女 1.34 29 16 Thelonious 6 男 1.07 17 15 TARO 22 男 1.728 65 21.7 HANAKO 22 女 1.60 53 20.7 NARMAN 38 男 1.76 73 NAOMI 23 女 1.63 60 "
             }
@@ -747,6 +771,15 @@
     index.add(
             {
                 id:  4 ,
+                href: "\/TableStructureRec\/docs\/install_usage\/wired_table_rec\/",
+                title: "wired_table_rec",
+                description: " 简介 linkwired_table_rec库源于阿里读光-表格结构识别-有线表格。 在这里，我们做的工作主要包括以下两点： 将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，需要参考modelscope中相关代码，该算法没有提供单独仓库。 安装 link pip install wired_table_rec 使用 link Python脚本使用 终端使用 from wired_table_rec import WiredTableRecognition table_rec = WiredTableRecognition() img_path = \"tests/test_files/wired/table_recognition.jpg\" table_str, elapse = table_rec(img_path) print(table_str) print(elapse) $ wired_table_rec -img tests/test_files/wired/table_recognition.jpg 查看效果 link 识别结果（点击展开） 名称 产量（吨） 环比 增长量（吨） 增长率（%) 荔枝 11 10 芒果 -10 香蕉 20 ",
+                content: " 简介 linkwired_table_rec库源于阿里读光-表格结构识别-有线表格。\n在这里，我们做的工作主要包括以下两点：\n将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，需要参考modelscope中相关代码，该算法没有提供单独仓库。 安装 link pip install wired_table_rec 使用 link Python脚本使用 终端使用 from wired_table_rec import WiredTableRecognition table_rec = WiredTableRecognition() img_path = \"tests/test_files/wired/table_recognition.jpg\" table_str, elapse = table_rec(img_path) print(table_str) print(elapse) $ wired_table_rec -img tests/test_files/wired/table_recognition.jpg 查看效果 link 识别结果（点击展开） 名称 产量（吨） 环比 增长量（吨） 增长率（%) 荔枝 11 10 芒果 -10 香蕉 20 "
+            }
+        );
+    index.add(
+            {
+                id:  5 ,
                 href: "\/TableStructureRec\/docs\/blog\/",
                 title: "博客",
                 description: "",
@@ -755,7 +788,16 @@
         );
     index.add(
             {
-                id:  5 ,
+                id:  6 ,
+                href: "\/TableStructureRec\/docs\/blog\/wired_table_rec\/",
+                title: "Cycle-CenterNet: 无线表格结构识别算法",
+                description: "引言 linkCycle-CenterNet算法来自论文Parsing Table Structure in the Wild，是阿里的一篇工作。\n该工作主要解决拍照和截屏场景下有线结构识别问题。\n基本原理 link本模型是以自底向上的方式:\n1）基于单元格中心点回归出到4个顶点的距离，解码出单元格bbox；同时基于单元格顶点，回归出到共用该顶点的单元格的中心点距离，解码出gbox。\n2）基于gbox(group box)，将离散的bbox拼接起来得到精准完整的电子表格；\n3）第二步的拼接将单元格从“离散”变为“连续”，因此用后处理算法获得单元格的行列信息。\n参考资料 link 读光-表格结构识别-有线表格 ",
+                content: "引言 linkCycle-CenterNet算法来自论文Parsing Table Structure in the Wild，是阿里的一篇工作。\n该工作主要解决拍照和截屏场景下有线结构识别问题。\n基本原理 link本模型是以自底向上的方式:\n1）基于单元格中心点回归出到4个顶点的距离，解码出单元格bbox；同时基于单元格顶点，回归出到共用该顶点的单元格的中心点距离，解码出gbox。\n2）基于gbox(group box)，将离散的bbox拼接起来得到精准完整的电子表格；\n3）第二步的拼接将单元格从“离散”变为“连续”，因此用后处理算法获得单元格的行列信息。\n参考资料 link 读光-表格结构识别-有线表格 "
+            }
+        );
+    index.add(
+            {
+                id:  7 ,
                 href: "\/TableStructureRec\/docs\/blog\/lineless_table_rec\/",
                 title: "LORE: 无线表格结构识别算法",
                 description: "引言 linkLORE算法来自论文LORE: Logical Location Regression Network for Table Structure Recognition，是阿里的一篇工作。\n该工作主要解决无线表格结构识别问题，具体包括文档中涉及到一些三线表之类表格结构识别。对于有线的表格支持较差。\n基本原理 link主要原理为:\n1）基于无线单元格中心点回归出到4个顶点的距离，解码出单元格bbox；\n2）结合视觉特征与单元格bbox信息，采用两个级联回归器兼顾全局与局部注意力，直接对单元格的逻辑坐标进行回归；\n3）模型训练时显式利用单元格间与单元格内逻辑约束对模型进行优化。\n参考资料 link 读光-表格结构识别-无线表格 ",
@@ -764,7 +806,7 @@
         );
     index.add(
             {
-                id:  6 ,
+                id:  8 ,
                 href: "\/TableStructureRec\/docs\/sponsor\/",
                 title: "给作者加油",
                 description: "写在前面 linkI like open source and AI technology because I think open source and AI will bring convenience and help to people in need, and will also make the world a better place. By donating to these projects, you can join me in making AI bring warmth and beauty to more people.\n我喜欢开源，喜欢AI技术，因为我认为开源和AI会为有需要的人带来方便和帮助，也会让这个世界变得更好。通过对这些项目的捐赠，您可以和我一道让AI为更多人带来温暖和美好。\n知识星球RapidAI私享群 link这里的提问会优先得到回答和支持，也会享受到RapidAI组织后续持续优质的服务，欢迎大家的加入。\n支付宝或微信打赏 (Alipay reward or WeChat reward) link通过支付宝或者微信给作者打赏，请写好备注。 Give the author a reward through Alipay or WeChat.",
@@ -773,7 +815,7 @@
         );
     index.add(
             {
-                id:  7 ,
+                id:  9 ,
                 href: "\/TableStructureRec\/docs\/faq\/",
                 title: "常见问题",
                 description: "",
@@ -782,7 +824,7 @@
         );
     index.add(
             {
-                id:  8 ,
+                id:  10 ,
                 href: "\/TableStructureRec\/docs\/changelog\/",
                 title: "更新日志",
                 description: "2023-11-20 update: link 发布lineless_table_rec==0.0.1包 2023-11-19 update: link 添加无线表格识别算法（LORE）的推理代码 ",
@@ -791,7 +833,7 @@
         );
     index.add(
             {
-                id:  9 ,
+                id:  11 ,
                 href: "\/TableStructureRec\/docs\/",
                 title: "Docs",
                 description: "",

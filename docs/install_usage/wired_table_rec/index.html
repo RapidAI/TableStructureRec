@@ -18,7 +18,7 @@
 
 <html lang="en-us"><head>
     <meta charset="utf-8" />
-    <title>博客 | TableStructureRec Documentation</title>
+    <title>wired_table_rec | TableStructureRec Documentation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Documentation, Hugo, Hugo Theme, Bootstrap" />
     <meta name="author" content="Colin Wilson - Lotus Labs" />
@@ -32,13 +32,19 @@
 <link rel="icon" type="image/png" sizes="32x32" href="https://rapidai.github.io/TableStructureRec/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://rapidai.github.io/TableStructureRec/favicon-16x16.png">
 <link rel="manifest" crossorigin="use-credentials" href="https://rapidai.github.io/TableStructureRec/site.webmanifest">
-<meta property="og:title" content="博客" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://rapidai.github.io/TableStructureRec/docs/blog/" /><meta property="og:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_1225492034631851226.png"/><meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_1225492034631851226.png"/>
-<meta name="twitter:title" content="博客"/>
-<meta name="twitter:description" content=""/>
+<meta property="og:title" content="wired_table_rec" />
+<meta property="og:description" content=" 简介 linkwired_table_rec库源于阿里读光-表格结构识别-有线表格。
+在这里，我们做的工作主要包括以下两点：
+将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，需要参考modelscope中相关代码，该算法没有提供单独仓库。 安装 link pip install wired_table_rec 使用 link Python脚本使用 终端使用 from wired_table_rec import WiredTableRecognition table_rec = WiredTableRecognition() img_path = &#34;tests/test_files/wired/table_recognition.jpg&#34; table_str, elapse = table_rec(img_path) print(table_str) print(elapse) $ wired_table_rec -img tests/test_files/wired/table_recognition.jpg 查看效果 link 识别结果（点击展开） &lt;html&gt; &lt;body&gt; &lt;table&gt; &lt;tr&gt; &lt;td rowspan=&#34;2&#34;&gt;名称&lt;/td&gt; &lt;td rowspan=&#34;2&#34;&gt;产量（吨）&lt;/td&gt; &lt;td colspan=&#34;2&#34;&gt;环比&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt;增长量（吨）&lt;/td&gt; &lt;td&gt;增长率（%)&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt;荔枝&lt;/td&gt; &lt;td&gt;11&lt;/td&gt; &lt;td&gt;&lt;/td&gt; &lt;td&gt;10&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt;芒果&lt;/td&gt; &lt;td&gt;&lt;/td&gt; &lt;td&gt;&lt;/td&gt; &lt;td&gt;-10&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt;香蕉&lt;/td&gt; &lt;td&gt;&lt;/td&gt; &lt;td&gt;&lt;/td&gt; &lt;td&gt;20&lt;/td&gt; &lt;/tr&gt; &lt;/table&gt; &lt;/body&gt; &lt;/html&gt; " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rapidai.github.io/TableStructureRec/docs/install_usage/wired_table_rec/" /><meta property="og:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_7572371803687518047.png"/><meta property="article:section" content="docs" />
+
+<meta property="article:modified_time" content="2023-11-22T21:53:08+08:00" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_7572371803687518047.png"/>
+<meta name="twitter:title" content="wired_table_rec"/>
+<meta name="twitter:description" content=" 简介 linkwired_table_rec库源于阿里读光-表格结构识别-有线表格。
+在这里，我们做的工作主要包括以下两点：
+将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，需要参考modelscope中相关代码，该算法没有提供单独仓库。 安装 link pip install wired_table_rec 使用 link Python脚本使用 终端使用 from wired_table_rec import WiredTableRecognition table_rec = WiredTableRecognition() img_path = &#34;tests/test_files/wired/table_recognition.jpg&#34; table_str, elapse = table_rec(img_path) print(table_str) print(elapse) $ wired_table_rec -img tests/test_files/wired/table_recognition.jpg 查看效果 link 识别结果（点击展开） &lt;html&gt; &lt;body&gt; &lt;table&gt; &lt;tr&gt; &lt;td rowspan=&#34;2&#34;&gt;名称&lt;/td&gt; &lt;td rowspan=&#34;2&#34;&gt;产量（吨）&lt;/td&gt; &lt;td colspan=&#34;2&#34;&gt;环比&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt;增长量（吨）&lt;/td&gt; &lt;td&gt;增长率（%)&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt;荔枝&lt;/td&gt; &lt;td&gt;11&lt;/td&gt; &lt;td&gt;&lt;/td&gt; &lt;td&gt;10&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt;芒果&lt;/td&gt; &lt;td&gt;&lt;/td&gt; &lt;td&gt;&lt;/td&gt; &lt;td&gt;-10&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt;香蕉&lt;/td&gt; &lt;td&gt;&lt;/td&gt; &lt;td&gt;&lt;/td&gt; &lt;td&gt;20&lt;/td&gt; &lt;/tr&gt; &lt;/table&gt; &lt;/body&gt; &lt;/html&gt; "/>
 
     
     <script>(()=>{var t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,e=localStorage.getItem("theme");t&&e===null&&(localStorage.setItem("theme","dark"),document.documentElement.setAttribute("data-dark-mode","")),t&&e==="dark"&&document.documentElement.setAttribute("data-dark-mode",""),e==="dark"&&document.documentElement.setAttribute("data-dark-mode","")})()</script>
@@ -113,12 +119,12 @@
                 
                     
                     
-                        <li class="sidebar-dropdown  ">
+                        <li class="sidebar-dropdown  current active">
                             <button class="btn">
                                 <i class="material-icons me-2">package</i>
                                 安装及使用
                             </button>
-                            <div class="sidebar-submenu ">
+                            <div class="sidebar-submenu d-block">
                                 <ul>
                                     
                                         
@@ -128,7 +134,7 @@
                                     
                                         
                                         
-                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/install_usage/wired_table_rec/">wired_table_rec</a></li>
+                                            <li class="current "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/install_usage/wired_table_rec/">wired_table_rec</a></li>
                                         
                                     
                                 </ul>
@@ -138,12 +144,12 @@
                 
                     
                     
-                        <li class="sidebar-dropdown  current active">
+                        <li class="sidebar-dropdown  ">
                             <button class="btn">
                                 <i class="material-icons me-2">article</i>
                                 博客
                             </button>
-                            <div class="sidebar-submenu d-block">
+                            <div class="sidebar-submenu ">
                                 <ul>
                                     
                                         
@@ -339,10 +345,18 @@
                     <meta itemprop="position" content='1' />
                 </li>
             
+            
+                <li class="breadcrumb-item text-capitalize" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a itemprop="item" href="/TableStructureRec/docs/install_usage/">
+                        <span itemprop="name">安装及使用</span>
+                    </a>
+                    <meta itemprop="position" content='2' />
+                </li>
+            
         
             <li class="breadcrumb-item text-capitalize active" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <span itemprop="name">博客</span>
-                <meta itemprop="position" content='2' />
+                <span itemprop="name">wired_table_rec</span>
+                <meta itemprop="position" content='3' />
             </li>
         
     </ul>
@@ -350,22 +364,52 @@
                                     
                                     <div class="row flex-xl-nowrap">
                                         
-                                        <div class="docs-toc col-xl-3 visually-hidden visually-hidden  d-xl-block"><toc>
+                                        <div class="docs-toc col-xl-3    d-xl-block"><toc>
     <div class="fw-bold text-uppercase mb-2">On this page</div>
-    <nav id="toc"></nav>
+    <nav id="toc">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#简介">简介</a></li>
+            <li><a href="#安装">安装</a></li>
+            <li><a href="#使用">使用</a></li>
+            <li><a href="#查看效果">查看效果</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
     </toc></div>
                                         
                                         
-                                        <div class="docs-toc-mobile visually-hidden visually-hidden  d-print-none d-xl-none">
+                                        <div class="docs-toc-mobile    d-print-none d-xl-none">
                                             <button id="toc-dropdown-btn" class="btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-offset="0,0" aria-expanded="false">
                                                 Table of Contents
                                             </button>
-<nav id="toc-mobile"></nav></div>
-                                        <div class="docs-content col-12  mt-0">
+<nav id="toc-mobile">
+  <ul class="dropdown-menu">
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#简介">简介</a></li>
+            <li><a href="#安装">安装</a></li>
+            <li><a href="#使用">使用</a></li>
+            <li><a href="#查看效果">查看效果</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+                                        <div class="docs-content col-12 col-xl-9 mt-0">
                                             <div class="mb-0 d-flex">
                                                 
                                                 <h1 class="content-title mb-0">
-                                                    博客
+                                                    wired_table_rec
                                                     
                                                 </h1>
                                             </div>
@@ -374,47 +418,290 @@
                                             
                                             <div id="content" class="main-content" data-bs-spy="scroll" data-bs-root-margin="0px 0px -65%" data-bs-target="#toc-mobile">
                                                 
-    <div class="row flex-xl-wrap">
-        
-        <div id="list-item" class="col-md-4 col-12 mt-4 pt-2">
-            <a class="text-decoration-none text-reset" href="https://rapidai.github.io/TableStructureRec/docs/blog/wired_table_rec/">
-                <div class="card h-100 features feature-full-bg rounded p-4 position-relative overflow-hidden border-1">
-                    <span class="icon-color d-flex my-3">
-                        <i class="material-icons align-middle">table</i>
-                        
-                        
-                    </span>
-                    <div class="card-body p-0 content">
-                        <p class="fs-5 fw-semibold card-title mb-1">Cycle-CenterNet: 无线表格结构识别算法</p>
-                        <p class="para card-text mb-0"></p>
-                    </div>
-                    
-                </div>
-            </a>
-        </div>
-        
-        <div id="list-item" class="col-md-4 col-12 mt-4 pt-2">
-            <a class="text-decoration-none text-reset" href="https://rapidai.github.io/TableStructureRec/docs/blog/lineless_table_rec/">
-                <div class="card h-100 features feature-full-bg rounded p-4 position-relative overflow-hidden border-1">
-                    <span class="icon-color d-flex my-3">
-                        <i class="material-icons align-middle">table</i>
-                        
-                        
-                    </span>
-                    <div class="card-body p-0 content">
-                        <p class="fs-5 fw-semibold card-title mb-1">LORE: 无线表格结构识别算法</p>
-                        <p class="para card-text mb-0"></p>
-                    </div>
-                    
-                </div>
-            </a>
-        </div>
-        
+    
+    <div data-prismjs-copy="" data-prismjs-copy-success="" data-prismjs-copy-error="">
+        <p>
+  <a href=""><img src="https://img.shields.io/badge/Python->=3.6,<3.12-aff.svg"></a>
+  <a href=""><img src="https://img.shields.io/badge/OS-Linux%2C%20Mac%2C%20Win-pink.svg"></a>
+  <a href="https://pepy.tech/project/wired_table_rec"><img src="https://static.pepy.tech/badge/wired_table_rec?period=total&units=abbreviation&left_color=grey&right_color=blue&left_text=Downloads"></a>
+  <a href="https://pypi.org/project/wired_table_rec/"><img alt="PyPI" src="https://img.shields.io/pypi/v/wired_table_rec"></a>
+</p>
+<h3 id="简介">简介 <a href="#%e7%ae%80%e4%bb%8b" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h3><p><code>wired_table_rec</code>库源于<a href="https://www.modelscope.cn/models/damo/cv_dla34_table-structure-recognition_cycle-centernet/summary" rel="external" target="_blank">阿里读光-表格结构识别-有线表格<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M14 5c-.552 0-1-.448-1-1s.448-1 1-1h6c.552 0 1 .448 1 1v6c0 .552-.448 1-1 1s-1-.448-1-1v-3.586l-7.293 7.293c-.391.39-1.024.39-1.414 0-.391-.391-.391-1.024 0-1.414l7.293-7.293h-3.586zm-9 2c-.552 0-1 .448-1 1v11c0 .552.448 1 1 1h11c.552 0 1-.448 1-1v-4.563c0-.552.448-1 1-1s1 .448 1 1v4.563c0 1.657-1.343 3-3 3h-11c-1.657 0-3-1.343-3-3v-11c0-1.657 1.343-3 3-3h4.563c.552 0 1 .448 1 1s-.448 1-1 1h-4.563z"/></svg></a>。</p>
+<p>在这里，我们做的工作主要包括以下两点：</p>
+<ol>
+<li>将模型转换为ONNX格式，便于部署</li>
+<li>完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容</li>
+</ol>
+
+<div class="alert alert-info d-flex" role="alert">
+  <div class="flex-shrink-1 alert-icon">
+  
+  <span class="material-icons size-20 me-2">
+  info
+  </span></div>
+  
+  <div class="w-100">该库仅提供推理代码，如有训练模型需求，需要参考modelscope中相关代码，该算法没有提供单独仓库。</div>
+  </div>
+<h3 id="安装">安装 <a href="#%e5%ae%89%e8%a3%85" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h3>
+
+
+  
+  
+  
+
+  
+  
+  
+    
+  
+  
+
+   
+  
+
+  <div class="prism-codeblock  linenos">
+  <pre id="30b1180" class="language-bash  line-numbers">
+  <code>pip install wired_table_rec</code>
+  </pre>
+  </div>
+<h3 id="使用">使用 <a href="#%e4%bd%bf%e7%94%a8" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h3>
+<nav>
+	<div class="nav nav-tabs" id="nav-tab" role="tablist">
+
+		
+		
+		
+		
+
+		
+
+		<a class="nav-link  active"
+		   id="acfbedTab" data-bs-toggle="tab" data-bs-target="#acfbed"
+		   type="button" role="tab" aria-controls="acfbed" aria-selected="true">Python脚本使用</a>
+
+		
+
+		<a class="nav-link "
+		   id="beadcfTab" data-bs-toggle="tab" data-bs-target="#beadcf"
+		   type="button" role="tab" aria-controls="beadcf" aria-selected="true">终端使用</a>
+
+		
+
+	</div>
+</nav>
+
+<div class="tab-content" id="nav-tab-content">
+
+	
+
+
+
+
+
+
+<div class="tab-pane fade show active" id="acfbed" role="tabpanel" aria-labelledby="nav-1">
+
+	
+
+
+  
+  
+  
+
+  
+  
+  
+    
+  
+  
+
+   
+  
+
+  <div class="prism-codeblock  linenos">
+  <pre id="04b5f30" class="language-python  line-numbers">
+  <code>from wired_table_rec import WiredTableRecognition
+
+
+table_rec = WiredTableRecognition()
+
+img_path = &#34;tests/test_files/wired/table_recognition.jpg&#34;
+table_str, elapse = table_rec(img_path)
+print(table_str)
+print(elapse)</code>
+  </pre>
+  </div>
+
+
+</div>
+
+
+
+
+
+
+<div class="tab-pane fade" id="beadcf" role="tabpanel" aria-labelledby="nav-1">
+
+	
+
+
+  
+  
+  
+
+  
+  
+  
+  
+
+  
+
+  <div class="prism-codeblock ">
+  <pre id="0c8bbe4" class="language-bash " lineos="table">
+  <code>$ wired_table_rec -img tests/test_files/wired/table_recognition.jpg</code>
+  </pre>
+  </div>
+
+
+</div>
+
+
+</div>
+<h3 id="查看效果">查看效果 <a href="#%e6%9f%a5%e7%9c%8b%e6%95%88%e6%9e%9c" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h3><div align="center">
+    <img src="https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/wired_table_rec_result.jpg">
+</div>
+<details>
+    <summary>识别结果（点击展开）</summary>
+
+
+
+  
+  
+  
+
+  
+  
+  
+  
+
+  
+
+  <div class="prism-codeblock ">
+  <pre id="2fb46bb" class="language-html " lineos="table">
+  <code>&lt;html&gt;
+
+&lt;body&gt;
+    &lt;table&gt;
+        &lt;tr&gt;
+            &lt;td rowspan=&#34;2&#34;&gt;名称&lt;/td&gt;
+            &lt;td rowspan=&#34;2&#34;&gt;产量（吨）&lt;/td&gt;
+            &lt;td colspan=&#34;2&#34;&gt;环比&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;增长量（吨）&lt;/td&gt;
+            &lt;td&gt;增长率（%)&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;荔枝&lt;/td&gt;
+            &lt;td&gt;11&lt;/td&gt;
+            &lt;td&gt;&lt;/td&gt;
+            &lt;td&gt;10&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;芒果&lt;/td&gt;
+            &lt;td&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;/td&gt;
+            &lt;td&gt;-10&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;香蕉&lt;/td&gt;
+            &lt;td&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;/td&gt;
+            &lt;td&gt;20&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</code>
+  </pre>
+  </div>
+</details>
     </div>
 
+    
+
+
+
+
+
+    
+    
+
+
+
+
+
+
+<div class="gitinfo d-flex flex-wrap justify-content-between align-items-center opacity-85 pt-3">
+    <div id="edit-this-page" class="mt-1">
+        <a href="https://github.com/RapidAI/TableStructureRec/blob/main/content/docs/install_usage/wired_table_rec.md" alt="wired_table_rec" rel="noopener noreferrer" target="_blank">
+            
+            <span class="me-1 align-text-bottom">
+                
+                    <svg width="20px" height="20px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+  <path d="M16 0.396c-8.839 0-16 7.167-16 16 0 7.073 4.584 13.068 10.937 15.183 0.803 0.151 1.093-0.344 1.093-0.772 0-0.38-0.009-1.385-0.015-2.719-4.453 0.964-5.391-2.151-5.391-2.151-0.729-1.844-1.781-2.339-1.781-2.339-1.448-0.989 0.115-0.968 0.115-0.968 1.604 0.109 2.448 1.645 2.448 1.645 1.427 2.448 3.744 1.74 4.661 1.328 0.14-1.031 0.557-1.74 1.011-2.135-3.552-0.401-7.287-1.776-7.287-7.907 0-1.751 0.62-3.177 1.645-4.297-0.177-0.401-0.719-2.031 0.141-4.235 0 0 1.339-0.427 4.4 1.641 1.281-0.355 2.641-0.532 4-0.541 1.36 0.009 2.719 0.187 4 0.541 3.043-2.068 4.381-1.641 4.381-1.641 0.859 2.204 0.317 3.833 0.161 4.235 1.015 1.12 1.635 2.547 1.635 4.297 0 6.145-3.74 7.5-7.296 7.891 0.556 0.479 1.077 1.464 1.077 2.959 0 2.14-0.020 3.864-0.020 4.385 0 0.416 0.28 0.916 1.104 0.755 6.4-2.093 10.979-8.093 10.979-15.156 0-8.833-7.161-16-16-16z"/>
+</svg>
+
+                
+            </span>
+            Edit this page
+            
+        </a>
+    </div>
+    
+    <div id="last-modified" class="mt-1">
+        <p class="mb-0 fw-semibold">Last updated <span
+            id="relativetime"
+            data-authdate="2023-11-22T21:53:08&#43;0800"
+            title="22 Nov 2023, 21:53 &#43;0800">
+            22 Nov 2023, 21:53 &#43;0800
+        </span>. <span class="material-icons size-20 align-text-bottom opacity-75">history</span>
+        </p>
+    </div>
+    
+</div>
+
+    
+
+    
                                             </div>
                                             <div><hr class="doc-hr">
 <div id="doc-nav" class="d-print-none">
+
+	<div class="row flex-xl-nowrap ">
+	<div class="col-sm-6 pt-2 doc-next">
+		<a href="/TableStructureRec/docs/install_usage/lineless_table_rec/">
+			<div class="card h-100 my-1">
+				<div class="card-body py-2">
+                    <p class="card-title fs-5 fw-semibold lh-base mb-0"><i class="material-icons align-middle">navigate_before</i> lineless_table_rec</p>
+					<p class="card-text ms-2"></p>
+					
+				</div>
+			</div>
+		</a>
+        </div>
+	<div class="col-sm-6 pt-2 doc-prev">
+		<a class="ms-auto" href="/TableStructureRec/docs/blog/wired_table_rec/">
+			<div class="card h-100 my-1 text-end">
+				<div class="card-body py-2">
+                    <p class="card-title fs-5 fw-semibold lh-base mb-0">Cycle-CenterNet: 无线表格结构识别算法 <i class="material-icons align-middle">navigate_next</i></p>
+					<p class="card-text me-2"></p>
+					
+				</div>
+			</div>
+		</a>
+        </div>
+	</div>
 </div></div>
                                         </div>
                                     </div>
