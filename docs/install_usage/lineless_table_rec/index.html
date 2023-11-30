@@ -164,6 +164,11 @@
                                             <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/wired_table_rec/">Cycle-CenterNet: 有线表格结构识别算法</a></li>
                                         
                                     
+                                        
+                                        
+                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/table_rec_evaluate/">三个表格识别算法评测</a></li>
+                                        
+                                    
                                 </ul>
                             </div>
                         </li>
@@ -479,14 +484,14 @@
 		
 
 		<a class="nav-link  active"
-		   id="bfecdaTab" data-bs-toggle="tab" data-bs-target="#bfecda"
-		   type="button" role="tab" aria-controls="bfecda" aria-selected="true">Python脚本使用</a>
+		   id="bfdaecTab" data-bs-toggle="tab" data-bs-target="#bfdaec"
+		   type="button" role="tab" aria-controls="bfdaec" aria-selected="true">Python脚本使用</a>
 
 		
 
 		<a class="nav-link "
-		   id="adbecfTab" data-bs-toggle="tab" data-bs-target="#adbecf"
-		   type="button" role="tab" aria-controls="adbecf" aria-selected="true">终端使用</a>
+		   id="bacdefTab" data-bs-toggle="tab" data-bs-target="#bacdef"
+		   type="button" role="tab" aria-controls="bacdef" aria-selected="true">终端使用</a>
 
 		
 
@@ -502,7 +507,7 @@
 
 
 
-<div class="tab-pane fade show active" id="bfecda" role="tabpanel" aria-labelledby="nav-1">
+<div class="tab-pane fade show active" id="bfdaec" role="tabpanel" aria-labelledby="nav-1">
 
 	
 
@@ -543,7 +548,7 @@ print(elapse)</code>
 
 
 
-<div class="tab-pane fade" id="adbecf" role="tabpanel" aria-labelledby="nav-1">
+<div class="tab-pane fade" id="bacdef" role="tabpanel" aria-labelledby="nav-1">
 
 	
 
@@ -995,6 +1000,13 @@ print(elapse)</code>
     
     
     
+    
+    
+    
+    
+    
+    
+    
 
 
     
@@ -1076,6 +1088,15 @@ print(elapse)</code>
     index.add(
             {
                 id:  8 ,
+                href: "\/TableStructureRec\/docs\/blog\/table_rec_evaluate\/",
+                title: "三个表格识别算法评测",
+                description: "引言 link为了便于比较不同表格识别算法的效果差异，本篇文章基于评测工具TableRecognitionMetric和表格测试数据集liekkas/table_recognition上计算不同算法的TEDS指标。\n指标结果 link 方法 TEDS RapidTable 0.58786 lineless_table_rec 0.50054 wired_table_rec 0.63316 评测步骤 link1. 安装评测数据集和评测工具包 link pip install table_recognition_metric pip install modelscope==1.5.2 pip install rapidocr_onnxruntime==1.3.8 2. 安装表格识别推理库 link pip install rapid_table pip install lineless_table_rec pip install wired_table_rec 3. 推理代码 link info 完整评测代码，请移步Gist\nfrom modelscope.msdatasets import MsDataset from rapid_table import RapidTable from lineless_table_rec import LinelessTableRecognition from wired_table_rec import WiredTableRecognition from table_recognition_metric import TEDS test_data = MsDataset.load( \"table_recognition\", namespace=\"liekkas\", subset_name=\"default\", split=\"test\", ) # 这里依次更换不同算法实例即可 table_engine = RapidTable() # table_engine = LinelessTableRecognition() # table_engine = WiredTableRecognition() teds = TEDS() content = [] for one_data in test_data: img_path = one_data.",
+                content: "引言 link为了便于比较不同表格识别算法的效果差异，本篇文章基于评测工具TableRecognitionMetric和表格测试数据集liekkas/table_recognition上计算不同算法的TEDS指标。\n指标结果 link 方法 TEDS RapidTable 0.58786 lineless_table_rec 0.50054 wired_table_rec 0.63316 评测步骤 link1. 安装评测数据集和评测工具包 link pip install table_recognition_metric pip install modelscope==1.5.2 pip install rapidocr_onnxruntime==1.3.8 2. 安装表格识别推理库 link pip install rapid_table pip install lineless_table_rec pip install wired_table_rec 3. 推理代码 link info 完整评测代码，请移步Gist\nfrom modelscope.msdatasets import MsDataset from rapid_table import RapidTable from lineless_table_rec import LinelessTableRecognition from wired_table_rec import WiredTableRecognition from table_recognition_metric import TEDS test_data = MsDataset.load( \"table_recognition\", namespace=\"liekkas\", subset_name=\"default\", split=\"test\", ) # 这里依次更换不同算法实例即可 table_engine = RapidTable() # table_engine = LinelessTableRecognition() # table_engine = WiredTableRecognition() teds = TEDS() content = [] for one_data in test_data: img_path = one_data.get(\"image:FILE\") gt = one_data.get(\"label\") pred_str, _ = table_engine(img_path) scores = teds(gt, pred_str) content.append(scores) print(f\"{img_path}\\t{scores:.5f}\") avg = sum(content) / len(content) print(f'{avg:.5f}') 4. 写在最后 link以上评测仅是基于表格测试数据集liekkas/table_recognition测试而来，不能完全代表模型效果。\n因为每个模型训练数据不同，测试数据集如与训练数据相差较大，难免效果较差，请针对自身场景客观看待评测指标。\n"
+            }
+        );
+    index.add(
+            {
+                id:  9 ,
                 href: "\/TableStructureRec\/docs\/sponsor\/",
                 title: "给作者加油",
                 description: "写在前面 linkI like open source and AI technology because I think open source and AI will bring convenience and help to people in need, and will also make the world a better place. By donating to these projects, you can join me in making AI bring warmth and beauty to more people.\n我喜欢开源，喜欢AI技术，因为我认为开源和AI会为有需要的人带来方便和帮助，也会让这个世界变得更好。通过对这些项目的捐赠，您可以和我一道让AI为更多人带来温暖和美好。\n知识星球RapidAI私享群 link这里的提问会优先得到回答和支持，也会享受到RapidAI组织后续持续优质的服务，欢迎大家的加入。\n支付宝或微信打赏 (Alipay reward or WeChat reward) link通过支付宝或者微信给作者打赏，请写好备注。 Give the author a reward through Alipay or WeChat.",
@@ -1084,7 +1105,7 @@ print(elapse)</code>
         );
     index.add(
             {
-                id:  9 ,
+                id:  10 ,
                 href: "\/TableStructureRec\/docs\/faq\/",
                 title: "常见问题",
                 description: "",
@@ -1093,7 +1114,7 @@ print(elapse)</code>
         );
     index.add(
             {
-                id:  10 ,
+                id:  11 ,
                 href: "\/TableStructureRec\/docs\/changelog\/",
                 title: "更新日志",
                 description: "2023-11-22 update: link 发布wired_table_rec==0.0.1包 2023-11-20 update: link 发布lineless_table_rec==0.0.1包 2023-11-19 update: link 添加无线表格识别算法（LORE）的推理代码 ",
@@ -1102,7 +1123,7 @@ print(elapse)</code>
         );
     index.add(
             {
-                id:  11 ,
+                id:  12 ,
                 href: "\/TableStructureRec\/docs\/",
                 title: "Docs",
                 description: "",

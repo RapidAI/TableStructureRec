@@ -18,7 +18,7 @@
 
 <html lang="en-us"><head>
     <meta charset="utf-8" />
-    <title>在线demo | TableStructureRec Documentation</title>
+    <title>三个表格识别算法评测 | TableStructureRec Documentation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Documentation, Hugo, Hugo Theme, Bootstrap" />
     <meta name="author" content="Colin Wilson - Lotus Labs" />
@@ -32,19 +32,19 @@
 <link rel="icon" type="image/png" sizes="32x32" href="https://rapidai.github.io/TableStructureRec/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://rapidai.github.io/TableStructureRec/favicon-16x16.png">
 <link rel="manifest" crossorigin="use-credentials" href="https://rapidai.github.io/TableStructureRec/site.webmanifest">
-<meta property="og:title" content="在线demo" />
-<meta property="og:description" content="简介 link因为无线表格识别和有线表格识别均在魔搭社区上有托管，我这里就不再搭建在线demo了。
-大家可前往魔搭社区在线体验
-无线表格识别Demo link有线表格识别Demo link" />
+<meta property="og:title" content="三个表格识别算法评测" />
+<meta property="og:description" content="引言 link为了便于比较不同表格识别算法的效果差异，本篇文章基于评测工具TableRecognitionMetric和表格测试数据集liekkas/table_recognition上计算不同算法的TEDS指标。
+指标结果 link 方法 TEDS RapidTable 0.58786 lineless_table_rec 0.50054 wired_table_rec 0.63316 评测步骤 link1. 安装评测数据集和评测工具包 link pip install table_recognition_metric pip install modelscope==1.5.2 pip install rapidocr_onnxruntime==1.3.8 2. 安装表格识别推理库 link pip install rapid_table pip install lineless_table_rec pip install wired_table_rec 3. 推理代码 link info 完整评测代码，请移步Gist
+from modelscope.msdatasets import MsDataset from rapid_table import RapidTable from lineless_table_rec import LinelessTableRecognition from wired_table_rec import WiredTableRecognition from table_recognition_metric import TEDS test_data = MsDataset.load( &#34;table_recognition&#34;, namespace=&#34;liekkas&#34;, subset_name=&#34;default&#34;, split=&#34;test&#34;, ) # 这里依次更换不同算法实例即可 table_engine = RapidTable() # table_engine = LinelessTableRecognition() # table_engine = WiredTableRecognition() teds = TEDS() content = [] for one_data in test_data: img_path = one_data." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://rapidai.github.io/TableStructureRec/docs/online_demo/" /><meta property="og:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_408941367709876724.png"/><meta property="article:section" content="docs" />
+<meta property="og:url" content="https://rapidai.github.io/TableStructureRec/docs/blog/table_rec_evaluate/" /><meta property="og:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_3551202621770440409.png"/><meta property="article:section" content="docs" />
 
-<meta property="article:modified_time" content="2023-11-22T22:08:39+08:00" /><meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_408941367709876724.png"/>
-<meta name="twitter:title" content="在线demo"/>
-<meta name="twitter:description" content="简介 link因为无线表格识别和有线表格识别均在魔搭社区上有托管，我这里就不再搭建在线demo了。
-大家可前往魔搭社区在线体验
-无线表格识别Demo link有线表格识别Demo link"/>
+<meta property="article:modified_time" content="2023-11-30T09:50:03+08:00" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_3551202621770440409.png"/>
+<meta name="twitter:title" content="三个表格识别算法评测"/>
+<meta name="twitter:description" content="引言 link为了便于比较不同表格识别算法的效果差异，本篇文章基于评测工具TableRecognitionMetric和表格测试数据集liekkas/table_recognition上计算不同算法的TEDS指标。
+指标结果 link 方法 TEDS RapidTable 0.58786 lineless_table_rec 0.50054 wired_table_rec 0.63316 评测步骤 link1. 安装评测数据集和评测工具包 link pip install table_recognition_metric pip install modelscope==1.5.2 pip install rapidocr_onnxruntime==1.3.8 2. 安装表格识别推理库 link pip install rapid_table pip install lineless_table_rec pip install wired_table_rec 3. 推理代码 link info 完整评测代码，请移步Gist
+from modelscope.msdatasets import MsDataset from rapid_table import RapidTable from lineless_table_rec import LinelessTableRecognition from wired_table_rec import WiredTableRecognition from table_recognition_metric import TEDS test_data = MsDataset.load( &#34;table_recognition&#34;, namespace=&#34;liekkas&#34;, subset_name=&#34;default&#34;, split=&#34;test&#34;, ) # 这里依次更换不同算法实例即可 table_engine = RapidTable() # table_engine = LinelessTableRecognition() # table_engine = WiredTableRecognition() teds = TEDS() content = [] for one_data in test_data: img_path = one_data."/>
 
     
     <script>(()=>{var t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,e=localStorage.getItem("theme");t&&e===null&&(localStorage.setItem("theme","dark"),document.documentElement.setAttribute("data-dark-mode","")),t&&e==="dark"&&document.documentElement.setAttribute("data-dark-mode",""),e==="dark"&&document.documentElement.setAttribute("data-dark-mode","")})()</script>
@@ -108,7 +108,7 @@
                 
                     
                         
-                        <li class="current">
+                        <li class="">
                             <a class="sidebar-root-link" href="https://rapidai.github.io/TableStructureRec/docs/online_demo/">
                                 <i class="material-icons me-2">language</i>
                                 
@@ -144,12 +144,12 @@
                 
                     
                     
-                        <li class="sidebar-dropdown  ">
+                        <li class="sidebar-dropdown  current active">
                             <button class="btn">
                                 <i class="material-icons me-2">article</i>
                                 博客
                             </button>
-                            <div class="sidebar-submenu ">
+                            <div class="sidebar-submenu d-block">
                                 <ul>
                                     
                                         
@@ -164,7 +164,7 @@
                                     
                                         
                                         
-                                            <li class=" "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/table_rec_evaluate/">三个表格识别算法评测</a></li>
+                                            <li class="current "><a class="sidebar-nested-link" href="https://rapidai.github.io/TableStructureRec/docs/blog/table_rec_evaluate/">三个表格识别算法评测</a></li>
                                         
                                     
                                 </ul>
@@ -350,10 +350,18 @@
                     <meta itemprop="position" content='1' />
                 </li>
             
+            
+                <li class="breadcrumb-item text-capitalize" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a itemprop="item" href="/TableStructureRec/docs/blog/">
+                        <span itemprop="name">博客</span>
+                    </a>
+                    <meta itemprop="position" content='2' />
+                </li>
+            
         
             <li class="breadcrumb-item text-capitalize active" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <span itemprop="name">在线demo</span>
-                <meta itemprop="position" content='2' />
+                <span itemprop="name">三个表格识别算法评测</span>
+                <meta itemprop="position" content='3' />
             </li>
         
     </ul>
@@ -369,10 +377,14 @@
       <ul>
         <li>
           <ul>
-            <li><a href="#简介">简介</a>
+            <li><a href="#引言">引言</a></li>
+            <li><a href="#指标结果">指标结果</a></li>
+            <li><a href="#评测步骤">评测步骤</a>
               <ul>
-                <li><a href="#无线表格识别demohttpswwwmodelscopecnmodelsdamocv_resnet-transformer_table-structure-recognition_loresummary"><a href="https://www.modelscope.cn/models/damo/cv_resnet-transformer_table-structure-recognition_lore/summary">无线表格识别Demo</a></a></li>
-                <li><a href="#有线表格识别demohttpswwwmodelscopecnmodelsdamocv_dla34_table-structure-recognition_cycle-centernetsummary"><a href="https://www.modelscope.cn/models/damo/cv_dla34_table-structure-recognition_cycle-centernet/summary">有线表格识别Demo</a></a></li>
+                <li><a href="#1-安装评测数据集和评测工具包">1. 安装评测数据集和评测工具包</a></li>
+                <li><a href="#2-安装表格识别推理库">2. 安装表格识别推理库</a></li>
+                <li><a href="#3-推理代码">3. 推理代码</a></li>
+                <li><a href="#4-写在最后">4. 写在最后</a></li>
               </ul>
             </li>
           </ul>
@@ -394,10 +406,14 @@
       <ul>
         <li>
           <ul>
-            <li><a href="#简介">简介</a>
+            <li><a href="#引言">引言</a></li>
+            <li><a href="#指标结果">指标结果</a></li>
+            <li><a href="#评测步骤">评测步骤</a>
               <ul>
-                <li><a href="#无线表格识别demohttpswwwmodelscopecnmodelsdamocv_resnet-transformer_table-structure-recognition_loresummary"><a href="https://www.modelscope.cn/models/damo/cv_resnet-transformer_table-structure-recognition_lore/summary">无线表格识别Demo</a></a></li>
-                <li><a href="#有线表格识别demohttpswwwmodelscopecnmodelsdamocv_dla34_table-structure-recognition_cycle-centernetsummary"><a href="https://www.modelscope.cn/models/damo/cv_dla34_table-structure-recognition_cycle-centernet/summary">有线表格识别Demo</a></a></li>
+                <li><a href="#1-安装评测数据集和评测工具包">1. 安装评测数据集和评测工具包</a></li>
+                <li><a href="#2-安装表格识别推理库">2. 安装表格识别推理库</a></li>
+                <li><a href="#3-推理代码">3. 推理代码</a></li>
+                <li><a href="#4-写在最后">4. 写在最后</a></li>
               </ul>
             </li>
           </ul>
@@ -410,7 +426,7 @@
                                             <div class="mb-0 d-flex">
                                                 
                                                 <h1 class="content-title mb-0">
-                                                    在线demo
+                                                    三个表格识别算法评测
                                                     
                                                 </h1>
                                             </div>
@@ -421,9 +437,145 @@
                                                 
     
     <div data-prismjs-copy="" data-prismjs-copy-success="" data-prismjs-copy-error="">
-        <h3 id="简介">简介 <a href="#%e7%ae%80%e4%bb%8b" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h3><p>因为无线表格识别和有线表格识别均在魔搭社区上有托管，我这里就不再搭建在线demo了。</p>
-<p>大家可前往魔搭社区在线体验</p>
-<h4 id="无线表格识别demohttpswwwmodelscopecnmodelsdamocv_resnet-transformer_table-structure-recognition_loresummary"><a href="https://www.modelscope.cn/models/damo/cv_resnet-transformer_table-structure-recognition_lore/summary" rel="external" target="_blank">无线表格识别Demo<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M14 5c-.552 0-1-.448-1-1s.448-1 1-1h6c.552 0 1 .448 1 1v6c0 .552-.448 1-1 1s-1-.448-1-1v-3.586l-7.293 7.293c-.391.39-1.024.39-1.414 0-.391-.391-.391-1.024 0-1.414l7.293-7.293h-3.586zm-9 2c-.552 0-1 .448-1 1v11c0 .552.448 1 1 1h11c.552 0 1-.448 1-1v-4.563c0-.552.448-1 1-1s1 .448 1 1v4.563c0 1.657-1.343 3-3 3h-11c-1.657 0-3-1.343-3-3v-11c0-1.657 1.343-3 3-3h4.563c.552 0 1 .448 1 1s-.448 1-1 1h-4.563z"/></svg></a> <a href="#%e6%97%a0%e7%ba%bf%e8%a1%a8%e6%a0%bc%e8%af%86%e5%88%abdemohttpswwwmodelscopecnmodelsdamocv_resnet-transformer_table-structure-recognition_loresummary" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h4><h4 id="有线表格识别demohttpswwwmodelscopecnmodelsdamocv_dla34_table-structure-recognition_cycle-centernetsummary"><a href="https://www.modelscope.cn/models/damo/cv_dla34_table-structure-recognition_cycle-centernet/summary" rel="external" target="_blank">有线表格识别Demo<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M14 5c-.552 0-1-.448-1-1s.448-1 1-1h6c.552 0 1 .448 1 1v6c0 .552-.448 1-1 1s-1-.448-1-1v-3.586l-7.293 7.293c-.391.39-1.024.39-1.414 0-.391-.391-.391-1.024 0-1.414l7.293-7.293h-3.586zm-9 2c-.552 0-1 .448-1 1v11c0 .552.448 1 1 1h11c.552 0 1-.448 1-1v-4.563c0-.552.448-1 1-1s1 .448 1 1v4.563c0 1.657-1.343 3-3 3h-11c-1.657 0-3-1.343-3-3v-11c0-1.657 1.343-3 3-3h4.563c.552 0 1 .448 1 1s-.448 1-1 1h-4.563z"/></svg></a> <a href="#%e6%9c%89%e7%ba%bf%e8%a1%a8%e6%a0%bc%e8%af%86%e5%88%abdemohttpswwwmodelscopecnmodelsdamocv_dla34_table-structure-recognition_cycle-centernetsummary" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h4>
+        <h3 id="引言">引言 <a href="#%e5%bc%95%e8%a8%80" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h3><p>为了便于比较不同表格识别算法的效果差异，本篇文章基于评测工具<a href="https://github.com/SWHL/TableRecognitionMetric" rel="external" target="_blank">TableRecognitionMetric<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M14 5c-.552 0-1-.448-1-1s.448-1 1-1h6c.552 0 1 .448 1 1v6c0 .552-.448 1-1 1s-1-.448-1-1v-3.586l-7.293 7.293c-.391.39-1.024.39-1.414 0-.391-.391-.391-1.024 0-1.414l7.293-7.293h-3.586zm-9 2c-.552 0-1 .448-1 1v11c0 .552.448 1 1 1h11c.552 0 1-.448 1-1v-4.563c0-.552.448-1 1-1s1 .448 1 1v4.563c0 1.657-1.343 3-3 3h-11c-1.657 0-3-1.343-3-3v-11c0-1.657 1.343-3 3-3h4.563c.552 0 1 .448 1 1s-.448 1-1 1h-4.563z"/></svg></a>和表格测试数据集<a href="https://www.modelscope.cn/datasets/liekkas/table_recognition/summary" rel="external" target="_blank">liekkas/table_recognition<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M14 5c-.552 0-1-.448-1-1s.448-1 1-1h6c.552 0 1 .448 1 1v6c0 .552-.448 1-1 1s-1-.448-1-1v-3.586l-7.293 7.293c-.391.39-1.024.39-1.414 0-.391-.391-.391-1.024 0-1.414l7.293-7.293h-3.586zm-9 2c-.552 0-1 .448-1 1v11c0 .552.448 1 1 1h11c.552 0 1-.448 1-1v-4.563c0-.552.448-1 1-1s1 .448 1 1v4.563c0 1.657-1.343 3-3 3h-11c-1.657 0-3-1.343-3-3v-11c0-1.657 1.343-3 3-3h4.563c.552 0 1 .448 1 1s-.448 1-1 1h-4.563z"/></svg></a>上计算不同算法的TEDS指标。</p>
+<h3 id="指标结果">指标结果 <a href="#%e6%8c%87%e6%a0%87%e7%bb%93%e6%9e%9c" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h3><table>
+<thead>
+<tr>
+<th style="text-align:left">方法</th>
+<th style="text-align:left">TEDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md" rel="external" target="_blank">RapidTable<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M14 5c-.552 0-1-.448-1-1s.448-1 1-1h6c.552 0 1 .448 1 1v6c0 .552-.448 1-1 1s-1-.448-1-1v-3.586l-7.293 7.293c-.391.39-1.024.39-1.414 0-.391-.391-.391-1.024 0-1.414l7.293-7.293h-3.586zm-9 2c-.552 0-1 .448-1 1v11c0 .552.448 1 1 1h11c.552 0 1-.448 1-1v-4.563c0-.552.448-1 1-1s1 .448 1 1v4.563c0 1.657-1.343 3-3 3h-11c-1.657 0-3-1.343-3-3v-11c0-1.657 1.343-3 3-3h4.563c.552 0 1 .448 1 1s-.448 1-1 1h-4.563z"/></svg></a></td>
+<td style="text-align:left">0.58786</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://rapidai.github.io/TableStructureRec/docs/install_usage/lineless_table_rec/" rel="external" target="_blank">lineless_table_rec<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M14 5c-.552 0-1-.448-1-1s.448-1 1-1h6c.552 0 1 .448 1 1v6c0 .552-.448 1-1 1s-1-.448-1-1v-3.586l-7.293 7.293c-.391.39-1.024.39-1.414 0-.391-.391-.391-1.024 0-1.414l7.293-7.293h-3.586zm-9 2c-.552 0-1 .448-1 1v11c0 .552.448 1 1 1h11c.552 0 1-.448 1-1v-4.563c0-.552.448-1 1-1s1 .448 1 1v4.563c0 1.657-1.343 3-3 3h-11c-1.657 0-3-1.343-3-3v-11c0-1.657 1.343-3 3-3h4.563c.552 0 1 .448 1 1s-.448 1-1 1h-4.563z"/></svg></a></td>
+<td style="text-align:left">0.50054</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://rapidai.github.io/TableStructureRec/docs/install_usage/wired_table_rec/" rel="external" target="_blank">wired_table_rec<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M14 5c-.552 0-1-.448-1-1s.448-1 1-1h6c.552 0 1 .448 1 1v6c0 .552-.448 1-1 1s-1-.448-1-1v-3.586l-7.293 7.293c-.391.39-1.024.39-1.414 0-.391-.391-.391-1.024 0-1.414l7.293-7.293h-3.586zm-9 2c-.552 0-1 .448-1 1v11c0 .552.448 1 1 1h11c.552 0 1-.448 1-1v-4.563c0-.552.448-1 1-1s1 .448 1 1v4.563c0 1.657-1.343 3-3 3h-11c-1.657 0-3-1.343-3-3v-11c0-1.657 1.343-3 3-3h4.563c.552 0 1 .448 1 1s-.448 1-1 1h-4.563z"/></svg></a></td>
+<td style="text-align:left">0.63316</td>
+</tr>
+</tbody>
+</table>
+<h3 id="评测步骤">评测步骤 <a href="#%e8%af%84%e6%b5%8b%e6%ad%a5%e9%aa%a4" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h3><h4 id="1-安装评测数据集和评测工具包">1. 安装评测数据集和评测工具包 <a href="#1-%e5%ae%89%e8%a3%85%e8%af%84%e6%b5%8b%e6%95%b0%e6%8d%ae%e9%9b%86%e5%92%8c%e8%af%84%e6%b5%8b%e5%b7%a5%e5%85%b7%e5%8c%85" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h4>
+
+
+  
+  
+  
+
+  
+  
+  
+    
+  
+  
+
+   
+  
+
+  <div class="prism-codeblock  linenos">
+  <pre id="6cfadf4" class="language-bash  line-numbers">
+  <code>pip install table_recognition_metric
+pip install modelscope==1.5.2
+pip install rapidocr_onnxruntime==1.3.8</code>
+  </pre>
+  </div>
+<h4 id="2-安装表格识别推理库">2. 安装表格识别推理库 <a href="#2-%e5%ae%89%e8%a3%85%e8%a1%a8%e6%a0%bc%e8%af%86%e5%88%ab%e6%8e%a8%e7%90%86%e5%ba%93" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h4>
+
+
+  
+  
+  
+
+  
+  
+  
+    
+  
+  
+
+   
+  
+
+  <div class="prism-codeblock  linenos">
+  <pre id="9617586" class="language-bash  line-numbers">
+  <code>pip install rapid_table
+pip install lineless_table_rec
+pip install wired_table_rec</code>
+  </pre>
+  </div>
+<h4 id="3-推理代码">3. 推理代码 <a href="#3-%e6%8e%a8%e7%90%86%e4%bb%a3%e7%a0%81" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h4>
+<div class="alert alert-info d-flex" role="alert">
+  <div class="flex-shrink-1 alert-icon">
+  
+  <span class="material-icons size-20 me-2">
+  info
+  </span></div>
+  
+  <div class="w-100"><p>完整评测代码，请移步<a href="https://gist.github.com/SWHL/4218b337f37ae07acd6ba859bae39d33" rel="external" target="_blank">Gist<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M14 5c-.552 0-1-.448-1-1s.448-1 1-1h6c.552 0 1 .448 1 1v6c0 .552-.448 1-1 1s-1-.448-1-1v-3.586l-7.293 7.293c-.391.39-1.024.39-1.414 0-.391-.391-.391-1.024 0-1.414l7.293-7.293h-3.586zm-9 2c-.552 0-1 .448-1 1v11c0 .552.448 1 1 1h11c.552 0 1-.448 1-1v-4.563c0-.552.448-1 1-1s1 .448 1 1v4.563c0 1.657-1.343 3-3 3h-11c-1.657 0-3-1.343-3-3v-11c0-1.657 1.343-3 3-3h4.563c.552 0 1 .448 1 1s-.448 1-1 1h-4.563z"/></svg></a></p>
+</div>
+  </div>
+
+
+
+  
+  
+  
+
+  
+  
+  
+    
+  
+  
+
+   
+  
+
+  <div class="prism-codeblock  linenos">
+  <pre id="7ebfc36" class="language-python  line-numbers">
+  <code>from modelscope.msdatasets import MsDataset
+
+from rapid_table import RapidTable
+from lineless_table_rec import LinelessTableRecognition
+from wired_table_rec import WiredTableRecognition
+
+from table_recognition_metric import TEDS
+
+test_data = MsDataset.load(
+    &#34;table_recognition&#34;,
+    namespace=&#34;liekkas&#34;,
+    subset_name=&#34;default&#34;,
+    split=&#34;test&#34;,
+)
+
+# 这里依次更换不同算法实例即可
+table_engine = RapidTable()
+# table_engine = LinelessTableRecognition()
+# table_engine = WiredTableRecognition()
+teds = TEDS()
+
+content = []
+for one_data in test_data:
+    img_path = one_data.get(&#34;image:FILE&#34;)
+    gt = one_data.get(&#34;label&#34;)
+
+    pred_str, _ = table_engine(img_path)
+    scores = teds(gt, pred_str)
+    content.append(scores)
+    print(f&#34;{img_path}\t{scores:.5f}&#34;)
+
+avg = sum(content) / len(content)
+print(f&#39;{avg:.5f}&#39;)</code>
+  </pre>
+  </div>
+<h4 id="4-写在最后">4. 写在最后 <a href="#4-%e5%86%99%e5%9c%a8%e6%9c%80%e5%90%8e" class="anchor" aria-hidden="true"><i class="material-icons align-middle">link</i></a></h4><p>以上评测仅是基于表格测试数据集<a href="https://www.modelscope.cn/datasets/liekkas/table_recognition/summary" rel="external" target="_blank">liekkas/table_recognition<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M14 5c-.552 0-1-.448-1-1s.448-1 1-1h6c.552 0 1 .448 1 1v6c0 .552-.448 1-1 1s-1-.448-1-1v-3.586l-7.293 7.293c-.391.39-1.024.39-1.414 0-.391-.391-.391-1.024 0-1.414l7.293-7.293h-3.586zm-9 2c-.552 0-1 .448-1 1v11c0 .552.448 1 1 1h11c.552 0 1-.448 1-1v-4.563c0-.552.448-1 1-1s1 .448 1 1v4.563c0 1.657-1.343 3-3 3h-11c-1.657 0-3-1.343-3-3v-11c0-1.657 1.343-3 3-3h4.563c.552 0 1 .448 1 1s-.448 1-1 1h-4.563z"/></svg></a>测试而来，不能完全代表模型效果。</p>
+<p>因为每个模型训练数据不同，测试数据集如与训练数据相差较大，难免效果较差，请针对自身场景客观看待评测指标。</p>
+
     </div>
 
     
@@ -442,7 +594,7 @@
 
 <div class="gitinfo d-flex flex-wrap justify-content-between align-items-center opacity-85 pt-3">
     <div id="edit-this-page" class="mt-1">
-        <a href="https://github.com/RapidAI/TableStructureRec/blob/main/content/docs/online_demo.md" alt="在线demo" rel="noopener noreferrer" target="_blank">
+        <a href="https://github.com/RapidAI/TableStructureRec/blob/main/content/docs/blog/table_rec_evaluate.md" alt="三个表格识别算法评测" rel="noopener noreferrer" target="_blank">
             
             <span class="me-1 align-text-bottom">
                 
@@ -460,9 +612,9 @@
     <div id="last-modified" class="mt-1">
         <p class="mb-0 fw-semibold">Last updated <span
             id="relativetime"
-            data-authdate="2023-11-22T22:08:39&#43;0800"
-            title="22 Nov 2023, 22:08 &#43;0800">
-            22 Nov 2023, 22:08 &#43;0800
+            data-authdate="2023-11-30T09:50:03&#43;0800"
+            title="30 Nov 2023, 09:50 &#43;0800">
+            30 Nov 2023, 09:50 &#43;0800
         </span>. <span class="material-icons size-20 align-text-bottom opacity-75">history</span>
         </p>
     </div>
@@ -478,10 +630,10 @@
 
 	<div class="row flex-xl-nowrap ">
 	<div class="col-sm-6 pt-2 doc-next">
-		<a href="/TableStructureRec/docs/overview/">
+		<a href="/TableStructureRec/docs/blog/wired_table_rec/">
 			<div class="card h-100 my-1">
 				<div class="card-body py-2">
-                    <p class="card-title fs-5 fw-semibold lh-base mb-0"><i class="material-icons align-middle">navigate_before</i> 概览</p>
+                    <p class="card-title fs-5 fw-semibold lh-base mb-0"><i class="material-icons align-middle">navigate_before</i> Cycle-CenterNet: 有线表格结构识别算法</p>
 					<p class="card-text ms-2"></p>
 					
 				</div>
@@ -489,10 +641,10 @@
 		</a>
         </div>
 	<div class="col-sm-6 pt-2 doc-prev">
-		<a class="ms-auto" href="/TableStructureRec/docs/install_usage/lineless_table_rec/">
+		<a class="ms-auto" href="/TableStructureRec/docs/sponsor/">
 			<div class="card h-100 my-1 text-end">
 				<div class="card-body py-2">
-                    <p class="card-title fs-5 fw-semibold lh-base mb-0">lineless_table_rec <i class="material-icons align-middle">navigate_next</i></p>
+                    <p class="card-title fs-5 fw-semibold lh-base mb-0">给作者加油 <i class="material-icons align-middle">navigate_next</i></p>
 					<p class="card-text me-2"></p>
 					
 				</div>
