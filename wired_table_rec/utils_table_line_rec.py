@@ -156,7 +156,7 @@ def _gather_np(data, dim, index):
             + ", all dimensions of index and data should be the same size"
         )
 
-    if index.dtype != np.dtype("int_"):
+    if index.dtype != np.int64:
         raise TypeError("The values of index must be integers")
 
     data_swaped = np.swapaxes(data, 0, dim)
