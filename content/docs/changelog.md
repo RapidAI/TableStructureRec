@@ -9,6 +9,10 @@ toc: true
 description: ""
 ---
 
+#### 2023-12-13 update:
+- 修复issue [#4](https://github.com/RapidAI/TableStructureRec/issues/4)
+- 发布`wired_table_rec==0.0.2`和`lineless_table_rec==0.0.2`版本
+
 #### 2023-11-22 update:
 - 发布`wired_table_rec==0.0.1`包
 

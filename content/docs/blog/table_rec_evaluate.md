@@ -12,6 +12,15 @@ description: ""
 ### 引言
 为了便于比较不同表格识别算法的效果差异，本篇文章基于评测工具[TableRecognitionMetric](https://github.com/SWHL/TableRecognitionMetric)和表格测试数据集[liekkas/table_recognition](https://www.modelscope.cn/datasets/liekkas/table_recognition/summary)上计算不同算法的TEDS指标。
 
+以下评测仅是基于表格测试数据集[liekkas/table_recognition](https://www.modelscope.cn/datasets/liekkas/table_recognition/summary)测试而来，不能完全代表模型效果。
+
+因为每个模型训练数据不同，测试数据集如与训练数据相差较大，难免效果较差，请针对自身场景客观看待评测指标。
+
+**RapidTable**: 有英文和中文两个模型，大多都是印刷体截屏表格。具体可参见:[表格识别模型](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.7/ppstructure/docs/models_list.md#22-%E8%A1%A8%E6%A0%BC%E8%AF%86%E5%88%AB%E6%A8%A1%E5%9E%8B)
+
+**lineless_table_rec**: 训练数据部分来自SciTSR与PubTabNet，训练集共45000张。这两个数据大多是来自论文截图，所以这个模型也是比较适用于论文中表格识别。
+
+**wired_table_rec**: 训练数据为WTW，训练集为10970张。WTW数据组成有50%的自然场景下、30%的档案和20%的印刷体表格。所以这个模型更适合自然场景下拍照的表格识别。
 
 ### 指标结果
 |方法|TEDS|
@@ -74,8 +83,3 @@ for one_data in test_data:
 avg = sum(content) / len(content)
 print(f'{avg:.5f}')
 ```
-
-#### 4. 写在最后
-以上评测仅是基于表格测试数据集[liekkas/table_recognition](https://www.modelscope.cn/datasets/liekkas/table_recognition/summary)测试而来，不能完全代表模型效果。
-
-因为每个模型训练数据不同，测试数据集如与训练数据相差较大，难免效果较差，请针对自身场景客观看待评测指标。
