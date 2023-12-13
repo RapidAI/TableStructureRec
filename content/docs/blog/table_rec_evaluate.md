@@ -16,7 +16,7 @@ description: ""
 
 因为每个模型训练数据不同，测试数据集如与训练数据相差较大，难免效果较差，请针对自身场景客观看待评测指标。
 
-**RapidTable**: 有英文和中文两个模型，大多都是印刷体截屏表格。具体可参见:[表格识别模型](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.7/ppstructure/docs/models_list.md#22-%E8%A1%A8%E6%A0%BC%E8%AF%86%E5%88%AB%E6%A8%A1%E5%9E%8B)
+**RapidTable**: 有英文和中文两个模型，大多都是印刷体截屏表格。具体可参见:[表格识别模型](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.7/ppstructure/docs/models_list.md#22-%E8%A1%A8%E6%A0%BC%E8%AF%86%E5%88%AB%E6%A8%A1%E5%9E%8B)。
 
 **lineless_table_rec**: 训练数据部分来自SciTSR与PubTabNet，训练集共45000张。这两个数据大多是来自论文截图，所以这个模型也是比较适用于论文中表格识别。
 
