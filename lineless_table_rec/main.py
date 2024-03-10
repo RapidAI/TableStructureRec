@@ -6,14 +6,14 @@ import logging
 import time
 import traceback
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple, Union
 
 import cv2
 import numpy as np
 from rapidocr_onnxruntime import RapidOCR
 
 from .lineless_table_process import DetProcess, get_affine_transform_upper_left
-from .utils import LoadImage, OrtInferSession
+from .utils import InputType, LoadImage, OrtInferSession
 from .utils_table_recover import (
     get_rotate_crop_image,
     match_ocr_cell,
@@ -29,6 +29,8 @@ process_model_path = cur_dir / "models" / "lore_process.onnx"
 class LinelessTableRecognition:
     def __init__(
         self,
+        detect_model_path: Union[str, Path] = detect_model_path,
+        process_model_path: Union[str, Path] = process_model_path,
     ):
         self.mean = np.array([0.408, 0.447, 0.470], dtype=np.float32).reshape(1, 1, 3)
         self.std = np.array([0.289, 0.274, 0.278], dtype=np.float32).reshape(1, 1, 3)
@@ -43,7 +45,7 @@ class LinelessTableRecognition:
         self.det_process = DetProcess()
         self.ocr = RapidOCR()
 
-    def __call__(self, content: Dict[str, Any]) -> str:
+    def __call__(self, content: InputType) -> str:
         ss = time.perf_counter()
         img = self.load_img(content)
 
@@ -92,8 +94,8 @@ class LinelessTableRecognition:
         }
         return {"img": images, "meta": meta}
 
-    def infer(self, input: Dict[str, Any]) -> Tuple[np.ndarray, np.ndarray]:
-        hm, st, wh, ax, cr, reg = self.det_session([input["img"]])
+    def infer(self, input_content: Dict[str, Any]) -> Tuple[np.ndarray, np.ndarray]:
+        hm, st, wh, ax, cr, reg = self.det_session([input_content["img"]])
         output = {
             "hm": hm,
             "st": st,
@@ -103,7 +105,7 @@ class LinelessTableRecognition:
             "reg": reg,
         }
         slct_logi_feat, slct_dets_feat, slct_output_dets = self.det_process(
-            output, input["meta"]
+            output, input_content["meta"]
         )
 
         slct_output_dets = slct_output_dets.reshape(-1, 4, 2)
