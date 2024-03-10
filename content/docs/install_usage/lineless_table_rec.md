@@ -26,6 +26,9 @@ description: ""
 
 {{< alert context="info" text="该库仅提供推理代码，如有训练模型需求，请移步[LORE-TSR](https://github.com/AlibabaResearch/AdvancedLiterateMachinery/tree/main/DocumentUnderstanding/LORE-TSR)" />}}
 
+### 模型转换ONNX
+详情参考：[ConvertLOREToONNX](https://github.com/SWHL/ConvertLOREToONNX)
+
 ### 安装
 ```bash {linenos=table}
 pip install lineless_table_rec
