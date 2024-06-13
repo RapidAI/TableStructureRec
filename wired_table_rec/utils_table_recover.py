@@ -85,7 +85,7 @@ def merge_adjacent_polys(polygons: np.ndarray) -> np.ndarray:
 
 def combine_two_poly(polygons: np.ndarray, idxs: np.ndarray) -> np.ndarray:
     del_idxs, insert_boxes = [], []
-    idxs = idxs.squeeze(0)
+    idxs = idxs.squeeze(-1)
     for idx in idxs:
         # idx 和 idx + 1 是重合度过高的
         # 合并，取两者各个点的最大值
