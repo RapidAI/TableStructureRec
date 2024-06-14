@@ -58,7 +58,7 @@ jobs:
           unzip lineless_table_rec_models.zip
           mv lineless_table_rec_models/*.onnx lineless_table_rec/models/
 
-          python setup_lineless.py bdist_wheel ${{ github.event.head_commit.message }}
+          python setup_lineless.py bdist_wheel "${{ github.event.head_commit.message }}"
 
       # - name: Publish distribution 📦 to Test PyPI
       #   uses: pypa/gh-action-pypi-publish@v1.5.0

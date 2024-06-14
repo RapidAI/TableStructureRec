@@ -20,7 +20,7 @@ from .utils_table_recover import merge_adjacent_polys, sorted_boxes
 
 
 class TableLineRecognition:
-    def __init__(self, model_path: str = None):
+    def __init__(self, model_path: Optional[str] = None):
         self.K = 1000
         self.MK = 4000
         self.mean = np.array([0.408, 0.447, 0.470], dtype=np.float32).reshape(1, 1, 3)
