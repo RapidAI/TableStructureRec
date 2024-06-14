@@ -27,7 +27,7 @@ jobs:
       - name: Unit testings
         run: |
           pip install -r requirements.txt
-          pip install pytest
+          pip install pytest beautifulsoup4
 
           wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/wired_table_rec_models.zip
           unzip wired_table_rec_models.zip

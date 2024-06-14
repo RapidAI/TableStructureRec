@@ -59,8 +59,7 @@ class WiredTableRecognition:
         except Exception:
             logging.warning(traceback.format_exc())
             return "", 0.0
-        else:
-            return table_str, elapse
+        return table_str, elapse
 
 
 def main():
