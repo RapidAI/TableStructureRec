@@ -157,3 +157,4 @@ long1.jpg
 
 .DS_Store
 *.npy
+/lineless_table_rec/output/
