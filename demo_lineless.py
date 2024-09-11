@@ -1,19 +1,29 @@
 # -*- encoding: utf-8 -*-
 # @Author: SWHL
 # @Contact: liekkaskono@163.com
-from pathlib import Path
+import os
 
 from lineless_table_rec import LinelessTableRecognition
+from lineless_table_rec.utils_table_recover import (
+    format_html,
+    plot_rec_box,
+    plot_rec_box_with_logic_info,
+)
 
-engine = LinelessTableRecognition()
-
+output_dir = "outputs"
 img_path = "tests/test_files/lineless_table_recognition.jpg"
-table_str, elapse = engine(img_path)
+table_rec = LinelessTableRecognition()
 
-print(table_str)
-print(elapse)
+html, elasp, polygons, logic_points, ocr_res = table_rec(img_path)
+print(f"cost: {elasp:.5f}")
 
-with open(f"{Path(img_path).stem}.html", "w", encoding="utf-8") as f:
-    f.write(table_str)
+complete_html = format_html(html)
+os.makedirs(os.path.dirname(f"{output_dir}/table.html"), exist_ok=True)
 
-print("ok")
+with open(f"{output_dir}/table.html", "w", encoding="utf-8") as file:
+    file.write(complete_html)
+
+plot_rec_box_with_logic_info(
+    img_path, f"{output_dir}/table_rec_box.jpg", logic_points, polygons
+)
+plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)

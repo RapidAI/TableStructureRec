@@ -22,15 +22,15 @@ table_recog = LinelessTableRecognition()
 @pytest.mark.parametrize(
     "img_path, table_str_len, td_nums",
     [
-        ("lineless_table_recognition.jpg", 2076, 108),
-        ("table.jpg", 3208, 160),
+        ("lineless_table_recognition.jpg", 1869, 104),
+        ("table.jpg", 3000, 158),
     ],
 )
 def test_input_normal(img_path, table_str_len, td_nums):
     img_path = test_file_dir / img_path
     img = cv2.imread(str(img_path))
 
-    table_str, _ = table_recog(img)
+    table_str, *_ = table_recog(img)
 
     assert len(table_str) >= table_str_len
     assert table_str.count("td") == td_nums

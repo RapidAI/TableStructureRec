@@ -3,7 +3,7 @@
 # @Contact: liekkaskono@163.com
 import os
 import random
-from typing import Dict, List, Tuple, Iterable, Union, Any
+from typing import Any, Dict, List, Union
 
 import cv2
 import numpy as np
@@ -28,8 +28,8 @@ def sorted_boxes(dt_boxes: np.ndarray) -> np.ndarray:
     for i in range(num_boxes - 1):
         for j in range(i, -1, -1):
             if (
-                    abs(_boxes[j + 1][0][1] - _boxes[j][0][1]) < 10
-                    and _boxes[j + 1][0][0] < _boxes[j][0][0]
+                abs(_boxes[j + 1][0][1] - _boxes[j][0][1]) < 10
+                and _boxes[j + 1][0][0] < _boxes[j][0][0]
             ):
                 _boxes[j], _boxes[j + 1] = _boxes[j + 1], _boxes[j]
             else:
@@ -127,15 +127,17 @@ def calculate_iou(box1: list | np.ndarray, box2: list | np.ndarray) -> float:
     return iou
 
 
-def caculate_single_axis_iou(box1: list | np.ndarray, box2: list | np.ndarray, axis='x') -> float:
+def caculate_single_axis_iou(
+    box1: list | np.ndarray, box2: list | np.ndarray, axis="x"
+) -> float:
     """
-   :param box1: Iterable [xmin,ymin,xmax,ymax]
-   :param box2: Iterable [xmin,ymin,xmax,ymax]
-   :return: iou: float 0-1
-   """
+    :param box1: Iterable [xmin,ymin,xmax,ymax]
+    :param box2: Iterable [xmin,ymin,xmax,ymax]
+    :return: iou: float 0-1
+    """
     b1_x1, b1_y1, b1_x2, b1_y2 = box1
     b2_x1, b2_y1, b2_x2, b2_y2 = box2
-    if axis == 'x':
+    if axis == "x":
         i_min = max(b1_x1, b2_x1)
         i_max = min(b1_x2, b2_x2)
         u_area = max(b1_x2, b2_x2) - min(b1_x1, b2_x1)
@@ -149,12 +151,14 @@ def caculate_single_axis_iou(box1: list | np.ndarray, box2: list | np.ndarray, a
     return i_area / u_area
 
 
-def is_box_contained(box1: list | np.ndarray, box2: list | np.ndarray, threshold=0.2) -> int | None:
+def is_box_contained(
+    box1: list | np.ndarray, box2: list | np.ndarray, threshold=0.2
+) -> int | None:
     """
-   :param box1: Iterable [xmin,ymin,xmax,ymax]
-   :param box2: Iterable [xmin,ymin,xmax,ymax]
-   :return: 1: box1 is contained 2: box2 is contained None: no contain these
-   """
+    :param box1: Iterable [xmin,ymin,xmax,ymax]
+    :param box2: Iterable [xmin,ymin,xmax,ymax]
+    :return: 1: box1 is contained 2: box2 is contained None: no contain these
+    """
     b1_x1, b1_y1, b1_x2, b1_y2 = box1[0], box1[1], box1[2], box1[3]
     b2_x1, b2_y1, b2_x2, b2_y2 = box2[0], box2[1], box2[2], box2[3]
     # 不相交直接退出检测
@@ -171,7 +175,9 @@ def is_box_contained(box1: list | np.ndarray, box2: list | np.ndarray, threshold
     intersect_y2 = min(b1_y2, b2_y2)
 
     # 计算交集的面积
-    intersect_area = max(0, intersect_x2 - intersect_x1) * max(0, intersect_y2 - intersect_y1)
+    intersect_area = max(0, intersect_x2 - intersect_x1) * max(
+        0, intersect_y2 - intersect_y1
+    )
 
     # 计算外面的面积
     b1_outside_area = b1_area - intersect_area
@@ -189,23 +195,25 @@ def is_box_contained(box1: list | np.ndarray, box2: list | np.ndarray, threshold
     return None
 
 
-def is_single_axis_contained(box1: list | np.ndarray, box2: list | np.ndarray, axis='x', threshold=0.2) -> int | None:
+def is_single_axis_contained(
+    box1: list | np.ndarray, box2: list | np.ndarray, axis="x", threshold=0.2
+) -> int | None:
     """
-   :param box1: Iterable [xmin,ymin,xmax,ymax]
-   :param box2: Iterable [xmin,ymin,xmax,ymax]
-   :return: 1: box1 is contained 2: box2 is contained None: no contain these
-   """
+    :param box1: Iterable [xmin,ymin,xmax,ymax]
+    :param box2: Iterable [xmin,ymin,xmax,ymax]
+    :return: 1: box1 is contained 2: box2 is contained None: no contain these
+    """
     b1_x1, b1_y1, b1_x2, b1_y2 = box1[0], box1[1], box1[2], box1[3]
     b2_x1, b2_y1, b2_x2, b2_y2 = box2[0], box2[1], box2[2], box2[3]
 
     # 计算轴重叠大小
-    if axis == 'x':
-        b1_area = (b1_x2 - b1_x1)
-        b2_area = (b2_x2 - b2_x1)
+    if axis == "x":
+        b1_area = b1_x2 - b1_x1
+        b2_area = b2_x2 - b2_x1
         i_area = min(b1_x2, b2_x2) - max(b1_x1, b2_x1)
     else:
-        b1_area = (b1_y2 - b1_y1)
-        b2_area = (b2_y2 - b2_y1)
+        b1_area = b1_y2 - b1_y1
+        b2_area = b2_y2 - b2_y1
         i_area = min(b1_y2, b2_y2) - max(b1_y1, b2_y1)
         # 计算外面的面积
     b1_outside_area = b1_area - i_area
@@ -220,7 +228,9 @@ def is_single_axis_contained(box1: list | np.ndarray, box2: list | np.ndarray, a
     return None
 
 
-def sorted_ocr_boxes(dt_boxes: np.ndarray | list) -> tuple[np.ndarray | list, list[int]]:
+def sorted_ocr_boxes(
+    dt_boxes: np.ndarray | list,
+) -> tuple[np.ndarray | list, list[int]]:
     """
     Sort text boxes in order from top to bottom, left to right
     args:
@@ -236,7 +246,7 @@ def sorted_ocr_boxes(dt_boxes: np.ndarray | list) -> tuple[np.ndarray | list, li
     _boxes = [dt_boxes[i] for i in indices]
     for i in range(num_boxes - 1):
         for j in range(i, -1, -1):
-            c_idx = is_single_axis_contained(_boxes[j], _boxes[j + 1], axis='y')
+            c_idx = is_single_axis_contained(_boxes[j], _boxes[j + 1], axis="y")
             if c_idx is not None and _boxes[j + 1][0] < _boxes[j][0]:
                 _boxes[j], _boxes[j + 1] = _boxes[j + 1], _boxes[j]
                 indices[j], indices[j + 1] = indices[j + 1], indices[j]
@@ -245,7 +255,9 @@ def sorted_ocr_boxes(dt_boxes: np.ndarray | list) -> tuple[np.ndarray | list, li
     return _boxes, indices
 
 
-def gather_ocr_list_by_row(ocr_list: list[list[list[float], str]]) -> list[list[list[float], str]]:
+def gather_ocr_list_by_row(
+    ocr_list: list[list[list[float], str]]
+) -> list[list[list[float], str]]:
     """
     :param ocr_list: [[[xmin,ymin,xmax,ymax], text]]
     :return:
@@ -253,6 +265,7 @@ def gather_ocr_list_by_row(ocr_list: list[list[list[float], str]]) -> list[list[
     for i in range(len(ocr_list)):
         if not ocr_list[i]:
             continue
+
         for j in range(i + 1, len(ocr_list)):
             if not ocr_list[j]:
                 continue
@@ -260,7 +273,7 @@ def gather_ocr_list_by_row(ocr_list: list[list[list[float], str]]) -> list[list[
             next = ocr_list[j]
             cur_box = cur[0]
             next_box = next[0]
-            c_idx = is_single_axis_contained(cur[0], next[0], axis='y')
+            c_idx = is_single_axis_contained(cur[0], next[0], axis="y")
             if c_idx:
                 cur[1] = cur[1] + next[1]
                 xmin = min(cur_box[0], next_box[0])
@@ -274,6 +287,7 @@ def gather_ocr_list_by_row(ocr_list: list[list[list[float], str]]) -> list[list[
                 ocr_list[j] = None
     ocr_list = [x for x in ocr_list if x]
     return ocr_list
+
 
 def box_4_1_poly_to_box_4_2(poly_box: list | np.ndarray) -> list[list[float]]:
     xmin, ymin, xmax, ymax = tuple(poly_box)
@@ -358,10 +372,15 @@ def match_ocr_cell(dt_rec_boxes: List[List[Union[Any, str]]], pred_bboxes: np.nd
             pred_box = [pred_box[0][0], pred_box[0][1], pred_box[2][0], pred_box[2][1]]
             ocr_boxes = gt_box[0]
             # xmin,ymin,xmax,ymax
-            ocr_box = (ocr_boxes[0][0], ocr_boxes[0][1], ocr_boxes[2][0], ocr_boxes[2][1])
+            ocr_box = (
+                ocr_boxes[0][0],
+                ocr_boxes[0][1],
+                ocr_boxes[2][0],
+                ocr_boxes[2][1],
+            )
             contained = is_box_contained(ocr_box, pred_box, 0.6)
             if contained == 1 or calculate_iou(ocr_box, pred_box) > 0.8:
-                if j not in matched.keys():
+                if j not in matched:
                     matched[j] = [gt_box]
                 else:
                     matched[j].append(gt_box)
@@ -371,12 +390,14 @@ def match_ocr_cell(dt_rec_boxes: List[List[Union[Any, str]]], pred_bboxes: np.nd
     return matched, not_match_orc_boxes
 
 
-def plot_html_table(logi_points: np.ndarray | list, cell_box_map: Dict[int, List[str]]) -> str:
+def plot_html_table(
+    logi_points: np.ndarray | list, cell_box_map: Dict[int, List[str]]
+) -> str:
     # 初始化最大行数和列数
     max_row = 0
     max_col = 0
     # 计算最大行数和列数
-    for point  in logi_points:
+    for point in logi_points:
         max_row = max(max_row, point[1] + 1)  # 加1是因为结束下标是包含在内的
         max_col = max(max_col, point[3] + 1)  # 加1是因为结束下标是包含在内的
 
@@ -385,7 +406,12 @@ def plot_html_table(logi_points: np.ndarray | list, cell_box_map: Dict[int, List
 
     # 将 sorted_logi_points 中的元素填充到 grid 中
     for i, logic_point in enumerate(logi_points):
-        row_start, row_end, col_start, col_end = logic_point[0],logic_point[1],logic_point[2],logic_point[3]
+        row_start, row_end, col_start, col_end = (
+            logic_point[0],
+            logic_point[1],
+            logic_point[2],
+            logic_point[3],
+        )
         for row in range(row_start, row_end + 1):
             for col in range(col_start, col_end + 1):
                 grid[row][col] = (i, row_start, row_end, col_start, col_end)
@@ -407,7 +433,7 @@ def plot_html_table(logi_points: np.ndarray | list, cell_box_map: Dict[int, List
                 if not cell_box_map.get(i):
                     continue
                 empty_temp = False
-                if (row == row_start and col == col_start):
+                if row == row_start and col == col_start:
                     ocr_rec_text = cell_box_map.get(i)
                     text = "<br>".join(ocr_rec_text)
                     if not text.strip():
@@ -415,14 +441,15 @@ def plot_html_table(logi_points: np.ndarray | list, cell_box_map: Dict[int, List
                     # 如果是起始单元格
                     row_span = row_end - row_start + 1
                     col_span = col_end - col_start + 1
-                    cell_content = f"<td rowspan={row_span} colspan={col_span}>{text}</td>\n"
+                    cell_content = (
+                        f"<td rowspan={row_span} colspan={col_span}>{text}</td>\n"
+                    )
                     temp += cell_content
         if not empty_temp:
             table_html = table_html + temp + "  </tr>\n"
 
     table_html += "</table>"
     return table_html
-
 
 
 def vis_table(img: np.ndarray, polygons: np.ndarray) -> np.ndarray:
@@ -439,6 +466,7 @@ def vis_table(img: np.ndarray, polygons: np.ndarray) -> np.ndarray:
         cv2.putText(img, str(i), poly[0], font, 1, (0, 0, 255), 2)
     return img
 
+
 def plot_rec_box_with_logic_info(img_path, output_path, logic_points, sorted_polygons):
     """
     :param img_path
@@ -449,7 +477,9 @@ def plot_rec_box_with_logic_info(img_path, output_path, logic_points, sorted_pol
     """
     # 读取原图
     img = cv2.imread(img_path)
-    img = cv2.copyMakeBorder(img, 0, 0, 0, 100, cv2.BORDER_CONSTANT, value=[255, 255, 255])
+    img = cv2.copyMakeBorder(
+        img, 0, 0, 0, 100, cv2.BORDER_CONSTANT, value=[255, 255, 255]
+    )
     # 绘制 polygons 矩形
     for idx, polygon in enumerate(sorted_polygons):
         x0, y0, x1, y1 = polygon[0], polygon[1], polygon[2], polygon[3]
@@ -464,7 +494,7 @@ def plot_rec_box_with_logic_info(img_path, output_path, logic_points, sorted_pol
 
         cv2.putText(
             img,
-            f'{idx}-{logic_points[idx]}',
+            f"{idx}-{logic_points[idx]}",
             (x1, y1),
             cv2.FONT_HERSHEY_PLAIN,
             font_scale,
@@ -475,6 +505,7 @@ def plot_rec_box_with_logic_info(img_path, output_path, logic_points, sorted_pol
         # 保存绘制后的图像
         cv2.imwrite(output_path, img)
 
+
 def plot_rec_box(img_path, output_path, sorted_polygons):
     """
     :param img_path
@@ -484,7 +515,9 @@ def plot_rec_box(img_path, output_path, sorted_polygons):
     """
     # 处理ocr_res
     img = cv2.imread(img_path)
-    img = cv2.copyMakeBorder(img, 0, 0, 0, 100, cv2.BORDER_CONSTANT, value=[255, 255, 255])
+    img = cv2.copyMakeBorder(
+        img, 0, 0, 0, 100, cv2.BORDER_CONSTANT, value=[255, 255, 255]
+    )
     # 绘制 ocr_res 矩形
     for idx, polygon in enumerate(sorted_polygons):
         x0, y0, x1, y1 = polygon[0], polygon[1], polygon[2], polygon[3]
@@ -509,6 +542,7 @@ def plot_rec_box(img_path, output_path, sorted_polygons):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     # 保存绘制后的图像
     cv2.imwrite(output_path, img)
+
 
 def format_html(html):
 
@@ -538,6 +572,8 @@ def format_html(html):
     </body>
     </html>
     """
+
+
 def get_rotate_crop_image(img: np.ndarray, points: np.ndarray) -> np.ndarray:
     img_crop_width = int(
         max(
