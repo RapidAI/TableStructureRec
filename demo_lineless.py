@@ -19,7 +19,6 @@ print(f"cost: {elasp:.5f}")
 
 complete_html = format_html(html)
 os.makedirs(os.path.dirname(f"{output_dir}/table.html"), exist_ok=True)
-
 with open(f"{output_dir}/table.html", "w", encoding="utf-8") as file:
     file.write(complete_html)
 
