@@ -110,8 +110,8 @@ class LinelessTableRecognition:
         self,
         cell_box_det_map: dict[int, List[any]],
         polygons: np.ndarray,
-        logi_points: list[np.ndarray],
-    ) -> list[dict[str, any]]:
+        logi_points: List[np.ndarray],
+    ) -> List[dict[str, any]]:
         res = []
         for i in range(len(polygons)):
             ocr_res_list = cell_box_det_map.get(i)
@@ -231,7 +231,7 @@ class LinelessTableRecognition:
         return res, grid
 
     @staticmethod
-    def filter_logi_points(slct_logi: np.ndarray) -> list[np.ndarray]:
+    def filter_logi_points(slct_logi: np.ndarray) -> List[np.ndarray]:
         for logic_points in slct_logi[0]:
             # 修正坐标接近导致的r_e > r_s 或 c_e > c_s
             if abs(logic_points[0] - logic_points[1]) < 0.2:
