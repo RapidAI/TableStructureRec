@@ -2,11 +2,11 @@
 # @Author: SWHL
 # @Contact: liekkaskono@163.com
 import sys
-from typing import List, Union
 from pathlib import Path
-from get_pypi_latest_version import GetPyPiLatestVersion
+from typing import List, Union
 
 import setuptools
+from get_pypi_latest_version import GetPyPiLatestVersion
 
 
 def read_txt(txt_path: Union[Path, str]) -> List[str]:
@@ -39,8 +39,8 @@ setuptools.setup(
     description="A table classifier for further table rec",
     long_description="A table classifier that distinguishes between wired and wireless tables",
     long_description_content_type="text/markdown",
-    author="SWHL",
-    author_email="liekkaskono@163.com",
+    author="jockerK",
+    author_email=" xinyijianggo@gmail.com",
     url="https://github.com/RapidAI/TableStructureRec",
     license="Apache-2.0",
     install_requires=read_txt("requirements.txt"),
