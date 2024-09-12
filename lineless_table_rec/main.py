@@ -190,8 +190,13 @@ class LinelessTableRecognition:
     def handle_overlap_row_col(self, res):
         max_row, max_col = 0, 0
         for dict_res in res:
-            max_row = max(max_row, dict_res["t_logic_box"][1] + 1)  # 加1是因为结束下标是包含在内的
-            max_col = max(max_col, dict_res["t_logic_box"][3] + 1)  # 加1是因为结束下标是包含在内的
+            max_row = max(
+                max_row, dict_res["t_logic_box"][1] + 1
+            )  # 加1是因为结束下标是包含在内的
+            max_col = max(
+                max_col, dict_res["t_logic_box"][3] + 1
+            )  # 加1是因为结束下标是包含在内的
+
         # 创建一个二维数组来存储 sorted_logi_points 中的元素
         grid = [[None] * max_col for _ in range(max_row)]
         # 将 sorted_logi_points 中的元素填充到 grid 中
