@@ -15,6 +15,7 @@
 </div>
 
 ### Introduction
+
 This repo is an inference library used for structured recognition of tables in documents, including table structure recognition algorithm models from PaddleOCR, wired and wireless table recognition algorithm models from Alibaba Duguang, etc.
 
 The repo has improved the pre- and post-processing of form recognition and combined with OCR to ensure that the form recognition part can be used directly.
@@ -24,6 +25,7 @@ The repo will continue to focus on the field of table recognition, integrate the
 Welcome everyone to continue to pay attention.
 
 ### What is Table Structure Recognition?
+
 Table Structure Recognition (TSR) aims to extract the logical or physical structure of table images, thereby converting unstructured table images into machine-readable formats.
 
 Logical structure: represents the row/column relationship of cells (such as the same row, the same column) and the span information of cells.
@@ -37,23 +39,26 @@ Physical structure: includes not only the logical structure, but also the cell's
 Figure from: [Improving Table Structure Recognition with Visual-Alignment Sequential Coordinate Modeling](https://openaccess.thecvf.com/content/CVPR2023/html/Huang_Improving_Table_Structure_Recognition_With_Visual-Alignment_Sequential_Coordinate_Modeling_CVPR_2023_paper.html)
 
 ### Documentation
+
 Full documentation can be found on [docs](https://rapidai.github.io/TableStructureRec/docs/), in Chinese.
 
 ### Acknowledgements
+
 [PaddleOCR Table](https://github.com/PaddlePaddle/PaddleOCR/blob/4b17511491adcfd0f3e2970895d06814d1ce56cc/ppstructure/table/README_ch.md)
 
 [Cycle CenterNet](https://www.modelscope.cn/models/damo/cv_dla34_table-structure-recognition_cycle-centernet/summary)
 
 [LORE](https://www.modelscope.cn/models/damo/cv_resnet-transformer_table-structure-recognition_lore/summary)
 
-
 ### Contributing
+
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 
 ### [Sponsor](https://rapidai.github.io/Knowledge-QA-LLM/docs/sponsor/)
+
 If you want to sponsor the project, you can directly click the **Buy me a coffee** image, please write a note (e.g. your github account name) to facilitate adding to the sponsorship list below.
 
 <div align="left">
@@ -61,4 +66,5 @@ If you want to sponsor the project, you can directly click the **Buy me a coffee
 </div>
 
 ### License
+
 This project is released under the [Apache 2.0 license](https://github.com/RapidAI/TableStructureRec/blob/c41bbd23898cb27a957ed962b0ffee3c74dfeff1/LICENSE).

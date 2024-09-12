@@ -2,7 +2,6 @@
 from table_cls import TableCls
 
 table_cls = TableCls()
-output_dir = "outputs"
 img_path = "tests/test_files/table_cls/lineless_table.png"
 cls_str, elapse = table_cls(img_path)
 print(cls_str)

@@ -42,10 +42,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Python 3.7
+      - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: '3.7'
+          python-version: '3.10'
           architecture: 'x64'
 
       - name: Run setup.py
@@ -60,9 +60,8 @@ jobs:
 
           python setup_table_cls.py bdist_wheel "${{ github.event.head_commit.message }}"
 
-
       - name: Publish distribution 📦 to PyPI
         uses: pypa/gh-action-pypi-publish@v1.5.0
         with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          password: ${{ secrets.TABLE_CLS }}
           packages_dir: dist/

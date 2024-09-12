@@ -2,10 +2,9 @@ from io import BytesIO
 from pathlib import Path
 from typing import Union
 
-from PIL import UnidentifiedImageError
-from PIL import Image
-import numpy as np
 import cv2
+import numpy as np
+from PIL import Image, UnidentifiedImageError
 
 InputType = Union[str, np.ndarray, bytes, Path, Image.Image]
 
@@ -15,9 +14,7 @@ class LoadImageError(Exception):
 
 
 class LoadImage:
-    def __init__(
-        self,
-    ):
+    def __init__(self):
         pass
 
     def __call__(self, img: InputType) -> np.ndarray:
