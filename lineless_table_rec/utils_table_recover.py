@@ -8,7 +8,6 @@ from typing import Any, Dict, List, Union
 import cv2
 import numpy as np
 import shapely
-from numpy import ndarray
 from shapely.geometry import MultiPoint, Polygon
 
 
@@ -196,7 +195,7 @@ def is_box_contained(
 
 
 def is_single_axis_contained(
-    box1: list | np.ndarray, box2: list | np.ndarray, axis="x", threshold=0.2
+    box1: list | np.ndarray, box2: list | np.ndarray, axis="x", threhold=0.2
 ) -> int | None:
     """
     :param box1: Iterable [xmin,ymin,xmax,ymax]
@@ -221,15 +220,15 @@ def is_single_axis_contained(
 
     ratio_b1 = b1_outside_area / b1_area if b1_area > 0 else 0
     ratio_b2 = b2_outside_area / b2_area if b2_area > 0 else 0
-    if ratio_b1 < threshold:
+    if ratio_b1 < threhold:
         return 1
-    if ratio_b2 < threshold:
+    if ratio_b2 < threhold:
         return 2
     return None
 
 
 def sorted_ocr_boxes(
-    dt_boxes: np.ndarray | list,
+    dt_boxes: np.ndarray | list, threhold: float = 0.2
 ) -> tuple[np.ndarray | list, list[int]]:
     """
     Sort text boxes in order from top to bottom, left to right
@@ -249,10 +248,17 @@ def sorted_ocr_boxes(
     # 避免输出和输入格式不对应，与函数功能不符合
     if isinstance(dt_boxes, np.ndarray):
         _boxes = np.array(_boxes)
+    threahold = 20
     for i in range(num_boxes - 1):
         for j in range(i, -1, -1):
-            c_idx = is_single_axis_contained(_boxes[j], _boxes[j + 1], axis="y")
-            if c_idx is not None and _boxes[j + 1][0] < _boxes[j][0]:
+            c_idx = is_single_axis_contained(
+                _boxes[j], _boxes[j + 1], axis="y", threhold=threhold
+            )
+            if (
+                c_idx is not None
+                and _boxes[j + 1][0] < _boxes[j][0]
+                and abs(_boxes[j][1] - _boxes[j + 1][1]) < threahold
+            ):
                 _boxes[j], _boxes[j + 1] = _boxes[j + 1].copy(), _boxes[j].copy()
                 indices[j], indices[j + 1] = indices[j + 1], indices[j]
             else:
@@ -261,12 +267,13 @@ def sorted_ocr_boxes(
 
 
 def gather_ocr_list_by_row(
-    ocr_list: list[list[list[float], str]]
+    ocr_list: list[list[list[float], str]], thehold: float = 0.2
 ) -> list[list[list[float], str]]:
     """
     :param ocr_list: [[[xmin,ymin,xmax,ymax], text]]
     :return:
     """
+    threshold = 10
     for i in range(len(ocr_list)):
         if not ocr_list[i]:
             continue
@@ -278,9 +285,13 @@ def gather_ocr_list_by_row(
             next = ocr_list[j]
             cur_box = cur[0]
             next_box = next[0]
-            c_idx = is_single_axis_contained(cur[0], next[0], axis="y")
+            c_idx = is_single_axis_contained(
+                cur[0], next[0], axis="y", threhold=thehold
+            )
             if c_idx:
-                cur[1] = cur[1] + next[1]
+                dis = max(next_box[0] - cur_box[1], 0)
+                blank_str = int(dis / threshold) * " "
+                cur[1] = cur[1] + blank_str + next[1]
                 xmin = min(cur_box[0], next_box[0])
                 xmax = max(cur_box[2], next_box[2])
                 ymin = min(cur_box[1], next_box[1])
@@ -299,7 +310,7 @@ def box_4_1_poly_to_box_4_2(poly_box: list | np.ndarray) -> list[list[float]]:
     return [[xmin, ymin], [xmax, ymin], [xmax, ymax], [xmin, ymax]]
 
 
-def box_4_2_poly_to_box_4_1(poly_box: list | np.ndarray) -> list[ndarray[Any, Any]]:
+def box_4_2_poly_to_box_4_1(poly_box: list | np.ndarray) -> list[float]:
     """
     将poly_box转换为box_4_1
     :param poly_box:
@@ -409,6 +420,10 @@ def plot_html_table(
     # 创建一个二维数组来存储 sorted_logi_points 中的元素
     grid = [[None] * max_col for _ in range(max_row)]
 
+    valid_start_row = (1 << 16) - 1
+    valid_end_row = 0
+    valid_start_col = (1 << 16) - 1
+    valid_end_col = 0
     # 将 sorted_logi_points 中的元素填充到 grid 中
     for i, logic_point in enumerate(logi_points):
         row_start, row_end, col_start, col_end = (
@@ -417,43 +432,48 @@ def plot_html_table(
             logic_point[2],
             logic_point[3],
         )
+        ocr_rec_text_list = cell_box_map.get(i)
+        if ocr_rec_text_list and "".join(ocr_rec_text_list):
+            valid_start_row = min(row_start, valid_start_row)
+            valid_start_col = min(col_start, valid_start_col)
+            valid_end_row = max(row_end, valid_end_row)
+            valid_end_col = max(col_end, valid_end_col)
         for row in range(row_start, row_end + 1):
             for col in range(col_start, col_end + 1):
                 grid[row][col] = (i, row_start, row_end, col_start, col_end)
 
     # 创建表格
-    table_html = "<table>\n"
+    table_html = "<html><body><table>"
 
     # 遍历每行
     for row in range(max_row):
-        empty_temp = True
-        temp = "  <tr>\n"
-
+        if row < valid_start_row or row > valid_end_row:
+            continue
+        temp = "<tr>"
         # 遍历每一列
         for col in range(max_col):
+            if col < valid_start_col or col > valid_end_col:
+                continue
             if not grid[row][col]:
-                temp += "    <td></td>\n"
+                temp += "<td></td>"
             else:
                 i, row_start, row_end, col_start, col_end = grid[row][col]
                 if not cell_box_map.get(i):
                     continue
-                empty_temp = False
                 if row == row_start and col == col_start:
                     ocr_rec_text = cell_box_map.get(i)
                     text = "<br>".join(ocr_rec_text)
-                    if not text.strip():
-                        continue
                     # 如果是起始单元格
                     row_span = row_end - row_start + 1
                     col_span = col_end - col_start + 1
                     cell_content = (
-                        f"<td rowspan={row_span} colspan={col_span}>{text}</td>\n"
+                        f"<td rowspan={row_span} colspan={col_span}>{text}</td>"
                     )
                     temp += cell_content
-        if not empty_temp:
-            table_html = table_html + temp + "  </tr>\n"
 
-    table_html += "</table>"
+        table_html = table_html + temp + "</tr>"
+
+    table_html += "</table></body></html>"
     return table_html
 
 

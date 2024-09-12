@@ -16,7 +16,7 @@ class TableRecover:
         rows = self.get_rows(polygons)
         longest_col, each_col_widths, col_nums = self.get_benchmark_cols(rows, polygons)
         each_row_heights, row_nums = self.get_benchmark_rows(rows, polygons)
-        table_res = self.get_merge_cells(
+        table_res, logic_points_dict = self.get_merge_cells(
             polygons,
             rows,
             row_nums,
@@ -25,7 +25,10 @@ class TableRecover:
             each_col_widths,
             each_row_heights,
         )
-        return table_res
+        logic_points = np.array(
+            [logic_points_dict[i] for i in range(len(polygons))]
+        ).astype(np.int32)
+        return table_res, logic_points
 
     @staticmethod
     def get_rows(polygons: np.array) -> Dict[int, List[int]]:
@@ -38,8 +41,8 @@ class TableRecover:
         minus_res = concat_y[:, 1] - concat_y[:, 0]
 
         result = {}
-        thresh = 5.0
-        split_idxs = np.argwhere(minus_res > thresh).squeeze()
+        thresh = 10.0
+        split_idxs = np.argwhere(abs(minus_res) > thresh).squeeze()
         if split_idxs.ndim == 0:
             split_idxs = split_idxs[None, ...]
 
@@ -62,7 +65,7 @@ class TableRecover:
         longest_col_points = polygons[longest_col]
         longest_x = longest_col_points[:, 0, 0]
 
-        theta = 10
+        theta = 15
         for row_value in rows.values():
             cur_row = polygons[row_value][:, 0, 0]
 
@@ -116,7 +119,8 @@ class TableRecover:
         # 遍历其他所有的框，按照y轴进行区间划分
         range_res = {}
         for cur_idx, cur_box in enumerate(polygons):
-            if cur_idx in benchmark_x:
+            # fix cur_idx in benchmark_x
+            if cur_idx in leftmost_cell_idxs:
                 continue
 
             cur_y = cur_box[0, 1]
@@ -148,7 +152,8 @@ class TableRecover:
         # 求出最后一行cell中，最大的高度作为最后一行的高度
         bottommost_idxs = list(rows.values())[-1]
         bottommost_boxes = polygons[bottommost_idxs]
-        max_height = max([self.compute_L2(v[3, :], v[0, :]) for v in bottommost_boxes])
+        # fix self.compute_L2(v[3, :], v[0, :]), v为逆时针，即v[3]为右上，v[0]为左上,v[1]为左下
+        max_height = max([self.compute_L2(v[1, :], v[0, :]) for v in bottommost_boxes])
         each_row_widths.append(max_height)
 
         row_nums = benchmark_x.shape[0]
@@ -169,7 +174,8 @@ class TableRecover:
         each_row_heights: List[float],
     ) -> Dict[int, Dict[int, int]]:
         col_res_merge, row_res_merge = {}, {}
-        merge_thresh = 20
+        logic_points = {}
+        merge_thresh = 10
         for cur_row, col_list in rows.items():
             one_col_result, one_row_result = {}, {}
             for one_col in col_list:
@@ -178,40 +184,62 @@ class TableRecover:
 
                 # 不一定是从0开始的，应该综合已有值和x坐标位置来确定起始位置
                 loc_col_idx = np.argmin(np.abs(longest_col[:, 0, 0] - box[0, 0]))
-                merge_col_cell = max(sum(one_col_result.values()), loc_col_idx)
+                col_start = max(sum(one_col_result.values()), loc_col_idx)
 
                 # 计算合并多少个列方向单元格
-                for i in range(merge_col_cell, col_nums):
-                    col_cum_sum = sum(each_col_widths[merge_col_cell : i + 1])
-                    if i == merge_col_cell and col_cum_sum > box_width:
+                for i in range(col_start, col_nums):
+                    col_cum_sum = sum(each_col_widths[col_start : i + 1])
+                    if i == col_start and col_cum_sum > box_width:
                         one_col_result[one_col] = 1
                         break
                     elif abs(col_cum_sum - box_width) <= merge_thresh:
-                        one_col_result[one_col] = i + 1 - merge_col_cell
+                        one_col_result[one_col] = i + 1 - col_start
+                        break
+                    # 这里必须进行修正，不然会出现超越阈值范围后列交错
+                    elif col_cum_sum > box_width:
+                        idx = (
+                            i
+                            if abs(col_cum_sum - box_width)
+                            < abs(col_cum_sum - each_col_widths[i] - box_width)
+                            else i - 1
+                        )
+                        one_col_result[one_col] = idx + 1 - col_start
                         break
                 else:
-                    one_col_result[one_col] = i + 1 - merge_col_cell + 1
-
+                    one_col_result[one_col] = col_nums - col_start
+                col_end = one_col_result[one_col] + col_start - 1
                 box_height = self.compute_L2(box[1, :], box[0, :])
-                merge_row_cell = cur_row
-                for j in range(merge_row_cell, row_nums):
-                    row_cum_sum = sum(each_row_heights[merge_row_cell : j + 1])
+                row_start = cur_row
+                for j in range(row_start, row_nums):
+                    row_cum_sum = sum(each_row_heights[row_start : j + 1])
                     # box_height 不确定是几行的高度，所以要逐个试验，找一个最近的几行的高
                     # 如果第一次row_cum_sum就比box_height大，那么意味着？丢失了一行
-                    if j == merge_row_cell and row_cum_sum > box_height:
+                    if j == row_start and row_cum_sum > box_height:
                         one_row_result[one_col] = 1
                         break
-
                     elif abs(box_height - row_cum_sum) <= merge_thresh:
-                        one_row_result[one_col] = j + 1 - merge_row_cell
+                        one_row_result[one_col] = j + 1 - row_start
+                        break
+                    # 这里必须进行修正，不然会出现超越阈值范围后行交错
+                    elif row_cum_sum > box_height:
+                        idx = (
+                            j
+                            if abs(row_cum_sum - box_height)
+                            < abs(row_cum_sum - each_row_heights[j] - box_height)
+                            else j - 1
+                        )
+                        one_row_result[one_col] = idx + 1 - row_start
                         break
                 else:
-                    one_row_result[one_col] = j + 1 - merge_row_cell + 1
-
+                    one_row_result[one_col] = row_nums - row_start
+                row_end = one_row_result[one_col] + row_start - 1
+                logic_points[one_col] = np.array(
+                    [row_start, row_end, col_start, col_end]
+                )
             col_res_merge[cur_row] = one_col_result
             row_res_merge[cur_row] = one_row_result
 
         res = {}
         for i, (c, r) in enumerate(zip(col_res_merge.values(), row_res_merge.values())):
             res[i] = {k: [cc, r[k]] for k, cc in c.items()}
-        return res
+        return res, logic_points
