@@ -199,6 +199,7 @@ class LinelessTableRecognition:
 
         # 创建一个二维数组来存储 sorted_logi_points 中的元素
         grid = [[None] * max_col for _ in range(max_row)]
+
         # 将 sorted_logi_points 中的元素填充到 grid 中
         deleted_idx = set()
         for i, dict_res in enumerate(res):

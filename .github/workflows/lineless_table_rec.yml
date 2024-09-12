@@ -15,10 +15,10 @@ jobs:
       - name: Pull latest code
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.7
+      - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: '3.7'
+          python-version: '3.10'
           architecture: 'x64'
 
       - name: Display Python version
@@ -33,7 +33,7 @@ jobs:
           unzip lineless_table_rec_models.zip
           mv lineless_table_rec_models/*.onnx lineless_table_rec/models/
 
-          pytest tests/test_lore.py
+          pytest tests/test_lineless_table_rec.py
 
   GenerateWHL_PushPyPi:
     needs: UnitTesting

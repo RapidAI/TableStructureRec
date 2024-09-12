@@ -15,10 +15,10 @@ jobs:
       - name: Pull latest code
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.7
+      - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: '3.7'
+          python-version: '3.10'
           architecture: 'x64'
 
       - name: Display Python version
@@ -33,7 +33,7 @@ jobs:
           unzip wired_table_rec_models.zip
           mv wired_table_rec_models/*.onnx wired_table_rec/models/
 
-          pytest tests/test_wired.py
+          pytest tests/test_wired_table_rec.py
 
   GenerateWHL_PushPyPi:
     needs: UnitTesting
@@ -59,13 +59,6 @@ jobs:
           mv wired_table_rec_models/*.onnx wired_table_rec/models/
 
           python setup_wired.py bdist_wheel "${{ github.event.head_commit.message }}"
-
-      # - name: Publish distribution 📦 to Test PyPI
-      #   uses: pypa/gh-action-pypi-publish@v1.5.0
-      #   with:
-      #     password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-      #     repository_url: https://test.pypi.org/legacy/
-      #     packages_dir:  dist/
 
       - name: Publish distribution 📦 to PyPI
         uses: pypa/gh-action-pypi-publish@v1.5.0
