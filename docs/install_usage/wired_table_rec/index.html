@@ -481,14 +481,14 @@
 		
 
 		<a class="nav-link  active"
-		   id="acefdbTab" data-bs-toggle="tab" data-bs-target="#acefdb"
-		   type="button" role="tab" aria-controls="acefdb" aria-selected="true">Python脚本使用</a>
+		   id="ecfbdaTab" data-bs-toggle="tab" data-bs-target="#ecfbda"
+		   type="button" role="tab" aria-controls="ecfbda" aria-selected="true">Python脚本使用</a>
 
 		
 
 		<a class="nav-link "
-		   id="cdebfaTab" data-bs-toggle="tab" data-bs-target="#cdebfa"
-		   type="button" role="tab" aria-controls="cdebfa" aria-selected="true">终端使用</a>
+		   id="bdeacfTab" data-bs-toggle="tab" data-bs-target="#bdeacf"
+		   type="button" role="tab" aria-controls="bdeacf" aria-selected="true">终端使用</a>
 
 		
 
@@ -504,7 +504,7 @@
 
 
 
-<div class="tab-pane fade show active" id="acefdb" role="tabpanel" aria-labelledby="nav-1">
+<div class="tab-pane fade show active" id="ecfbda" role="tabpanel" aria-labelledby="nav-1">
 
 	
 
@@ -545,7 +545,7 @@ print(elapse)</code>
 
 
 
-<div class="tab-pane fade" id="cdebfa" role="tabpanel" aria-labelledby="nav-1">
+<div class="tab-pane fade" id="bdeacf" role="tabpanel" aria-labelledby="nav-1">
 
 	
 
@@ -996,8 +996,8 @@ print(elapse)</code>
                 id:  3 ,
                 href: "\/TableStructureRec\/docs\/install_usage\/lineless_table_rec\/",
                 title: "lineless_table_rec",
-                description: "简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。 在这里，我们做的工作主要包括以下两点： 将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR 模型转换ONNX link详情参考：ConvertLOREToONNX 安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 from lineless_table_rec import LinelessTableRecognition engine = LinelessTableRecognition() img_path = \"tests/test_files/lineless_table_recognition.jpg\" table_str, elapse = engine(img_path) print(table_str) print(elapse) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） 姓名 年龄 性别 身高/m 体重/kg BMI/(kg/m²) Duke 34 男 1.",
-                content: " 简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。\n在这里，我们做的工作主要包括以下两点：\n将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR\n模型转换ONNX link详情参考：ConvertLOREToONNX\n安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 from lineless_table_rec import LinelessTableRecognition engine = LinelessTableRecognition() img_path = \"tests/test_files/lineless_table_recognition.jpg\" table_str, elapse = engine(img_path) print(table_str) print(elapse) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） 姓名 年龄 性别 身高/m 体重/kg BMI/(kg/m²) Duke 34 男 1.74 70 23 Ella 26 女 1.60 58 23 Eartha 女 1.34 29 16 Thelonious 6 男 1.07 17 15 TARO 22 男 1.728 65 21.7 HANAKO 22 女 1.60 53 20.7 NARMAN 38 男 1.76 73 NAOMI 23 女 1.63 60 "
+                description: "简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。\n在这里，我们做的工作主要包括以下两点：\n将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR\n模型转换ONNX link详情参考：ConvertLOREToONNX\n安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 import os from lineless_table_rec import LinelessTableRecognition from lineless_table_rec.utils_table_recover import ( format_html, plot_rec_box, plot_rec_box_with_logic_info, ) output_dir = \"outputs\" img_path = \"tests/test_files/lineless_table_recognition.jpg\" table_rec = LinelessTableRecognition() html, elasp, polygons, logic_points, ocr_res = table_rec(img_path) print(f\"cost: {elasp:.5f}\") complete_html = format_html(html) os.makedirs(os.path.dirname(f\"{output_dir}/table.html\"), exist_ok=True) with open(f\"{output_dir}/table.html\", \"w\", encoding=\"utf-8\") as file: file.write(complete_html) plot_rec_box_with_logic_info( img_path, f\"{output_dir}/table_rec_box.jpg\", logic_points, polygons ) plot_rec_box(img_path, f\"{output_dir}/ocr_box.",
+                content: " 简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。\n在这里，我们做的工作主要包括以下两点：\n将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR\n模型转换ONNX link详情参考：ConvertLOREToONNX\n安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 import os from lineless_table_rec import LinelessTableRecognition from lineless_table_rec.utils_table_recover import ( format_html, plot_rec_box, plot_rec_box_with_logic_info, ) output_dir = \"outputs\" img_path = \"tests/test_files/lineless_table_recognition.jpg\" table_rec = LinelessTableRecognition() html, elasp, polygons, logic_points, ocr_res = table_rec(img_path) print(f\"cost: {elasp:.5f}\") complete_html = format_html(html) os.makedirs(os.path.dirname(f\"{output_dir}/table.html\"), exist_ok=True) with open(f\"{output_dir}/table.html\", \"w\", encoding=\"utf-8\") as file: file.write(complete_html) plot_rec_box_with_logic_info( img_path, f\"{output_dir}/table_rec_box.jpg\", logic_points, polygons ) plot_rec_box(img_path, f\"{output_dir}/ocr_box.jpg\", ocr_res) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） 姓名 年龄 性别 身高/m 体重/kg BMI/(kg/m²) Duke 34 男 1.74 70 23 Ella 26 女 1.60 58 23 Eartha 女 1.34 29 16 Thelonious 6 男 1.07 17 15 TARO 22 男 1.728 65 21.7 HANAKO 22 女 1.60 53 20.7 NARMAN 38 男 1.76 73 NAOMI 23 女 1.63 60 "
             }
         );
     index.add(

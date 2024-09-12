@@ -37,18 +37,18 @@
 在这里，我们做的工作主要包括以下两点：
 将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR
 模型转换ONNX link详情参考：ConvertLOREToONNX
-安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 from lineless_table_rec import LinelessTableRecognition engine = LinelessTableRecognition() img_path = &#34;tests/test_files/lineless_table_recognition.jpg&#34; table_str, elapse = engine(img_path) print(table_str) print(elapse) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） &lt;html&gt; &lt;body&gt; &lt;table&gt; &lt;tbody&gt; &lt;tr&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;姓名&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;年龄&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;性别&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;身高/m&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;体重/kg&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;BMI/(kg/m²)&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;Duke&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;34&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;男&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;1." />
+安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 import os from lineless_table_rec import LinelessTableRecognition from lineless_table_rec.utils_table_recover import ( format_html, plot_rec_box, plot_rec_box_with_logic_info, ) output_dir = &#34;outputs&#34; img_path = &#34;tests/test_files/lineless_table_recognition.jpg&#34; table_rec = LinelessTableRecognition() html, elasp, polygons, logic_points, ocr_res = table_rec(img_path) print(f&#34;cost: {elasp:.5f}&#34;) complete_html = format_html(html) os.makedirs(os.path.dirname(f&#34;{output_dir}/table.html&#34;), exist_ok=True) with open(f&#34;{output_dir}/table.html&#34;, &#34;w&#34;, encoding=&#34;utf-8&#34;) as file: file.write(complete_html) plot_rec_box_with_logic_info( img_path, f&#34;{output_dir}/table_rec_box.jpg&#34;, logic_points, polygons ) plot_rec_box(img_path, f&#34;{output_dir}/ocr_box." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rapidai.github.io/TableStructureRec/docs/install_usage/lineless_table_rec/" /><meta property="og:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_529375039069048311.png"/><meta property="article:section" content="docs" />
 
-<meta property="article:modified_time" content="2024-03-10T14:48:18+08:00" /><meta name="twitter:card" content="summary_large_image"/>
+<meta property="article:modified_time" content="2024-09-12T19:30:54+08:00" /><meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://rapidai.github.io/TableStructureRec/opengraph/card-base-2_hu06b1a92291a380a0d2e0ec03dab66b2f_17642_filter_529375039069048311.png"/>
 <meta name="twitter:title" content="lineless_table_rec"/>
 <meta name="twitter:description" content="简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。
 在这里，我们做的工作主要包括以下两点：
 将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR
 模型转换ONNX link详情参考：ConvertLOREToONNX
-安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 from lineless_table_rec import LinelessTableRecognition engine = LinelessTableRecognition() img_path = &#34;tests/test_files/lineless_table_recognition.jpg&#34; table_str, elapse = engine(img_path) print(table_str) print(elapse) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） &lt;html&gt; &lt;body&gt; &lt;table&gt; &lt;tbody&gt; &lt;tr&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;姓名&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;年龄&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;性别&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;身高/m&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;体重/kg&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;BMI/(kg/m²)&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;Duke&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;34&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;男&lt;/td&gt; &lt;td rowspan=&#34;1&#34; colspan=&#34;1&#34;&gt;1."/>
+安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 import os from lineless_table_rec import LinelessTableRecognition from lineless_table_rec.utils_table_recover import ( format_html, plot_rec_box, plot_rec_box_with_logic_info, ) output_dir = &#34;outputs&#34; img_path = &#34;tests/test_files/lineless_table_recognition.jpg&#34; table_rec = LinelessTableRecognition() html, elasp, polygons, logic_points, ocr_res = table_rec(img_path) print(f&#34;cost: {elasp:.5f}&#34;) complete_html = format_html(html) os.makedirs(os.path.dirname(f&#34;{output_dir}/table.html&#34;), exist_ok=True) with open(f&#34;{output_dir}/table.html&#34;, &#34;w&#34;, encoding=&#34;utf-8&#34;) as file: file.write(complete_html) plot_rec_box_with_logic_info( img_path, f&#34;{output_dir}/table_rec_box.jpg&#34;, logic_points, polygons ) plot_rec_box(img_path, f&#34;{output_dir}/ocr_box."/>
 
     
     <script>(()=>{var t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,e=localStorage.getItem("theme");t&&e===null&&(localStorage.setItem("theme","dark"),document.documentElement.setAttribute("data-dark-mode","")),t&&e==="dark"&&document.documentElement.setAttribute("data-dark-mode",""),e==="dark"&&document.documentElement.setAttribute("data-dark-mode","")})()</script>
@@ -489,14 +489,14 @@
 		
 
 		<a class="nav-link  active"
-		   id="eacbfdTab" data-bs-toggle="tab" data-bs-target="#eacbfd"
-		   type="button" role="tab" aria-controls="eacbfd" aria-selected="true">Python脚本使用</a>
+		   id="cadefbTab" data-bs-toggle="tab" data-bs-target="#cadefb"
+		   type="button" role="tab" aria-controls="cadefb" aria-selected="true">Python脚本使用</a>
 
 		
 
 		<a class="nav-link "
-		   id="afdbceTab" data-bs-toggle="tab" data-bs-target="#afdbce"
-		   type="button" role="tab" aria-controls="afdbce" aria-selected="true">终端使用</a>
+		   id="acfebdTab" data-bs-toggle="tab" data-bs-target="#acfebd"
+		   type="button" role="tab" aria-controls="acfebd" aria-selected="true">终端使用</a>
 
 		
 
@@ -512,7 +512,7 @@
 
 
 
-<div class="tab-pane fade show active" id="eacbfd" role="tabpanel" aria-labelledby="nav-1">
+<div class="tab-pane fade show active" id="cadefb" role="tabpanel" aria-labelledby="nav-1">
 
 	
 
@@ -532,16 +532,33 @@
   
 
   <div class="prism-codeblock  linenos">
-  <pre id="0dc4ac6" class="language-python  line-numbers">
-  <code>from lineless_table_rec import LinelessTableRecognition
+  <pre id="8a38cc6" class="language-python  line-numbers">
+  <code>import os
 
-engine = LinelessTableRecognition()
+from lineless_table_rec import LinelessTableRecognition
+from lineless_table_rec.utils_table_recover import (
+    format_html,
+    plot_rec_box,
+    plot_rec_box_with_logic_info,
+)
 
+output_dir = &#34;outputs&#34;
 img_path = &#34;tests/test_files/lineless_table_recognition.jpg&#34;
-table_str, elapse = engine(img_path)
+table_rec = LinelessTableRecognition()
 
-print(table_str)
-print(elapse)</code>
+html, elasp, polygons, logic_points, ocr_res = table_rec(img_path)
+print(f&#34;cost: {elasp:.5f}&#34;)
+
+complete_html = format_html(html)
+os.makedirs(os.path.dirname(f&#34;{output_dir}/table.html&#34;), exist_ok=True)
+
+with open(f&#34;{output_dir}/table.html&#34;, &#34;w&#34;, encoding=&#34;utf-8&#34;) as file:
+    file.write(complete_html)
+
+plot_rec_box_with_logic_info(
+    img_path, f&#34;{output_dir}/table_rec_box.jpg&#34;, logic_points, polygons
+)
+plot_rec_box(img_path, f&#34;{output_dir}/ocr_box.jpg&#34;, ocr_res)</code>
   </pre>
   </div>
 
@@ -553,7 +570,7 @@ print(elapse)</code>
 
 
 
-<div class="tab-pane fade" id="afdbce" role="tabpanel" aria-labelledby="nav-1">
+<div class="tab-pane fade" id="acfebd" role="tabpanel" aria-labelledby="nav-1">
 
 	
 
@@ -685,6 +702,7 @@ print(elapse)</code>
   </pre>
   </div>
 </details>
+
     </div>
 
     
@@ -721,9 +739,9 @@ print(elapse)</code>
     <div id="last-modified" class="mt-1">
         <p class="mb-0 fw-semibold">Last updated <span
             id="relativetime"
-            data-authdate="2024-03-10T14:48:18&#43;0800"
-            title="10 Mar 2024, 14:48 &#43;0800">
-            10 Mar 2024, 14:48 &#43;0800
+            data-authdate="2024-09-12T19:30:54&#43;0800"
+            title="12 Sep 2024, 19:30 &#43;0800">
+            12 Sep 2024, 19:30 &#43;0800
         </span>. <span class="material-icons size-20 align-text-bottom opacity-75">history</span>
         </p>
     </div>
@@ -1050,8 +1068,8 @@ print(elapse)</code>
                 id:  3 ,
                 href: "\/TableStructureRec\/docs\/install_usage\/lineless_table_rec\/",
                 title: "lineless_table_rec",
-                description: "简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。 在这里，我们做的工作主要包括以下两点： 将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR 模型转换ONNX link详情参考：ConvertLOREToONNX 安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 from lineless_table_rec import LinelessTableRecognition engine = LinelessTableRecognition() img_path = \"tests/test_files/lineless_table_recognition.jpg\" table_str, elapse = engine(img_path) print(table_str) print(elapse) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） 姓名 年龄 性别 身高/m 体重/kg BMI/(kg/m²) Duke 34 男 1.",
-                content: " 简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。\n在这里，我们做的工作主要包括以下两点：\n将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR\n模型转换ONNX link详情参考：ConvertLOREToONNX\n安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 from lineless_table_rec import LinelessTableRecognition engine = LinelessTableRecognition() img_path = \"tests/test_files/lineless_table_recognition.jpg\" table_str, elapse = engine(img_path) print(table_str) print(elapse) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） 姓名 年龄 性别 身高/m 体重/kg BMI/(kg/m²) Duke 34 男 1.74 70 23 Ella 26 女 1.60 58 23 Eartha 女 1.34 29 16 Thelonious 6 男 1.07 17 15 TARO 22 男 1.728 65 21.7 HANAKO 22 女 1.60 53 20.7 NARMAN 38 男 1.76 73 NAOMI 23 女 1.63 60 "
+                description: "简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。\n在这里，我们做的工作主要包括以下两点：\n将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR\n模型转换ONNX link详情参考：ConvertLOREToONNX\n安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 import os from lineless_table_rec import LinelessTableRecognition from lineless_table_rec.utils_table_recover import ( format_html, plot_rec_box, plot_rec_box_with_logic_info, ) output_dir = \"outputs\" img_path = \"tests/test_files/lineless_table_recognition.jpg\" table_rec = LinelessTableRecognition() html, elasp, polygons, logic_points, ocr_res = table_rec(img_path) print(f\"cost: {elasp:.5f}\") complete_html = format_html(html) os.makedirs(os.path.dirname(f\"{output_dir}/table.html\"), exist_ok=True) with open(f\"{output_dir}/table.html\", \"w\", encoding=\"utf-8\") as file: file.write(complete_html) plot_rec_box_with_logic_info( img_path, f\"{output_dir}/table_rec_box.jpg\", logic_points, polygons ) plot_rec_box(img_path, f\"{output_dir}/ocr_box.",
+                content: " 简介 linklineless_table_rec库源于阿里读光-LORE无线表格结构识别模型。\n在这里，我们做的工作主要包括以下两点：\n将模型转换为ONNX格式，便于部署 完善后处理代码，与OCR识别模型整合，可以保证输出结果为完整的表格和对应的内容 info 该库仅提供推理代码，如有训练模型需求，请移步LORE-TSR\n模型转换ONNX link详情参考：ConvertLOREToONNX\n安装 link pip install lineless_table_rec 使用 link Python脚本使用 终端使用 import os from lineless_table_rec import LinelessTableRecognition from lineless_table_rec.utils_table_recover import ( format_html, plot_rec_box, plot_rec_box_with_logic_info, ) output_dir = \"outputs\" img_path = \"tests/test_files/lineless_table_recognition.jpg\" table_rec = LinelessTableRecognition() html, elasp, polygons, logic_points, ocr_res = table_rec(img_path) print(f\"cost: {elasp:.5f}\") complete_html = format_html(html) os.makedirs(os.path.dirname(f\"{output_dir}/table.html\"), exist_ok=True) with open(f\"{output_dir}/table.html\", \"w\", encoding=\"utf-8\") as file: file.write(complete_html) plot_rec_box_with_logic_info( img_path, f\"{output_dir}/table_rec_box.jpg\", logic_points, polygons ) plot_rec_box(img_path, f\"{output_dir}/ocr_box.jpg\", ocr_res) $ lineless_table_rec -img tests/test_files/lineless_table_recognition.jpg 查看效果 link 识别结果（点击展开） 姓名 年龄 性别 身高/m 体重/kg BMI/(kg/m²) Duke 34 男 1.74 70 23 Ella 26 女 1.60 58 23 Eartha 女 1.34 29 16 Thelonious 6 男 1.07 17 15 TARO 22 男 1.728 65 21.7 HANAKO 22 女 1.60 53 20.7 NARMAN 38 男 1.76 73 NAOMI 23 女 1.63 60 "
             }
         );
     index.add(
