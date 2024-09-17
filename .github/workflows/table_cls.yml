@@ -35,33 +35,33 @@ jobs:
 
           pytest tests/test_table_cls.py
 
-  GenerateWHL_PushPyPi:
-    needs: UnitTesting
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-          architecture: 'x64'
-
-      - name: Run setup.py
-        run: |
-          pip install -r requirements.txt
-          python -m pip install --upgrade pip
-          pip install wheel get_pypi_latest_version
-
-          wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/table_cls_models.zip
-          unzip table_cls_models.zip
-          mv table_cls_models/*.onnx table_cls/models/
-
-          python setup_table_cls.py bdist_wheel "${{ github.event.head_commit.message }}"
-
-      - name: Publish distribution 📦 to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.5.0
-        with:
-          password: ${{ secrets.TABLE_CLS }}
-          packages_dir: dist/
+#  GenerateWHL_PushPyPi:
+#    needs: UnitTesting
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Set up Python 3.10
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: '3.10'
+#          architecture: 'x64'
+#
+#      - name: Run setup.py
+#        run: |
+#          pip install -r requirements.txt
+#          python -m pip install --upgrade pip
+#          pip install wheel get_pypi_latest_version
+#
+#          wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/table_cls_models.zip
+#          unzip table_cls_models.zip
+#          mv table_cls_models/*.onnx table_cls/models/
+#
+#          python setup_table_cls.py bdist_wheel "${{ github.event.head_commit.message }}"
+#
+#      - name: Publish distribution 📦 to PyPI
+#        uses: pypa/gh-action-pypi-publish@v1.5.0
+#        with:
+#          password: ${{ secrets.TABLE_CLS }}
+#          packages_dir: dist/
