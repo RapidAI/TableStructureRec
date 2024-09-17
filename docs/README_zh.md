@@ -16,31 +16,61 @@
 
 ### 简介
 
-该仓库是用来对文档中表格做结构化识别的推理库，包括来自PaddleOCR的表格结构识别算法模型、来自阿里读光有线和无线表格识别算法模型等。
+💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自paddle的表格识别模型，
+阿里读光有线和无线表格识别模型，其他人贡献的有线表格模型，网易Qanything内置表格分类模型等。
 
-该仓库将表格识别前后处理做了完善，并结合OCR，保证表格识别部分可直接使用。
+#### 特点
+⚡  **快**  采用ONNXRuntime作为推理引擎，cpu下单图推理1-7s
 
-该仓库会持续关注表格识别这一领域，集成最新最好用的表格识别算法，争取打造最具有落地价值的表格识别工具库。
+🎯 **准**: 结合表格类型分类模型，区分有线表格，无线表格，任务更细分，精度更高
 
-欢迎大家持续关注。
+🛡️ **稳**: 不依赖任何第三方训练框架，采用onnx专项小模型, 彻底解决了内存泄露问题
 
-### 表格结构化识别
 
-表格结构识别（Table Structure Recognition, TSR）旨在提取表格图像的逻辑或物理结构，从而将非结构化的表格图像转换为机器可读的格式。
-
-逻辑结构：表示单元格的行/列关系（例如同行、同列）和单元格的跨度信息。
-
-物理结构：不仅包含逻辑结构，还包含单元格的包围框、内容等信息，强调单元格的物理位置。
-
-<div align='center'>
-   <img src="https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/TSRFramework.jpg" width=70%>
+### 效果展示
+<div align="center">
+    <img src="https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/demo_img_output.gif" alt="Demo" width="100%" height="100%">
 </div>
 
-图来自： [Improving Table Structure Recognition with Visual-Alignment Sequential Coordinate Modeling](https://openaccess.thecvf.com/content/CVPR2023/html/Huang_Improving_Table_Structure_Recognition_With_Visual-Alignment_Sequential_Coordinate_Modeling_CVPR_2023_paper.html)
+### 安装
+``` python {linenos=table}
+pip install wired_table_rec lineless_table_rec table_cls
+```
 
-### 文档
+### 快速使用
+``` python {linenos=table}
+import os
 
-完整文档请移步：[docs](https://rapidai.github.io/TableStructureRec/docs/)
+from lineless_table_rec import LinelessTableRecognition
+from lineless_table_rec.utils_table_recover import format_html, plot_rec_box_with_logic_info, plot_rec_box
+from table_cls import TableCls
+from wired_table_rec import WiredTableRecognition
+
+lineless_engine = LinelessTableRecognition()
+wired_engine = WiredTableRecognition()
+table_cls = TableCls()
+img_path = f'images/img14.jpg'
+
+cls,elasp = table_cls(img_path)
+if cls == 'wired':
+    table_engine = wired_engine
+else:
+    table_engine = lineless_engine
+html, elasp, polygons, logic_points, ocr_res = table_engine(img_path)
+print(f"elasp: {elasp}")
+
+# output_dir = f'outputs'
+# complete_html = format_html(html)
+# os.makedirs(os.path.dirname(f"{output_dir}/table.html"), exist_ok=True)
+# with open(f"{output_dir}/table.html", "w", encoding="utf-8") as file:
+#     file.write(complete_html)
+# # 可视化表格识别框 + 逻辑行列信息
+# plot_rec_box_with_logic_info(
+#     img_path, f"{output_dir}/table_rec_box.jpg", logic_points, polygons
+# )
+# # 可视化 ocr 识别框
+# plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
+```
 
 ### 致谢
 
@@ -49,6 +79,10 @@
 [读光-表格结构识别-有线表格](https://www.modelscope.cn/models/damo/cv_dla34_table-structure-recognition_cycle-centernet/summary)
 
 [读光-表格结构识别-无线表格](https://www.modelscope.cn/models/damo/cv_resnet-transformer_table-structure-recognition_lore/summary)
+
+[Qanything-RAG](https://github.com/netease-youdao/QAnything)
+
+llaipython(微信，商业化支持表格提取) 提供高精度有线表格模型。
 
 ### 贡献指南
 

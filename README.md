@@ -16,31 +16,63 @@
 
 ### Introduction
 
-This repo is an inference library used for structured recognition of tables in documents, including table structure recognition algorithm models from PaddleOCR, wired and wireless table recognition algorithm models from Alibaba Duguang, etc.
+This repository is a library for structured recognition of tables in documents. 
+It includes table recognition models from Paddle, Alibaba's DocLight wired and wireless table recognition models, 
+wired table models contributed by others, and the built-in table classification model from NetEase QAnything.
 
-The repo has improved the pre- and post-processing of form recognition and combined with OCR to ensure that the form recognition part can be used directly.
 
-The repo will continue to focus on the field of table recognition, integrate the latest and most useful table recognition algorithms, and strive to create the most valuable table recognition tool library.
 
-Welcome everyone to continue to pay attention.
+#### Features
+⚡  **Fast**: Uses ONNXRuntime as the inference engine, achieving 1-7 second inference times on CPU.
 
-### What is Table Structure Recognition?
+🎯 **Accurate**: Combines table type classification models to distinguish between wired and wireless tables, leading to more specialized tasks and higher accuracy.
 
-Table Structure Recognition (TSR) aims to extract the logical or physical structure of table images, thereby converting unstructured table images into machine-readable formats.
+🛡️ **Stable**: Does not depend on any third-party training frameworks, uses specialized ONNX models, and completely solves memory leak issues.
 
-Logical structure: represents the row/column relationship of cells (such as the same row, the same column) and the span information of cells.
-
-Physical structure: includes not only the logical structure, but also the cell's bounding box, content and other information, emphasizing the physical location of the cell.
-
-<div align='center'>
-   <img src="https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/TSRFramework.jpg" width=70%>
+### Results Demonstration
+<div align="center">
+    <img src="https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/demo_img_output.gif" alt="Demo" width="100%" height="100%">
 </div>
 
-Figure from: [Improving Table Structure Recognition with Visual-Alignment Sequential Coordinate Modeling](https://openaccess.thecvf.com/content/CVPR2023/html/Huang_Improving_Table_Structure_Recognition_With_Visual-Alignment_Sequential_Coordinate_Modeling_CVPR_2023_paper.html)
+### Install
+``` python {linenos=table}
+pip install wired_table_rec lineless_table_rec table_cls
+```
 
-### Documentation
+### Quick Start
+``` python {linenos=table}
+import os
 
-Full documentation can be found on [docs](https://rapidai.github.io/TableStructureRec/docs/), in Chinese.
+from lineless_table_rec import LinelessTableRecognition
+from lineless_table_rec.utils_table_recover import format_html, plot_rec_box_with_logic_info, plot_rec_box
+from table_cls import TableCls
+from wired_table_rec import WiredTableRecognition
+
+lineless_engine = LinelessTableRecognition()
+wired_engine = WiredTableRecognition()
+table_cls = TableCls()
+img_path = f'images/img14.jpg'
+
+cls,elasp = table_cls(img_path)
+if cls == 'wired':
+    table_engine = wired_engine
+else:
+    table_engine = lineless_engine
+html, elasp, polygons, logic_points, ocr_res = table_engine(img_path)
+print(f"elasp: {elasp}")
+
+# output_dir = f'outputs'
+# complete_html = format_html(html)
+# os.makedirs(os.path.dirname(f"{output_dir}/table.html"), exist_ok=True)
+# with open(f"{output_dir}/table.html", "w", encoding="utf-8") as file:
+#     file.write(complete_html)
+# # 可视化表格识别框 + 逻辑行列信息
+# plot_rec_box_with_logic_info(
+#     img_path, f"{output_dir}/table_rec_box.jpg", logic_points, polygons
+# )
+# # 可视化 ocr 识别框
+# plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
+```
 
 ### Acknowledgements
 
@@ -49,6 +81,10 @@ Full documentation can be found on [docs](https://rapidai.github.io/TableStructu
 [Cycle CenterNet](https://www.modelscope.cn/models/damo/cv_dla34_table-structure-recognition_cycle-centernet/summary)
 
 [LORE](https://www.modelscope.cn/models/damo/cv_resnet-transformer_table-structure-recognition_lore/summary)
+
+[Qanything-RAG](https://github.com/netease-youdao/QAnything)
+
+llaipython (WeChat, commercial support for table extraction) provides high-precision wired table models.
 
 ### Contributing
 
