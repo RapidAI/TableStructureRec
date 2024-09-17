@@ -34,6 +34,21 @@ wired table models contributed by others, and the built-in table classification 
     <img src="https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/demo_img_output.gif" alt="Demo" width="100%" height="100%">
 </div>
 
+### 指标结果
+[TableRecognitionMetric](https://github.com/SWHL/TableRecognitionMetric)
+
+[dataset](https://huggingface.co/datasets/SWHL/table_rec_test_dataset)
+
+[Rapid OCR](https://github.com/RapidAI/RapidOCR)
+
+| model                                                                                                                      |TEDS|
+|:---------------------------------------------------------------------------------------------------------------------------|:-|
+| lineless_table_rec                                                                                                         |0.50054|
+| [RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md) |0.58786|
+| wired_table_rec v1                                                                                                         |0.70279|
+| table_cls + wired_table_rec v1 + lineless_table_rec                                                                        |0.74692|
+| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        |0.80235|
+
 ### Install
 ``` python {linenos=table}
 pip install wired_table_rec lineless_table_rec table_cls
@@ -73,7 +88,11 @@ print(f"elasp: {elasp}")
 # # 可视化 ocr 识别框
 # plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
 ```
-
+### TODO List
+- [ ] rotate img fix before rec
+- [ ] Increase dataset size
+- [ ] Lineless table rec optimization
+- 
 ### Acknowledgements
 
 [PaddleOCR Table](https://github.com/PaddlePaddle/PaddleOCR/blob/4b17511491adcfd0f3e2970895d06814d1ce56cc/ppstructure/table/README_ch.md)

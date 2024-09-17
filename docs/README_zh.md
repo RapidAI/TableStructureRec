@@ -32,6 +32,22 @@
     <img src="https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/demo_img_output.gif" alt="Demo" width="100%" height="100%">
 </div>
 
+### 指标结果
+[TableRecognitionMetric 评测工具](https://github.com/SWHL/TableRecognitionMetric)
+
+[评测数据集](https://huggingface.co/datasets/SWHL/table_rec_test_dataset)
+
+[Rapid OCR](https://github.com/RapidAI/RapidOCR)
+
+| 方法                                                                                                                         |TEDS|
+|:---------------------------------------------------------------------------------------------------------------------------|:-|
+| lineless_table_rec                                                                                                         |0.53561|
+| [RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md) |0.58786|
+| wired_table_rec v1                                                                                                         |0.70279|
+| wired_table_rec v2                                                                                                         |0.78007|
+| table_cls + wired_table_rec v1 + lineless_table_rec                                                                        |0.74692|
+| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        |0.80235|
+
 ### 安装
 ``` python {linenos=table}
 pip install wired_table_rec lineless_table_rec table_cls
@@ -71,6 +87,10 @@ print(f"elasp: {elasp}")
 # # 可视化 ocr 识别框
 # plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
 ```
+### TODO List 
+- [ ] 识别前图片偏移修正
+- [ ] 增加数据集数量，增加更多评测对比
+- [ ] 优化无线表格模型
 
 ### 致谢
 
