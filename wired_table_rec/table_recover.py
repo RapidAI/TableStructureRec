@@ -115,7 +115,7 @@ class TableRecover:
         leftmost_cell_idxs = [v[0] for v in rows.values()]
         benchmark_x = polygons[leftmost_cell_idxs][:, 0, 1]
 
-        theta = 10
+        theta = 15
         # 遍历其他所有的框，按照y轴进行区间划分
         range_res = {}
         for cur_idx, cur_box in enumerate(polygons):
