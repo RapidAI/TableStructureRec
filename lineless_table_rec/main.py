@@ -5,7 +5,7 @@ import logging
 import time
 import traceback
 from pathlib import Path
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union, Optional
 
 import cv2
 import numpy as np
@@ -47,16 +47,25 @@ class LinelessTableRecognition:
         self.det_process = DetProcess()
         self.ocr = RapidOCR()
 
-    def __call__(self, content: InputType):
+    def __call__(
+        self,
+        content: InputType,
+        ocr_result: Optional[List[Union[List[List[float]], str, str]]] = None,
+    ):
         ss = time.perf_counter()
         img = self.load_img(content)
-        ocr_res, _ = self.ocr(img)
+        if self.ocr is None and ocr_result is None:
+            raise ValueError(
+                "One of two conditions must be met: ocr_result is not empty, or rapidocr_onnxruntime is installed."
+            )
+        if ocr_result is None:
+            ocr_result, _ = self.ocr(img)
         input_info = self.preprocess(img)
         try:
             polygons, slct_logi = self.infer(input_info)
             logi_points = self.filter_logi_points(slct_logi)
             # ocr 结果匹配
-            cell_box_det_map, no_match_ocr_det = match_ocr_cell(ocr_res, polygons)
+            cell_box_det_map, no_match_ocr_det = match_ocr_cell(ocr_result, polygons)
             # 如果有识别框没有ocr结果，直接进行rec补充
             cell_box_det_map = self.re_rec(img, polygons, cell_box_det_map)
             # 转换为中间格式，修正识别框坐标,将物理识别框，逻辑识别框，ocr识别框整合为dict，方便后续处理
@@ -92,7 +101,9 @@ class LinelessTableRecognition:
             sorted_logi_points = [
                 t_box_ocr["t_logic_box"] for t_box_ocr in t_rec_ocr_list
             ]
-            ocr_boxes_res = [box_4_2_poly_to_box_4_1(ori_ocr[0]) for ori_ocr in ocr_res]
+            ocr_boxes_res = [
+                box_4_2_poly_to_box_4_1(ori_ocr[0]) for ori_ocr in ocr_result
+            ]
             sorted_ocr_boxes_res, _ = sorted_ocr_boxes(ocr_boxes_res)
             table_elapse = time.perf_counter() - ss
             return (
@@ -181,21 +192,19 @@ class LinelessTableRecognition:
     def sort_and_gather_ocr_res(self, res):
         for i, dict_res in enumerate(res):
             _, sorted_idx = sorted_ocr_boxes(
-                [ocr_det[0] for ocr_det in dict_res["t_ocr_res"]]
+                [ocr_det[0] for ocr_det in dict_res["t_ocr_res"]], threhold=0.5
             )
             dict_res["t_ocr_res"] = [dict_res["t_ocr_res"][i] for i in sorted_idx]
-            dict_res["t_ocr_res"] = gather_ocr_list_by_row(dict_res["t_ocr_res"])
+            dict_res["t_ocr_res"] = gather_ocr_list_by_row(
+                dict_res["t_ocr_res"], thehold=0.5
+            )
         return res
 
     def handle_overlap_row_col(self, res):
         max_row, max_col = 0, 0
         for dict_res in res:
-            max_row = max(
-                max_row, dict_res["t_logic_box"][1] + 1
-            )  # 加1是因为结束下标是包含在内的
-            max_col = max(
-                max_col, dict_res["t_logic_box"][3] + 1
-            )  # 加1是因为结束下标是包含在内的
+            max_row = max(max_row, dict_res["t_logic_box"][1] + 1)  # 加1是因为结束下标是包含在内的
+            max_col = max(max_col, dict_res["t_logic_box"][3] + 1)  # 加1是因为结束下标是包含在内的
 
         # 创建一个二维数组来存储 sorted_logi_points 中的元素
         grid = [[None] * max_col for _ in range(max_row)]

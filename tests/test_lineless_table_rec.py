@@ -21,8 +21,8 @@ table_recog = LinelessTableRecognition()
 @pytest.mark.parametrize(
     "img_path, table_str_len, td_nums",
     [
-        ("lineless_table_recognition.jpg", 1869, 104),
-        ("table.jpg", 3000, 158),
+        ("lineless_table_recognition.jpg", 1840, 108),
+        ("table.jpg", 2870, 160),
     ],
 )
 def test_input_normal(img_path, table_str_len, td_nums):
@@ -182,3 +182,65 @@ def test_filter_duplicated_box(table_boxes, expected_delete_idx):
     assert (
         delete_idx == expected_delete_idx
     ), f"Expected {expected_delete_idx}, but got {delete_idx}"
+
+
+@pytest.mark.parametrize(
+    "logi_points, cell_box_map, expected_html",
+    [
+        # 测试空输入
+        ([], {}, "<html><body><table></table></body></html>"),
+        # 测试单个单元格，包含rowspan和colspan
+        (
+            [[0, 0, 0, 0]],
+            {0: ["Cell 1"]},
+            "<html><body><table><tr><td rowspan=1 colspan=1>Cell 1</td></tr></table></body></html>",
+        ),
+        # 测试多个独立单元格
+        (
+            [[0, 0, 0, 0], [1, 1, 1, 1]],
+            {0: ["Cell 1"], 1: ["Cell 2"]},
+            "<html><body><table><tr><td rowspan=1 colspan=1>Cell 1</td><td></td></tr><tr><td></td><td rowspan=1 colspan=1>Cell 2</td></tr></table></body></html>",
+        ),
+        # 测试跨行的单元格
+        (
+            [[0, 1, 0, 0]],
+            {0: ["Row 1 Col 1", "Row 2 Col 1"]},
+            "<html><body><table><tr><td rowspan=2 colspan=1>Row 1 Col 1<br>Row 2 Col 1</td></tr><tr></tr></table></body></html>",
+        ),
+        # 测试跨列的单元格
+        (
+            [[0, 0, 0, 1]],
+            {0: ["Col 1 Row 1", "Col 2 Row 1"]},
+            "<html><body><table><tr><td rowspan=1 colspan=2>Col 1 Row 1<br>Col 2 Row 1</td></tr></table></body></html>",
+        ),
+        # 测试跨多行多列的单元格
+        (
+            [[0, 1, 0, 1]],
+            {0: ["Row 1 Col 1", "Row 2 Col 1"]},
+            "<html><body><table><tr><td rowspan=2 colspan=2>Row 1 Col 1<br>Row 2 Col 1</td></tr><tr></tr></table></body></html>",
+        ),
+        # 测试跨行跨行跨列的单元格出现在中间
+        (
+            [[0, 0, 0, 0], [0, 1, 1, 2]],
+            {0: ["Cell 1"], 1: ["Row 2", "Col 2"]},
+            "<html><body><table><tr><td rowspan=1 colspan=1>Cell 1</td><td rowspan=2 colspan=2>Row 2<br>Col 2</td></tr><tr><td></td></tr></table></body></html>",
+        ),
+        # 测试跨行跨列的单元格出现在结尾
+        (
+            [[0, 0, 0, 0], [1, 1, 1, 1], [0, 1, 2, 2]],
+            {0: ["Cell 1"], 1: ["Cell 2"], 2: ["Row 1 Col 2", "Row 2 Col 2"]},
+            "<html><body><table><tr><td rowspan=1 colspan=1>Cell 1</td><td></td><td rowspan=2 colspan=1>Row 1 Col 2<br>Row 2 Col 2</td></tr><tr><td></td><td rowspan=1 colspan=1>Cell 2</td></tr></table></body></html>",
+        ),
+        # 测试去除无效行和无效列
+        (
+            [[0, 0, 0, 0], [1, 1, 0, 0], [1, 1, 1, 1], [0, 0, 1, 2]],
+            {2: ["Row 3 Col 1", "Row 3 Col 2"]},
+            "<html><body><table><tr><td rowspan=1 colspan=1>Row 3 Col 1<br>Row 3 Col 2</td></tr></table></body></html>",
+        ),
+    ],
+)
+def test_plot_html_table(logi_points, cell_box_map, expected_html):
+    html_output = plot_html_table(logi_points, cell_box_map)
+    assert (
+        html_output == expected_html
+    ), f"Expected HTML does not match. Got: {html_output}"

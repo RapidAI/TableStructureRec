@@ -16,7 +16,12 @@ from .utils_table_line_rec import (
     group_bbox_by_gbox,
     nms,
 )
-from .utils_table_recover import merge_adjacent_polys, sorted_boxes
+from .utils_table_recover import (
+    merge_adjacent_polys,
+    sorted_ocr_boxes,
+    box_4_2_poly_to_box_4_1,
+    filter_duplicated_box,
+)
 
 
 class TableLineRecognition:
@@ -39,7 +44,12 @@ class TableLineRecognition:
             return None
 
         polygons = polygons.reshape(polygons.shape[0], 4, 2)
-        polygons = sorted_boxes(polygons)
+        del_idxs = filter_duplicated_box(
+            [box_4_2_poly_to_box_4_1(box) for box in polygons]
+        )
+        polygons = np.delete(polygons, list(del_idxs), axis=0)
+        _, idx = sorted_ocr_boxes([box_4_2_poly_to_box_4_1(box) for box in polygons])
+        polygons = polygons[idx]
         polygons = merge_adjacent_polys(polygons)
         return polygons
 

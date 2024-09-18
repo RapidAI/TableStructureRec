@@ -1,5 +1,7 @@
 numpy>=1.21.6
 onnxruntime>=1.14.1
 opencv_python
+scipy
+scikit-image
 Shapely
 rapidocr_onnxruntime>=1.3.8
