@@ -1,6 +1,6 @@
 <div align="center">
   <div align="center">
-    <h1><b>📊 Table Structure Recognition</b></h1>
+    <h1><b>📊 表格结构识别</b></h1>
   </div>
   <a href=""><img src="https://img.shields.io/badge/Python->=3.6,<3.12-aff.svg"></a>
   <a href=""><img src="https://img.shields.io/badge/OS-Linux%2C%20Mac%2C%20Win-pink.svg"></a>
@@ -10,51 +10,43 @@
   <a href="https://semver.org/"><img alt="SemVer2.0" src="https://img.shields.io/badge/SemVer-2.0-brightgreen"></a>
   <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
   <a href="https://github.com/RapidAI/TableStructureRec/blob/c41bbd23898cb27a957ed962b0ffee3c74dfeff1/LICENSE"><img alt="GitHub" src="https://img.shields.io/badge/license-Apache 2.0-blue"></a>
-
-  [简体中文](./docs/README_zh.md) | English
 </div>
 
-### Introduction
+### 简介
 
-This repository is a library for structured recognition of tables in documents. 
-It includes table recognition models from Paddle, Alibaba's DocLight wired and wireless table recognition models, 
-wired table models contributed by others, and the built-in table classification model from NetEase QAnything.
+💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自paddle的表格识别模型，
+阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。
 
+#### 特点
+⚡  **快**  采用ONNXRuntime作为推理引擎，cpu下单图推理1-7s
 
+🎯 **准**: 结合表格类型分类模型，区分有线表格，无线表格，任务更细分，精度更高
 
-#### Features
-⚡  **Fast**: Uses ONNXRuntime as the inference engine, achieving 1-7 second inference times on CPU.
+🛡️ **稳**: 不依赖任何第三方训练框架，采用onnx专项小模型, 彻底解决了内存泄露问题
 
-🎯 **Accurate**: Combines table type classification models to distinguish between wired and wireless tables, leading to more specialized tasks and higher accuracy.
-
-🛡️ **Stable**: Does not depend on any third-party training frameworks, uses specialized ONNX models, and completely solves memory leak issues.
-
-### Results Demonstration
+### 效果展示
 <div align="center">
     <img src="https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/demo_img_output.gif" alt="Demo" width="100%" height="100%">
 </div>
 
 ### 指标结果
-[TableRecognitionMetric](https://github.com/SWHL/TableRecognitionMetric)
+[TableRecognitionMetric 评测工具](https://github.com/SWHL/TableRecognitionMetric) [评测数据集](https://huggingface.co/datasets/SWHL/table_rec_test_dataset) [Rapid OCR](https://github.com/RapidAI/RapidOCR)
 
-[dataset](https://huggingface.co/datasets/SWHL/table_rec_test_dataset)
+| 方法                                                                                                                         | TEDS |
+|:---------------------------------------------------------------------------------------------------------------------------|:----:|
+| lineless_table_rec                                                                                                         | 0.53561 |
+| [RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md) | 0.58786 |
+| wired_table_rec v1                                                                                                         | 0.70279 |
+| wired_table_rec v2                                                                                                         | 0.78007 |
+| table_cls + wired_table_rec v1 + lineless_table_rec                                                                        | 0.74692 |
+| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        |0.80235|                                                                    
 
-[Rapid OCR](https://github.com/RapidAI/RapidOCR)
-
-| model                                                                                                                      |TEDS|
-|:---------------------------------------------------------------------------------------------------------------------------|:-|
-| lineless_table_rec                                                                                                         |0.50054|
-| [RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md) |0.58786|
-| wired_table_rec v1                                                                                                         |0.70279|
-| table_cls + wired_table_rec v1 + lineless_table_rec                                                                        |0.74692|
-| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        |0.80235|
-
-### Install
+### 安装
 ``` python {linenos=table}
 pip install wired_table_rec lineless_table_rec table_cls
 ```
 
-### Quick Start
+### 快速使用
 ``` python {linenos=table}
 import os
 
@@ -88,38 +80,55 @@ print(f"elasp: {elasp}")
 # # 可视化 ocr 识别框
 # plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
 ```
-### TODO List
-- [ ] rotate img fix before rec
-- [ ] Increase dataset size
-- [ ] Lineless table rec optimization
-- 
-### Acknowledgements
 
-[PaddleOCR Table](https://github.com/PaddlePaddle/PaddleOCR/blob/4b17511491adcfd0f3e2970895d06814d1ce56cc/ppstructure/table/README_ch.md)
+## FAQ (Frequently Asked Questions)
 
-[Cycle CenterNet](https://www.modelscope.cn/models/damo/cv_dla34_table-structure-recognition_cycle-centernet/summary)
+1. **问：偏移的图片能够处理吗？**
+   - 答：该项目暂时不支持偏移图片识别，请先修正图片，也欢迎提pr来解决这个问题。
 
-[LORE](https://www.modelscope.cn/models/damo/cv_resnet-transformer_table-structure-recognition_lore/summary)
+2. **问：识别框丢失了内部文字信息**
+   - 答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
+     下载更高精度的ocr模型,在执行时传入ocr_result即可
+     
+3. **问：模型支持 gpu 加速吗？**
+   - 答：目前表格模型的推理非常快，有线表格在100ms级别，无线表格在500ms级别，
+     主要耗时在ocr阶段，可以参考 [rapidocr_paddle](https://rapidai.github.io/RapidOCRDocs/install_usage/rapidocr_paddle/usage/#_3) 加速ocr识别过程
+
+### TODO List 
+- [ ] 识别前图片偏移修正
+- [ ] 增加数据集数量，增加更多评测对比
+- [ ] 优化无线表格模型
+
+### 处理流程
+```mermaid
+flowchart TD
+    A[/表格图片/] --> B([表格分类])
+    B --> C([有线表格识别]) & D([无线表格识别]) --> E([文字识别 rapidocr_onnxruntime])
+    E --> F[/html结构化输出/]
+```
+
+### 致谢
+
+[PaddleOCR 表格识别](https://github.com/PaddlePaddle/PaddleOCR/blob/4b17511491adcfd0f3e2970895d06814d1ce56cc/ppstructure/table/README_ch.md)
+
+[读光-表格结构识别-有线表格](https://www.modelscope.cn/models/damo/cv_dla34_table-structure-recognition_cycle-centernet/summary)
+
+[读光-表格结构识别-无线表格](https://www.modelscope.cn/models/damo/cv_resnet-transformer_table-structure-recognition_lore/summary)
 
 [Qanything-RAG](https://github.com/netease-youdao/QAnything)
 
-llaipython (WeChat, commercial support for table extraction) provides high-precision wired table models.
+非常感谢 llaipython(微信，提供全套有偿高精度表格提取) 提供高精度有线表格模型。
 
-### Contributing
+### 贡献指南
 
-Pull requests are welcome. For major changes, please open an issue first
-to discuss what you would like to change.
+欢迎提交请求。对于重大更改，请先打开issue讨论您想要改变的内容。
 
-Please make sure to update tests as appropriate.
+请确保适当更新测试。
 
-### [Sponsor](https://rapidai.github.io/Knowledge-QA-LLM/docs/sponsor/)
+### [赞助](https://rapidai.github.io/Knowledge-QA-LLM/docs/sponsor/)
 
-If you want to sponsor the project, you can directly click the **Buy me a coffee** image, please write a note (e.g. your github account name) to facilitate adding to the sponsorship list below.
+如果您想要赞助该项目，可直接点击当前页最上面的Sponsor按钮，请写好备注(**您的Github账号名称**)，方便添加到赞助列表中。
 
-<div align="left">
-   <a href="https://www.buymeacoffee.com/SWHL"><img src="https://raw.githubusercontent.com/RapidAI/.github/main/assets/buymeacoffe.png" width="30%" height="30%"></a>
-</div>
+### 开源许可证
 
-### License
-
-This project is released under the [Apache 2.0 license](https://github.com/RapidAI/TableStructureRec/blob/c41bbd23898cb27a957ed962b0ffee3c74dfeff1/LICENSE).
+该项目采用[Apache 2.0](https://github.com/RapidAI/TableStructureRec/blob/c41bbd23898cb27a957ed962b0ffee3c74dfeff1/LICENSE)开源许可证。
