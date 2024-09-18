@@ -1,12 +1,12 @@
 # -*- encoding: utf-8 -*-
 # @Author: SWHL
 # @Contact: liekkaskono@163.com
-import sys
 from pathlib import Path
 from typing import List, Union
 
 import setuptools
-from get_pypi_latest_version import GetPyPiLatestVersion
+
+# from get_pypi_latest_version import GetPyPiLatestVersion
 
 
 def read_txt(txt_path: Union[Path, str]) -> List[str]:
@@ -17,20 +17,21 @@ def read_txt(txt_path: Union[Path, str]) -> List[str]:
 
 MODULE_NAME = "table_cls"
 
-obtainer = GetPyPiLatestVersion()
-try:
-    latest_version = obtainer(MODULE_NAME)
-except Exception:
-    latest_version = "0.0.0"
+# obtainer = GetPyPiLatestVersion()
+# try:
+#     latest_version = obtainer(MODULE_NAME)
+# except Exception:
+#     latest_version = "0.0.0"
+#
+# VERSION_NUM = obtainer.version_add_one(latest_version)
+VERSION_NUM = "1.0.0"
 
-VERSION_NUM = obtainer.version_add_one(latest_version)
-
-if len(sys.argv) > 2:
-    match_str = " ".join(sys.argv[2:])
-    matched_versions = obtainer.extract_version(match_str)
-    if matched_versions:
-        VERSION_NUM = matched_versions
-sys.argv = sys.argv[:2]
+# if len(sys.argv) > 2:
+#     match_str = " ".join(sys.argv[2:])
+#     matched_versions = obtainer.extract_version(match_str)
+#     if matched_versions:
+#         VERSION_NUM = matched_versions
+# sys.argv = sys.argv[:2]
 
 setuptools.setup(
     name=MODULE_NAME,
@@ -45,10 +46,8 @@ setuptools.setup(
     license="Apache-2.0",
     install_requires=read_txt("requirements.txt"),
     include_package_data=True,
-    packages=setuptools.find_packages(include=[MODULE_NAME, f"{MODULE_NAME}.*"]),
-    package_data={
-        MODULE_NAME: ["*.onnx"],
-    },
+    packages=[MODULE_NAME, f"{MODULE_NAME}.models"],
+    package_data={"": ["*.onnx"]},
     keywords=["table-classifier", "wired", "wireless", "table-recognition"],
     classifiers=[
         "Programming Language :: Python :: 3.6",
