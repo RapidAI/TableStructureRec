@@ -33,6 +33,10 @@ jobs:
           unzip wired_table_rec_models.zip
           mv wired_table_rec_models/*.onnx wired_table_rec/models/
 
+          wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/wired_table_rec_modelsV2.zip
+          unzip wired_table_rec_modelsV2.zip
+          mv cycle_center_net_v2.onnx wired_table_rec/models/
+
           pytest tests/test_wired_table_rec.py
 
 #  GenerateWHL_PushPyPi:
