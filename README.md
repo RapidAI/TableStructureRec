@@ -18,6 +18,7 @@
 阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。
 
 #### 特点
+
 ⚡  **快**  采用ONNXRuntime作为推理引擎，cpu下单图推理1-7s
 
 🎯 **准**: 结合表格类型分类模型，区分有线表格，无线表格，任务更细分，精度更高
@@ -25,11 +26,13 @@
 🛡️ **稳**: 不依赖任何第三方训练框架，只依赖必要基础库，避免包冲突
 
 ### 效果展示
+
 <div align="center">
     <img src="https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/demo_img_output.gif" alt="Demo" width="100%" height="100%">
 </div>
 
 ### 指标结果
+
 [TableRecognitionMetric 评测工具](https://github.com/SWHL/TableRecognitionMetric) [评测数据集](https://huggingface.co/datasets/SWHL/table_rec_test_dataset) [Rapid OCR](https://github.com/RapidAI/RapidOCR)
 
 | 方法                                                                                                                         | TEDS |
@@ -39,14 +42,16 @@
 | wired_table_rec v1                                                                                                         | 0.70279 |
 | wired_table_rec v2                                                                                                         | 0.78007 |
 | table_cls + wired_table_rec v1 + lineless_table_rec                                                                        | 0.74692 |
-| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        |0.80235|                                                                    
+| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        |0.80235|
 
 ### 安装
+
 ``` python {linenos=table}
 pip install wired_table_rec lineless_table_rec table_cls
 ```
 
 ### 快速使用
+
 ``` python {linenos=table}
 import os
 
@@ -89,21 +94,23 @@ print(f"elasp: {elasp}")
 2. **问：识别框丢失了内部文字信息**
    - 答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
      下载更高精度的ocr模型,在执行时传入ocr_result即可
-     
+
 3. **问：模型支持 gpu 加速吗？**
    - 答：目前表格模型的推理非常快，有线表格在100ms级别，无线表格在500ms级别，
      主要耗时在ocr阶段，可以参考 [rapidocr_paddle](https://rapidai.github.io/RapidOCRDocs/install_usage/rapidocr_paddle/usage/#_3) 加速ocr识别过程
 
-### TODO List 
+### TODO List
+
 - [ ] 识别前图片偏移修正
 - [ ] 增加数据集数量，增加更多评测对比
 - [ ] 优化无线表格模型
 
 ### 处理流程
+
 ```mermaid
 flowchart TD
-    A[/表格图片/] --> B([表格分类])
-    B --> C([有线表格识别]) & D([无线表格识别]) --> E([文字识别 rapidocr_onnxruntime])
+    A[/表格图片/] --> B([表格分类 table_cls])
+    B --> C([有线表格识别 wired_table_rec]) & D([无线表格识别 lineless_table_rec]) --> E([文字识别 rapidocr_onnxruntime])
     E --> F[/html结构化输出/]
 ```
 
