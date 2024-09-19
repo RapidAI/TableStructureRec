@@ -48,7 +48,9 @@ class TableLineRecognition:
             [box_4_2_poly_to_box_4_1(box) for box in polygons]
         )
         polygons = np.delete(polygons, list(del_idxs), axis=0)
-        _, idx = sorted_ocr_boxes([box_4_2_poly_to_box_4_1(box) for box in polygons])
+        _, idx = sorted_ocr_boxes(
+            [box_4_2_poly_to_box_4_1(box) for box in polygons], threhold=0.4
+        )
         polygons = polygons[idx]
         polygons = merge_adjacent_polys(polygons)
         return polygons
