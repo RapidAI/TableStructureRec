@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+import math
 import traceback
 from io import BytesIO
 from pathlib import Path
@@ -350,3 +351,47 @@ def _scale_size(size, scale):
         scale = (scale, scale)
     w, h = size
     return int(w * float(scale[0]) + 0.5), int(h * float(scale[1]) + 0.5)
+
+
+class ImageOrientationCorrector:
+    """
+    对图片小角度(-90 - + 90度进行修正)
+    """
+
+    def __init__(self):
+        self.img_loader = LoadImage()
+
+    def __call__(self, img: InputType):
+        img = self.img_loader(img)
+        # 取灰度
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        # 二值化
+        gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+        # 边缘检测
+        edges = cv2.Canny(gray, 100, 250, apertureSize=3)
+        # 霍夫变换，摘自https://blog.csdn.net/feilong_csdn/article/details/81586322
+        lines = cv2.HoughLines(edges, 1, np.pi / 180, 0)
+        for rho, theta in lines[0]:
+            a = np.cos(theta)
+            b = np.sin(theta)
+            x0 = a * rho
+            y0 = b * rho
+            x1 = int(x0 + 1000 * (-b))
+            y1 = int(y0 + 1000 * (a))
+            x2 = int(x0 - 1000 * (-b))
+            y2 = int(y0 - 1000 * (a))
+        if x1 == x2 or y1 == y2:
+            return img
+        else:
+            t = float(y2 - y1) / (x2 - x1)
+            # 得到角度后
+            rotate_angle = math.degrees(math.atan(t))
+            if rotate_angle > 45:
+                rotate_angle = -90 + rotate_angle
+            elif rotate_angle < -45:
+                rotate_angle = 90 + rotate_angle
+            # 旋转图像
+            (h, w) = img.shape[:2]
+            center = (w // 2, h // 2)
+            M = cv2.getRotationMatrix2D(center, rotate_angle, 1.0)
+            return cv2.warpAffine(img, M, (w, h))

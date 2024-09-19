@@ -3,7 +3,7 @@
 # @Contact: liekkaskono@163.com
 import os
 import random
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Union, Set, Tuple
 
 import cv2
 import numpy as np
@@ -67,7 +67,7 @@ def compute_poly_iou(a: np.ndarray, b: np.ndarray) -> float:
     return float(inter_area) / union_area
 
 
-def filter_duplicated_box(table_boxes: list[list[float]]) -> set[int]:
+def filter_duplicated_box(table_boxes: List[List[float]]) -> Set[int]:
     """
     :param table_boxes: [[xmin,ymin,xmax,ymax]]
     :return:
@@ -95,7 +95,9 @@ def filter_duplicated_box(table_boxes: list[list[float]]) -> set[int]:
     return delete_idx
 
 
-def calculate_iou(box1: list | np.ndarray, box2: list | np.ndarray) -> float:
+def calculate_iou(
+    box1: Union[np.ndarray, List], box2: Union[np.ndarray, List]
+) -> float:
     """
     :param box1: Iterable [xmin,ymin,xmax,ymax]
     :param box2: Iterable [xmin,ymin,xmax,ymax]
@@ -127,7 +129,7 @@ def calculate_iou(box1: list | np.ndarray, box2: list | np.ndarray) -> float:
 
 
 def caculate_single_axis_iou(
-    box1: list | np.ndarray, box2: list | np.ndarray, axis="x"
+    box1: Union[np.ndarray, List], box2: Union[np.ndarray, List], axis="x"
 ) -> float:
     """
     :param box1: Iterable [xmin,ymin,xmax,ymax]
@@ -151,8 +153,8 @@ def caculate_single_axis_iou(
 
 
 def is_box_contained(
-    box1: list | np.ndarray, box2: list | np.ndarray, threshold=0.2
-) -> int | None:
+    box1: Union[np.ndarray, List], box2: Union[np.ndarray, List], threshold=0.2
+) -> Union[int, None]:
     """
     :param box1: Iterable [xmin,ymin,xmax,ymax]
     :param box2: Iterable [xmin,ymin,xmax,ymax]
@@ -195,8 +197,8 @@ def is_box_contained(
 
 
 def is_single_axis_contained(
-    box1: list | np.ndarray, box2: list | np.ndarray, axis="x", threhold=0.2
-) -> int | None:
+    box1: Union[np.ndarray, list], box2: Union[np.ndarray, list], axis="x", threhold=0.2
+) -> Union[int, None]:
     """
     :param box1: Iterable [xmin,ymin,xmax,ymax]
     :param box2: Iterable [xmin,ymin,xmax,ymax]
@@ -228,8 +230,8 @@ def is_single_axis_contained(
 
 
 def sorted_ocr_boxes(
-    dt_boxes: np.ndarray | list, threhold: float = 0.2
-) -> tuple[np.ndarray | list, list[int]]:
+    dt_boxes: Union[np.ndarray, List], threhold: float = 0.2
+) -> Tuple[Union[np.ndarray, list], List[int]]:
     """
     Sort text boxes in order from top to bottom, left to right
     args:
@@ -266,9 +268,7 @@ def sorted_ocr_boxes(
     return _boxes, indices
 
 
-def gather_ocr_list_by_row(
-    ocr_list: list[list[list[float], str]], thehold: float = 0.2
-) -> list[list[list[float], str]]:
+def gather_ocr_list_by_row(ocr_list: List[Any], thehold: float = 0.2) -> List[Any]:
     """
     :param ocr_list: [[[xmin,ymin,xmax,ymax], text]]
     :return:
@@ -305,12 +305,12 @@ def gather_ocr_list_by_row(
     return ocr_list
 
 
-def box_4_1_poly_to_box_4_2(poly_box: list | np.ndarray) -> list[list[float]]:
+def box_4_1_poly_to_box_4_2(poly_box: Union[np.ndarray, list]) -> List[List[float]]:
     xmin, ymin, xmax, ymax = tuple(poly_box)
     return [[xmin, ymin], [xmax, ymin], [xmax, ymax], [xmin, ymax]]
 
 
-def box_4_2_poly_to_box_4_1(poly_box: list | np.ndarray) -> list[float]:
+def box_4_2_poly_to_box_4_1(poly_box: Union[np.ndarray, list]) -> List[float]:
     """
     将poly_box转换为box_4_1
     :param poly_box:
@@ -407,7 +407,7 @@ def match_ocr_cell(dt_rec_boxes: List[List[Union[Any, str]]], pred_bboxes: np.nd
 
 
 def plot_html_table(
-    logi_points: np.ndarray | list, cell_box_map: Dict[int, List[str]]
+    logi_points: Union[np.ndarray, list], cell_box_map: Dict[int, List[str]]
 ) -> str:
     # 初始化最大行数和列数
     max_row = 0

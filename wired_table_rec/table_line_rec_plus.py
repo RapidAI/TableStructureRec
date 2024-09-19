@@ -44,7 +44,7 @@ class TableLineRecognitionPlus:
             polygons[:, 3, :].copy(),
         )
         _, idx = sorted_ocr_boxes(
-            [box_4_2_poly_to_box_4_1(poly_box) for poly_box in polygons]
+            [box_4_2_poly_to_box_4_1(poly_box) for poly_box in polygons], threhold=0.4
         )
         polygons = polygons[idx]
         return polygons
