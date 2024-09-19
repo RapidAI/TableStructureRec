@@ -85,7 +85,16 @@ print(f"elasp: {elasp}")
 # # 可视化 ocr 识别框
 # plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
 ```
-
+#### 偏移修正
+```python
+import cv2
+img_path = f'tests/test_files/wired/squeeze_error.jpeg'
+from wired_table_rec.utils import ImageOrientationCorrector
+img_orientation_corrector = ImageOrientationCorrector()
+img = cv2.imread(img_path)
+img = img_orientation_corrector(img)
+cv2.imwrite(f'img_rotated.jpg', img)
+```
 ## FAQ (Frequently Asked Questions)
 
 1. **问：偏移的图片能够处理吗？**
@@ -101,7 +110,7 @@ print(f"elasp: {elasp}")
 
 ### TODO List
 
-- [ ] 识别前图片偏移修正
+- [ ] 识别前图片偏移修正(完成有线表格小角度偏移修正)
 - [ ] 增加数据集数量，增加更多评测对比
 - [ ] 优化无线表格模型
 

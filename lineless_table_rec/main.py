@@ -119,10 +119,10 @@ class LinelessTableRecognition:
 
     def transform_res(
         self,
-        cell_box_det_map: dict[int, List[any]],
+        cell_box_det_map: Dict[int, List[any]],
         polygons: np.ndarray,
         logi_points: List[np.ndarray],
-    ) -> List[dict[str, any]]:
+    ) -> List[Dict[str, any]]:
         res = []
         for i in range(len(polygons)):
             ocr_res_list = cell_box_det_map.get(i)

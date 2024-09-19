@@ -7,7 +7,7 @@ import logging
 import time
 import traceback
 from pathlib import Path
-from typing import List, Optional, Tuple, Union, Dict
+from typing import List, Optional, Tuple, Union, Dict, Any
 import numpy as np
 import cv2
 
@@ -50,7 +50,7 @@ class WiredTableRecognition:
         self,
         img: InputType,
         ocr_result: Optional[List[Union[List[List[float]], str, str]]] = None,
-    ) -> Tuple[str, float, list]:
+    ) -> Tuple[str, float, Any, Any, Any]:
         if self.ocr is None and ocr_result is None:
             raise ValueError(
                 "One of two conditions must be met: ocr_result is not empty, or rapidocr_onnxruntime is installed."
@@ -109,10 +109,10 @@ class WiredTableRecognition:
 
     def transform_res(
         self,
-        cell_box_det_map: dict[int, List[any]],
+        cell_box_det_map: Dict[int, List[any]],
         polygons: np.ndarray,
         logi_points: List[np.ndarray],
-    ) -> List[dict[str, any]]:
+    ) -> List[Dict[str, any]]:
         res = []
         for i in range(len(polygons)):
             ocr_res_list = cell_box_det_map.get(i)
@@ -152,7 +152,7 @@ class WiredTableRecognition:
         img: np.ndarray,
         sorted_polygons: np.ndarray,
         cell_box_map: Dict[int, List[str]],
-    ) -> Dict[int, List[any]]:
+    ) -> Dict[int, List[Any]]:
         """找到poly对应为空的框，尝试将直接将poly框直接送到识别中"""
         #
         for i in range(sorted_polygons.shape[0]):
