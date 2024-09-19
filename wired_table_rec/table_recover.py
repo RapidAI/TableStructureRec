@@ -114,38 +114,6 @@ class TableRecover:
     ) -> Tuple[np.ndarray, List[float], int]:
         leftmost_cell_idxs = [v[0] for v in rows.values()]
         benchmark_x = polygons[leftmost_cell_idxs][:, 0, 1]
-        #  有线表格模型精度足够，不进行工程化修正，避免更多未知问题
-        # theta = 15
-        # 遍历其他所有的框，按照y轴进行区间划分
-        # range_res = {}
-        # for cur_idx, cur_box in enumerate(polygons):
-        #     # fix cur_idx in benchmark_x
-        #     if cur_idx in leftmost_cell_idxs:
-        #         continue
-        #
-        #     cur_y = cur_box[0, 1]
-        #
-        #     start_idx, end_idx = None, None
-        #     for i, v in enumerate(benchmark_x):
-        #         if cur_y - theta <= v <= cur_y + theta:
-        #             break
-        #
-        #         if cur_y > v:
-        #             start_idx = i
-        #             continue
-        #
-        #         if cur_y < v:
-        #             end_idx = i
-        #             break
-        #
-        #     range_res[cur_idx] = [start_idx, end_idx]
-        #
-        # sorted_res = dict(sorted(range_res.items(), key=lambda x: x[0], reverse=True))
-        # for k, v in sorted_res.items():
-        #     if not all(v):
-        #         continue
-        #
-        #     benchmark_x = np.insert(benchmark_x, v[1], polygons[k][0, 1])
 
         each_row_widths = (benchmark_x[1:] - benchmark_x[:-1]).tolist()
 
