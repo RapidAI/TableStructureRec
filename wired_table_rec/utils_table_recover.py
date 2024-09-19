@@ -37,7 +37,7 @@ def sorted_boxes(dt_boxes: np.ndarray) -> np.ndarray:
 
 
 def calculate_iou(
-    box1: Union[np.ndarray, list], box2: Union[np.ndarray, list]
+    box1: Union[np.ndarray, List], box2: Union[np.ndarray, List]
 ) -> float:
     """
     :param box1: Iterable [xmin,ymin,xmax,ymax]
@@ -70,7 +70,7 @@ def calculate_iou(
 
 
 def caculate_single_axis_iou(
-    box1: Union[np.ndarray, list], box2: Union[np.ndarray, list], axis="x"
+    box1: Union[np.ndarray, List], box2: Union[np.ndarray, List], axis="x"
 ) -> float:
     """
     :param box1: Iterable [xmin,ymin,xmax,ymax]
@@ -94,7 +94,7 @@ def caculate_single_axis_iou(
 
 
 def is_box_contained(
-    box1: Union[np.ndarray, list], box2: Union[np.ndarray, list], threshold=0.2
+    box1: Union[np.ndarray, List], box2: Union[np.ndarray, List], threshold=0.2
 ) -> Union[int, None]:
     """
     :param box1: Iterable [xmin,ymin,xmax,ymax]
@@ -138,8 +138,8 @@ def is_box_contained(
 
 
 def is_single_axis_contained(
-    box1: Union[np.ndarray, list],
-    box2: Union[np.ndarray, list],
+    box1: Union[np.ndarray, List],
+    box2: Union[np.ndarray, List],
     axis="x",
     threhold: float = 0.2,
 ) -> Union[int, None]:
@@ -558,7 +558,7 @@ def is_inclusive_each_other(box1: np.ndarray, box2: np.ndarray):
 
 
 def plot_html_table(
-    logi_points: Union[Union[np.ndarray, list]], cell_box_map: Dict[int, List[str]]
+    logi_points: Union[Union[np.ndarray, List]], cell_box_map: Dict[int, List[str]]
 ) -> str:
     # 初始化最大行数和列数
     max_row = 0

@@ -96,7 +96,7 @@ def filter_duplicated_box(table_boxes: List[List[float]]) -> Set[int]:
 
 
 def calculate_iou(
-    box1: Union[np.ndarray, list], box2: Union[np.ndarray, list]
+    box1: Union[np.ndarray, List], box2: Union[np.ndarray, List]
 ) -> float:
     """
     :param box1: Iterable [xmin,ymin,xmax,ymax]
@@ -129,7 +129,7 @@ def calculate_iou(
 
 
 def caculate_single_axis_iou(
-    box1: Union[np.ndarray, list], box2: Union[np.ndarray, list], axis="x"
+    box1: Union[np.ndarray, List], box2: Union[np.ndarray, List], axis="x"
 ) -> float:
     """
     :param box1: Iterable [xmin,ymin,xmax,ymax]
@@ -153,7 +153,7 @@ def caculate_single_axis_iou(
 
 
 def is_box_contained(
-    box1: Union[np.ndarray, list], box2: Union[np.ndarray, list], threshold=0.2
+    box1: Union[np.ndarray, List], box2: Union[np.ndarray, List], threshold=0.2
 ) -> Union[int, None]:
     """
     :param box1: Iterable [xmin,ymin,xmax,ymax]
