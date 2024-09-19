@@ -3,7 +3,7 @@
 # @Contact: liekkaskono@163.com
 import os
 import random
-from typing import Dict, List, Union, Any
+from typing import Any, Dict, List, Union
 
 import cv2
 import numpy as np
@@ -638,3 +638,32 @@ def vis_table(img: np.ndarray, polygons: np.ndarray) -> np.ndarray:
         font = cv2.FONT_HERSHEY_SIMPLEX
         cv2.putText(img, str(i), poly[0], font, 1, (0, 0, 255), 1)
     return img
+
+
+def format_html(html):
+    return f"""
+    <!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+    <meta charset="UTF-8">
+    <title>Complex Table Example</title>
+    <style>
+        table {{
+            border-collapse: collapse;
+            width: 100%;
+        }}
+        th, td {{
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }}
+        th {{
+            background-color: #f2f2f2;
+        }}
+    </style>
+    </head>
+    <body>
+    {html}
+    </body>
+    </html>
+    """
