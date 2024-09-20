@@ -2,7 +2,7 @@ name: Push table_cls to pypi
 
 on:
   push:
-    branches: [ main ]
+    # branches: [ main ]
     # paths:
     #   - 'table_cls/**'
     tags:

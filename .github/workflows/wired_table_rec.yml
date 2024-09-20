@@ -2,7 +2,7 @@ name: Push wired_table_rec to pypi
 
 on:
   push:
-    branches: [ main ]
+    # branches: [ main ]
     # paths:
     #   - 'wired_table_rec/**'
     tags:
