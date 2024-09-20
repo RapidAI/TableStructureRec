@@ -39,33 +39,33 @@ jobs:
 
           pytest tests/test_wired_table_rec.py
 
- GenerateWHL_PushPyPi:
-   needs: UnitTesting
-   runs-on: ubuntu-latest
+  GenerateWHL_PushPyPi:
+    needs: UnitTesting
+    runs-on: ubuntu-latest
 
-   steps:
-     - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-     - name: Set up Python 3.10
-       uses: actions/setup-python@v4
-       with:
-         python-version: '3.10'
-         architecture: 'x64'
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          architecture: 'x64'
 
-     - name: Run setup.py
-       run: |
-         pip install -r requirements.txt
-         python -m pip install --upgrade pip
-         pip install wheel get_pypi_latest_version
+      - name: Run setup.py
+        run: |
+          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install wheel get_pypi_latest_version
 
-         wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/wired_table_rec_models.zip
-         unzip wired_table_rec_models.zip
-         mv wired_table_rec_models/*.onnx wired_table_rec/models/
+          wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/wired_table_rec_models.zip
+          unzip wired_table_rec_models.zip
+          mv wired_table_rec_models/*.onnx wired_table_rec/models/
 
-         python setup_wired.py bdist_wheel "${{ github.ref_name }}"
+          python setup_wired.py bdist_wheel "${{ github.ref_name }}"
 
-     - name: Publish distribution 📦 to PyPI
-       uses: pypa/gh-action-pypi-publish@v1.5.0
-       with:
-         password: ${{ secrets.PYPI_API_TOKEN }}
-         packages_dir: dist/
+      - name: Publish distribution 📦 to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.5.0
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          packages_dir: dist/
