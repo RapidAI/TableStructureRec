@@ -3,10 +3,10 @@ name: Push wired_table_rec to pypi
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'wired_table_rec/**'
-    # tags:
-    #   - v*
+    # paths:
+    #   - 'wired_table_rec/**'
+    tags:
+      - wired_v*
 
 jobs:
   UnitTesting:
@@ -62,7 +62,7 @@ jobs:
          unzip wired_table_rec_models.zip
          mv wired_table_rec_models/*.onnx wired_table_rec/models/
 
-         python setup_wired.py bdist_wheel "${{ github.event.head_commit.message }}"
+         python setup_wired.py bdist_wheel "${{ github.ref_name }}"
 
      - name: Publish distribution 📦 to PyPI
        uses: pypa/gh-action-pypi-publish@v1.5.0
