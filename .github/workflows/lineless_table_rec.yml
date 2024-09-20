@@ -3,11 +3,11 @@ name: Push lineless_table_rec to pypi
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'lineless_table_rec/**'
-      - '.github/workflows/lineless_table_rec.yml'
-    # tags:
-    #   - v*
+    # paths:
+    #   - 'lineless_table_rec/**'
+    #   - '.github/workflows/lineless_table_rec.yml'
+    tags:
+      - lineless_v*
 
 jobs:
   UnitTesting:
@@ -59,7 +59,7 @@ jobs:
           unzip lineless_table_rec_models.zip
           mv lineless_table_rec_models/*.onnx lineless_table_rec/models/
 
-          python setup_lineless.py bdist_wheel "${{ github.event.head_commit.message }}"
+          python setup_lineless.py bdist_wheel "${{ github.ref_name }}"
 
       # - name: Publish distribution 📦 to Test PyPI
       #   uses: pypa/gh-action-pypi-publish@v1.5.0
