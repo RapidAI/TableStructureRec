@@ -35,14 +35,13 @@
 
 [TableRecognitionMetric 评测工具](https://github.com/SWHL/TableRecognitionMetric) [评测数据集](https://huggingface.co/datasets/SWHL/table_rec_test_dataset) [Rapid OCR](https://github.com/RapidAI/RapidOCR)
 
-| 方法                                                                                                                         | TEDS |
-|:---------------------------------------------------------------------------------------------------------------------------|:----:|
-| lineless_table_rec                                                                                                         | 0.53561 |
-| [RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md) | 0.58786 |
-| wired_table_rec v1                                                                                                         | 0.70279 |
-| wired_table_rec v2                                                                                                         | 0.78007 |
-| table_cls + wired_table_rec v1 + lineless_table_rec                                                                        | 0.74692 |
-| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        |0.80235|
+| 方法                                                                                                                         |  TEDS   | TEDS-only-structure |
+|:---------------------------------------------------------------------------------------------------------------------------|:-------:|:-------------------:|
+| [RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md) | 0.59765 |       0.68996       |
+| ppstructure_table_master                                                                                                   | 0.59835 |       0.68996       |
+| table_cls + wired_table_rec v1 + lineless_table_rec                                                                        | 0.74692 |       0.83049       |
+| ppsturcture_table_engine                                                                                                   | 0.76835 |       0.83296       |
+| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        | 0.80890 |       0.88011       |
 
 ### 安装
 
@@ -85,28 +84,35 @@ print(f"elasp: {elasp}")
 # # 可视化 ocr 识别框
 # plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
 ```
+
 #### 偏移修正
+
 ```python
 import cv2
+
 img_path = f'tests/test_files/wired/squeeze_error.jpeg'
 from wired_table_rec.utils import ImageOrientationCorrector
+
 img_orientation_corrector = ImageOrientationCorrector()
 img = cv2.imread(img_path)
 img = img_orientation_corrector(img)
 cv2.imwrite(f'img_rotated.jpg', img)
 ```
+
 ## FAQ (Frequently Asked Questions)
 
 1. **问：偏移的图片能够处理吗？**
-   - 答：该项目暂时不支持偏移图片识别，请先修正图片，也欢迎提pr来解决这个问题。
+    - 答：该项目暂时不支持偏移图片识别，请先修正图片，也欢迎提pr来解决这个问题。
 
 2. **问：识别框丢失了内部文字信息**
-   - 答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
-     下载更高精度的ocr模型,在执行时传入ocr_result即可
+   -
+   答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
+   下载更高精度的ocr模型,在执行时传入ocr_result即可
 
 3. **问：模型支持 gpu 加速吗？**
-   - 答：目前表格模型的推理非常快，有线表格在100ms级别，无线表格在500ms级别，
-     主要耗时在ocr阶段，可以参考 [rapidocr_paddle](https://rapidai.github.io/RapidOCRDocs/install_usage/rapidocr_paddle/usage/#_3) 加速ocr识别过程
+    - 答：目前表格模型的推理非常快，有线表格在100ms级别，无线表格在500ms级别，
+      主要耗时在ocr阶段，可以参考 [rapidocr_paddle](https://rapidai.github.io/RapidOCRDocs/install_usage/rapidocr_paddle/usage/#_3)
+      加速ocr识别过程
 
 ### TODO List
 
@@ -147,4 +153,5 @@ flowchart TD
 
 ### 开源许可证
 
-该项目采用[Apache 2.0](https://github.com/RapidAI/TableStructureRec/blob/c41bbd23898cb27a957ed962b0ffee3c74dfeff1/LICENSE)开源许可证。
+该项目采用[Apache 2.0](https://github.com/RapidAI/TableStructureRec/blob/c41bbd23898cb27a957ed962b0ffee3c74dfeff1/LICENSE)
+开源许可证。
