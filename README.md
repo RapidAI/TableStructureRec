@@ -12,8 +12,12 @@
   <a href="https://github.com/RapidAI/TableStructureRec/blob/c41bbd23898cb27a957ed962b0ffee3c74dfeff1/LICENSE"><img alt="GitHub" src="https://img.shields.io/badge/license-Apache 2.0-blue"></a>
 </div>
 
-### 简介
+### 最近更新
+- **2024.9.26**
+  - 修正RapidTable默认英文模型导致的测评结果错误。
+  - 补充测评数据集，补充开源社区更多模型的测评结果
 
+### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自paddle的表格识别模型，
 阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。
 
@@ -33,15 +37,20 @@
 
 ### 指标结果
 
-[TableRecognitionMetric 评测工具](https://github.com/SWHL/TableRecognitionMetric) [评测数据集](https://huggingface.co/datasets/SWHL/table_rec_test_dataset) [Rapid OCR](https://github.com/RapidAI/RapidOCR)
+[TableRecognitionMetric 评测工具](https://github.com/SWHL/TableRecognitionMetric) [huggingface数据集](https://huggingface.co/datasets/SWHL/table_rec_test_dataset) [modelscope 数据集](https://www.modelscope.cn/datasets/jockerK/TEDS_TEST/files) [Rapid OCR](https://github.com/RapidAI/RapidOCR)
 
-| 方法                                                                                                                         |  TEDS   | TEDS-only-structure |
+注: StructEqTable 输出为 latex，只取成功转换为html并去除样式标签后进行测评
+
+| 方法                                                                                                                        |  TEDS   | TEDS-only-structure |
 |:---------------------------------------------------------------------------------------------------------------------------|:-------:|:-------------------:|
-| [RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md) | 0.59765 |       0.68996       |
-| ppstructure_table_master                                                                                                   | 0.59835 |       0.68996       |
-| table_cls + wired_table_rec v1 + lineless_table_rec                                                                        | 0.74692 |       0.83049       |
-| ppsturcture_table_engine                                                                                                   | 0.76835 |       0.83296       |
-| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        | 0.80890 |       0.88011       |
+| [deepdoctection(rag-flow)](https://github.com/deepdoctection/deepdoctection?tab=readme-ov-file)                            | 0.59975 |       0.69918   |
+| [ppstructure_table_master](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)                                | 0.61606 |       0.73892       |
+| [ppsturcture_table_engine](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)                                | 0.67924 |       0.78653       |
+| table_cls + wired_table_rec v1 + lineless_table_rec                                                                        | 0.68507 |       0.75140       |
+| [StructEqTable](https://github.com/UniModal4Reasoning/StructEqTable-Deploy)                                                | 0.67310 |       **0.81210**   |
+| [RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md) | 0.71654 |       0.81067       |
+| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        | **0.73343** |       0.79876   |
+
 
 ### 安装
 
@@ -69,8 +78,14 @@ if cls == 'wired':
     table_engine = wired_engine
 else:
     table_engine = lineless_engine
+  
 html, elasp, polygons, logic_points, ocr_res = table_engine(img_path)
 print(f"elasp: {elasp}")
+
+# 使用其他ocr模型
+#ocr_engine =RapidOCR(det_model_dir="xxx/det_server_infer.onnx",rec_model_dir="xxx/rec_server_infer.onnx")
+#ocr_res, _ = ocr_engine(img_path)
+#html, elasp, polygons, logic_points, ocr_res = table_engine(img_path, ocr_result=ocr_res)  
 
 # output_dir = f'outputs'
 # complete_html = format_html(html)
@@ -105,8 +120,7 @@ cv2.imwrite(f'img_rotated.jpg', img)
     - 答：该项目暂时不支持偏移图片识别，请先修正图片，也欢迎提pr来解决这个问题。
 
 2. **问：识别框丢失了内部文字信息**
-   -
-   答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
+   -答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
    下载更高精度的ocr模型,在执行时传入ocr_result即可
 
 3. **问：模型支持 gpu 加速吗？**
@@ -116,9 +130,10 @@ cv2.imwrite(f'img_rotated.jpg', img)
 
 ### TODO List
 
-- [ ] 识别前图片偏移修正(完成有线表格小角度偏移修正)
-- [ ] 增加数据集数量，增加更多评测对比
+- [x] 识别前图片小角度偏移修正方法补充
+- [x] 增加数据集数量，增加更多评测对比
 - [ ] 优化无线表格模型
+- [ ] 补充复杂场景表格检测和提取，彻底解决旋转和透视问题
 
 ### 处理流程
 
