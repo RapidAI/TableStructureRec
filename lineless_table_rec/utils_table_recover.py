@@ -421,7 +421,6 @@ def plot_html_table(
     grid = [[None] * max_col for _ in range(max_row)]
 
     valid_start_row = (1 << 16) - 1
-    # valid_end_row = 0
     valid_start_col = (1 << 16) - 1
     valid_end_col = 0
     # 将 sorted_logi_points 中的元素填充到 grid 中
@@ -436,7 +435,6 @@ def plot_html_table(
         if ocr_rec_text_list and "".join(ocr_rec_text_list):
             valid_start_row = min(row_start, valid_start_row)
             valid_start_col = min(col_start, valid_start_col)
-            # valid_end_row = max(row_end, valid_end_row)
             valid_end_col = max(col_end, valid_end_col)
         for row in range(row_start, row_end + 1):
             for col in range(col_start, col_end + 1):

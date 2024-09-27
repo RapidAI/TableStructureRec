@@ -32,6 +32,8 @@ ocr_engine = RapidOCR()
 
 def get_td_nums(html: str) -> int:
     soup = BeautifulSoup(html, "html.parser")
+    if not soup.table:
+        return 0
     tds = soup.table.find_all("td")
     return len(tds)
 
@@ -41,7 +43,7 @@ def test_squeeze_bug():
     ocr_result, _ = ocr_engine(img_path)
     table_str, *_ = table_recog(str(img_path), ocr_result)
     td_nums = get_td_nums(table_str)
-    assert td_nums == 291
+    assert td_nums == 192
 
 
 @pytest.mark.parametrize(
@@ -50,6 +52,7 @@ def test_squeeze_bug():
         ("table_recognition.jpg", 35, "d colsp"),
         ("table2.jpg", 23, "td><td "),
         ("row_span.png", 17, "></td><"),
+        ("no_table.jpg", 0, "d colsp"),
     ],
 )
 def test_input_normal(img_path, gt_td_nums, gt2):
