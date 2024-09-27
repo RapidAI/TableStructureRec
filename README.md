@@ -41,15 +41,15 @@
 
 注: StructEqTable 输出为 latex，只取成功转换为html并去除样式标签后进行测评
 
-| 方法                                                                                                                        |  TEDS   | TEDS-only-structure |
-|:---------------------------------------------------------------------------------------------------------------------------|:-------:|:-------------------:|
-| [deepdoctection(rag-flow)](https://github.com/deepdoctection/deepdoctection?tab=readme-ov-file)                            | 0.59975 |       0.69918   |
-| [ppstructure_table_master](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)                                | 0.61606 |       0.73892       |
-| [ppsturcture_table_engine](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)                                | 0.67924 |       0.78653       |
-| table_cls + wired_table_rec v1 + lineless_table_rec                                                                        | 0.68507 |       0.75140       |
-| [StructEqTable](https://github.com/UniModal4Reasoning/StructEqTable-Deploy)                                                | 0.67310 |       **0.81210**   |
-| [RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md) | 0.71654 |       0.81067       |
-| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        | **0.73343** |       0.79876   |
+| 方法                                                                                                                        |    TEDS     | TEDS-only-structure |
+|:---------------------------------------------------------------------------------------------------------------------------|:-----------:|:-------------------:|
+| [deepdoctection(rag-flow)](https://github.com/deepdoctection/deepdoctection?tab=readme-ov-file)                            |   0.59975   |       0.69918       |
+| [ppstructure_table_master](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)                                |   0.61606   |       0.73892       |
+| [ppsturcture_table_engine](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)                                |   0.67924   |       0.78653       |
+| table_cls + wired_table_rec v1 + lineless_table_rec                                                                        |   0.68507   |       0.75140       |
+| [StructEqTable](https://github.com/UniModal4Reasoning/StructEqTable-Deploy)                                                |   0.67310   |     **0.81210**     |
+| [RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md) |   0.71654   |       0.81067       |
+| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        | **0.73702** |       0.80210       |
 
 
 ### 安装
