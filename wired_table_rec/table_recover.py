@@ -43,6 +43,9 @@ class TableRecover:
         result = {}
         thresh = 10.0
         split_idxs = np.argwhere(abs(minus_res) > thresh).squeeze()
+        # 如果都在一行，则将所有下标设置为同一行
+        if split_idxs.size == 0:
+            return {0: [i for i in range(len(y_axis))]}
         if split_idxs.ndim == 0:
             split_idxs = split_idxs[None, ...]
 
