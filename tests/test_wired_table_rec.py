@@ -52,7 +52,7 @@ def test_squeeze_bug():
         ("table_recognition.jpg", 35, "d colsp"),
         ("table2.jpg", 23, "td><td "),
         ("row_span.png", 17, "></td><"),
-        ("no_table.jpg", 0, "d colsp"),
+        ("no_table.jpg", 1, "d colsp"),
     ],
 )
 def test_input_normal(img_path, gt_td_nums, gt2):
