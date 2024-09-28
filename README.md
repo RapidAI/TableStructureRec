@@ -155,6 +155,7 @@ flowchart TD
 [Qanything-RAG](https://github.com/netease-youdao/QAnything)
 
 非常感谢 llaipython(微信，提供全套有偿高精度表格提取) 提供高精度有线表格模型。
+非常感谢 [MajexH](https://github.com/MajexH)完成deepdoctection(rag-flow)的表格识别测试
 
 ### 贡献指南
 
