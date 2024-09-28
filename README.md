@@ -39,7 +39,9 @@
 
 [TableRecognitionMetric 评测工具](https://github.com/SWHL/TableRecognitionMetric) [huggingface数据集](https://huggingface.co/datasets/SWHL/table_rec_test_dataset) [modelscope 数据集](https://www.modelscope.cn/datasets/jockerK/TEDS_TEST/files) [Rapid OCR](https://github.com/RapidAI/RapidOCR)
 
-注: StructEqTable 输出为 latex，只取成功转换为html并去除样式标签后进行测评
+测试环境: ubuntu 20.04 python 3.10.10 opencv-python 4.10.0.84 
+
+注:StructEqTable 输出为 latex，只取成功转换为html并去除样式标签后进行测评
 
 | 方法                                                                                                                        |    TEDS     | TEDS-only-structure |
 |:---------------------------------------------------------------------------------------------------------------------------|:-----------:|:-------------------:|
@@ -155,6 +157,7 @@ flowchart TD
 [Qanything-RAG](https://github.com/netease-youdao/QAnything)
 
 非常感谢 llaipython(微信，提供全套有偿高精度表格提取) 提供高精度有线表格模型。
+
 非常感谢 [MajexH](https://github.com/MajexH)完成deepdoctection(rag-flow)的表格识别测试
 
 ### 贡献指南
