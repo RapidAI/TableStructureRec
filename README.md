@@ -120,7 +120,7 @@ cv2.imwrite(f'img_rotated.jpg', img)
     - 答：该项目暂时不支持偏移图片识别，请先修正图片，也欢迎提pr来解决这个问题。
 
 2. **问：识别框丢失了内部文字信息**
-   -答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
+   - 答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
    下载更高精度的ocr模型,在执行时传入ocr_result即可
 
 3. **问：模型支持 gpu 加速吗？**
