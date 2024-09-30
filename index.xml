@@ -100,8 +100,7 @@
 RapidTable: 有英文和中文两个模型，大多都是印刷体截屏表格。具体可参见:表格识别模型。
 lineless_table_rec: 训练数据部分来自SciTSR与PubTabNet，训练集共45000张。这两个数据大多是来自论文截图，所以这个模型也是比较适用于论文中表格识别。
 wired_table_rec: 训练数据为WTW，训练集为10970张。WTW数据组成有50%的自然场景下、30%的档案和20%的印刷体表格。所以这个模型更适合自然场景下拍照的表格识别。
-指标结果 link 方法 TEDS RapidTable 0.58786 lineless_table_rec 0.50054 wired_table_rec 0.63316 评测步骤 link1. 安装评测数据集和评测工具包 link pip install table_recognition_metric pip install modelscope==1.5.2 pip install rapidocr_onnxruntime==1.3.8 2. 安装表格识别推理库 link pip install rapid_table pip install lineless_table_rec pip install wired_table_rec 3. 推理代码 link info 完整评测代码，请移步Gist
-from modelscope.msdatasets import MsDataset from rapid_table import RapidTable from lineless_table_rec import LinelessTableRecognition from wired_table_rec import WiredTableRecognition from table_recognition_metric import TEDS test_data = MsDataset.</description>
+指标结果 link 方法 TEDS TEDS-only-structure deepdoctection(rag-flow) 0.59975 0.69918 ppstructure_table_master 0.61606 0.73892 ppsturcture_table_engine 0.67924 0.78653 table_cls + wired_table_rec v1 + lineless_table_rec 0.68507 0.75140 StructEqTable 0.67310 0.81210 RapidTable 0.71654 0.81067 table_cls + wired_table_rec v2 + lineless_table_rec 0.73702 0.80210 评测步骤 link1. 安装评测数据集和评测工具包 link pip install table_recognition_metric pip install modelscope==1.5.2 pip install rapidocr_onnxruntime==1.3.8 2. 安装表格识别推理库 link pip install rapid_table pip install lineless_table_rec pip install wired_table_rec 3.</description>
     </item>
     
     <item>
