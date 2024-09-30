@@ -23,11 +23,15 @@ description: ""
 **wired_table_rec**: 训练数据为WTW，训练集为10970张。WTW数据组成有50%的自然场景下、30%的档案和20%的印刷体表格。所以这个模型更适合自然场景下拍照的表格识别。
 
 ### 指标结果
-|方法|TEDS|
-|:---|:---|
-|[RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md)|0.58786|
-|[lineless_table_rec](https://rapidai.github.io/TableStructureRec/docs/install_usage/lineless_table_rec/)|0.50054|
-|[wired_table_rec](https://rapidai.github.io/TableStructureRec/docs/install_usage/wired_table_rec/)|0.63316|
+| 方法                                                                                                                        |    TEDS     | TEDS-only-structure |
+|:---------------------------------------------------------------------------------------------------------------------------|:-----------:|:-------------------:|
+| [deepdoctection(rag-flow)](https://github.com/deepdoctection/deepdoctection?tab=readme-ov-file)                            |   0.59975   |       0.69918       |
+| [ppstructure_table_master](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)                                |   0.61606   |       0.73892       |
+| [ppsturcture_table_engine](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)                                |   0.67924   |       0.78653       |
+| table_cls + wired_table_rec v1 + lineless_table_rec                                                                        |   0.68507   |       0.75140       |
+| [StructEqTable](https://github.com/UniModal4Reasoning/StructEqTable-Deploy)                                                |   0.67310   |     **0.81210**     |
+| [RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md) |   0.71654   |       0.81067       |
+| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        | **0.73702** |       0.80210       |
 
 
 ### 评测步骤
