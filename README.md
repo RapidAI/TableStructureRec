@@ -16,7 +16,9 @@
 - **2024.9.26**
   - 修正RapidTable默认英文模型导致的测评结果错误。
   - 补充测评数据集，补充开源社区更多模型的测评结果
-
+- **2024.9.30**
+  - 优化表格类型判断，增加在线演示
+    
 ### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自paddle的表格识别模型，
 阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。
@@ -29,6 +31,9 @@
 
 🛡️ **稳**: 不依赖任何第三方训练框架，只依赖必要基础库，避免包冲突
 
+### 在线演示
+[modelscope魔塔](https://www.modelscope.cn/studios/jockerK/TableRec)
+[huggingface](https://huggingface.co/spaces/Joker1212/TableDetAndRec)
 ### 效果展示
 
 <div align="center">
