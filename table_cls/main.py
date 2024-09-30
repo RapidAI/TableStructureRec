@@ -1,6 +1,7 @@
 import time
 from pathlib import Path
 
+import cv2
 import numpy as np
 import onnxruntime
 from PIL import Image
@@ -39,8 +40,10 @@ class TableCls:
     def __call__(self, content: InputType):
         ss = time.perf_counter()
         img = self.load_img(content)
-        img = self._preprocess(img)
-        output = self.table_cls.run(None, {"input": img})
+        gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        gray_img = np.stack((gray_img,) * 3, axis=-1)
+        gray_img = self._preprocess(gray_img)
+        output = self.table_cls.run(None, {"input": gray_img})
         predict = np.exp(output[0] - np.max(output[0], axis=1, keepdims=True))
         predict /= np.sum(predict, axis=1, keepdims=True)
         predict_cla = np.argmax(predict, axis=1)[0]
