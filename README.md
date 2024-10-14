@@ -13,11 +13,10 @@
 </div>
 
 ### 最近更新
-- **2024.9.26**
-  - 修正RapidTable默认英文模型导致的测评结果错误。
-  - 补充测评数据集，补充开源社区更多模型的测评结果
 - **2024.9.30**
   - 优化表格类型判断，增加在线演示
+- **2024.10.13**
+  - 补充最新paddlex-SLANet-plus 测评结果(已集成模型到rappid_table仓库)
     
 ### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自paddle的表格识别模型，
@@ -48,16 +47,21 @@
 
 注:StructEqTable 输出为 latex，只取成功转换为html并去除样式标签后进行测评
 
-| 方法                                                                                                                        |    TEDS     | TEDS-only-structure |
-|:---------------------------------------------------------------------------------------------------------------------------|:-----------:|:-------------------:|
-| [deepdoctection(rag-flow)](https://github.com/deepdoctection/deepdoctection?tab=readme-ov-file)                            |   0.59975   |       0.69918       |
-| [ppstructure_table_master](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)                                |   0.61606   |       0.73892       |
-| [ppsturcture_table_engine](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)                                |   0.67924   |       0.78653       |
-| table_cls + wired_table_rec v1 + lineless_table_rec                                                                        |   0.68507   |       0.75140       |
-| [StructEqTable](https://github.com/UniModal4Reasoning/StructEqTable-Deploy)                                                |   0.67310   |     **0.81210**     |
-| [RapidTable](https://github.com/RapidAI/RapidStructure/blob/b800b156015bf5cd6f5429295cdf48be682fd97e/docs/README_Table.md) |   0.71654   |       0.81067       |
-| table_cls + wired_table_rec v2 + lineless_table_rec                                                                        | **0.73702** |       0.80210       |
+| 方法                                                                                              |    TEDS     | TEDS-only-structure |
+|:------------------------------------------------------------------------------------------------|:-----------:|:-------------------:|
+| [deepdoctection(rag-flow)](https://github.com/deepdoctection/deepdoctection?tab=readme-ov-file) |   0.59975   |       0.69918       |
+| [ppstructure_table_master](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)     |   0.61606   |       0.73892       |
+| [ppsturcture_table_engine](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)     |   0.67924   |       0.78653       |
+| table_cls + wired_table_rec v1 + lineless_table_rec                                             |   0.68507   |       0.75140       |
+| [StructEqTable](https://github.com/UniModal4Reasoning/StructEqTable-Deploy)                     |   0.67310   |       0.81210       |
+| [RapidTable(SLANet)](https://github.com/RapidAI/RapidTable)                                           |   0.71654   |       0.81067       |
+| table_cls + wired_table_rec v2 + lineless_table_rec                                             |   0.73702   |       0.80210       |
+| [RapidTable(SLANet-plus)](https://github.com/RapidAI/RapidTable)                                | **0.84481** |     **0.91369**     |
 
+### 使用建议
+wired_table_rec_v2(有线表格精度最高): 通用场景有线表格(论文，杂志，期刊, 收据，单据，账单)
+
+paddlex-SLANet-plus(综合精度最高): 文档场景表格(论文，杂志，期刊中的表格)
 
 ### 安装
 
@@ -152,6 +156,8 @@ flowchart TD
 ```
 
 ### 致谢
+
+[PaddleX 表格识别](https://github.com/PaddlePaddle/PaddleX/blob/release/3.0-beta1/docs/module_usage/tutorials/ocr_modules/table_structure_recognition.md)
 
 [PaddleOCR 表格识别](https://github.com/PaddlePaddle/PaddleOCR/blob/4b17511491adcfd0f3e2970895d06814d1ce56cc/ppstructure/table/README_ch.md)
 
