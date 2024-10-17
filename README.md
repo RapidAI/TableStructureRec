@@ -17,7 +17,8 @@
   - 优化表格类型判断，增加在线演示
 - **2024.10.13**
   - 补充最新paddlex-SLANet-plus 测评结果(已集成模型到rappid_table仓库)
-    
+- **2024.10.17**
+  - 补充最新surya 表格识别测评结果  
 ### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自paddle的表格识别模型，
 阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。
@@ -45,16 +46,21 @@
 
 测试环境: ubuntu 20.04 python 3.10.10 opencv-python 4.10.0.84 
 
-注:StructEqTable 输出为 latex，只取成功转换为html并去除样式标签后进行测评
+注:
+   StructEqTable 输出为 latex，只取成功转换为html并去除样式标签后进行测评
+
+   Surya-Tabled 使用内置ocr模块，表格模型为行列识别模型，无法识别单元格合并，导致分数较低
 
 | 方法                                                                                              |    TEDS     | TEDS-only-structure |
 |:------------------------------------------------------------------------------------------------|:-----------:|:-------------------:|
+| [surya-tabled(--skip-detect)](https://github.com/VikParuchuri/tabled)                           |   0.33437   |       0.65865       |
+| [surya-tabled](https://github.com/VikParuchuri/tabled)                                          |   0.33940   |       0.67103       |
 | [deepdoctection(rag-flow)](https://github.com/deepdoctection/deepdoctection?tab=readme-ov-file) |   0.59975   |       0.69918       |
 | [ppstructure_table_master](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)     |   0.61606   |       0.73892       |
 | [ppsturcture_table_engine](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)     |   0.67924   |       0.78653       |
 | table_cls + wired_table_rec v1 + lineless_table_rec                                             |   0.68507   |       0.75140       |
 | [StructEqTable](https://github.com/UniModal4Reasoning/StructEqTable-Deploy)                     |   0.67310   |       0.81210       |
-| [RapidTable(SLANet)](https://github.com/RapidAI/RapidTable)                                           |   0.71654   |       0.81067       |
+| [RapidTable(SLANet)](https://github.com/RapidAI/RapidTable)                                     |   0.71654   |       0.81067       |
 | table_cls + wired_table_rec v2 + lineless_table_rec                                             |   0.73702   |       0.80210       |
 | [RapidTable(SLANet-plus)](https://github.com/RapidAI/RapidTable)                                | **0.84481** |     **0.91369**     |
 
