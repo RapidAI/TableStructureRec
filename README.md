@@ -16,7 +16,7 @@
 - **2024.9.30**
   - 优化表格类型判断，增加在线演示
 - **2024.10.13**
-  - 补充最新paddlex-SLANet-plus 测评结果(已集成模型到rappid_table仓库)
+  - 补充最新paddlex-SLANet-plus 测评结果(已集成模型到[RapidTable](https://github.com/RapidAI/RapidTable)仓库)
 - **2024.10.17**
   - 补充最新surya 表格识别测评结果  
 ### 简介
