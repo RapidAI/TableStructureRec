@@ -20,8 +20,7 @@
 - **2024.10.22**
   - 补充复杂背景多表格检测提取方案[RapidTableDet](https://github.com/RapidAI/RapidTableDetection)   
 ### 简介
-💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自paddle的表格识别模型，
-阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。
+💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。
 
 #### 特点
 
