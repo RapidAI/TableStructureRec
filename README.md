@@ -13,12 +13,12 @@
 </div>
 
 ### 最近更新
-- **2024.9.30**
-  - 优化表格类型判断，增加在线演示
 - **2024.10.13**
   - 补充最新paddlex-SLANet-plus 测评结果(已集成模型到[RapidTable](https://github.com/RapidAI/RapidTable)仓库)
 - **2024.10.17**
-  - 补充最新surya 表格识别测评结果  
+  - 补充最新surya 表格识别测评结果
+- **2024.10.22**
+  - 补充复杂背景多表格检测提取方案[RapidTableDet](https://github.com/RapidAI/RapidTableDetection)   
 ### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自paddle的表格识别模型，
 阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。
@@ -117,26 +117,35 @@ print(f"elasp: {elasp}")
 # plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
 ```
 
-#### 偏移修正
-
+#### 表格旋转及透视修正
+需要gpu或更高精度场景，请参考项目[RapidTableDet](https://github.com/RapidAI/RapidTableDetection)
 ```python
+pip install rapid-table-det
+```
+```python
+import os
 import cv2
-
-img_path = f'tests/test_files/wired/squeeze_error.jpeg'
-from wired_table_rec.utils import ImageOrientationCorrector
-
-img_orientation_corrector = ImageOrientationCorrector()
-img = cv2.imread(img_path)
-img = img_orientation_corrector(img)
-cv2.imwrite(f'img_rotated.jpg', img)
+from rapid_table_det.utils import img_loader, visuallize, extract_table_img
+from rapid_table_det.inference import TableDetector
+table_det = TableDetector()
+img_path = f"tests/test_files/chip.jpg"
+result, elapse = table_det(img_path)
+img = img_loader(img_path)
+extract_img = img.copy()
+#可能有多表格
+for i, res in enumerate(result):
+    box = res["box"]
+    lt, rt, rb, lb = res["lt"], res["rt"], res["rb"], res["lb"]
+    # 带识别框和左上角方向位置
+    img = visuallize(img, box, lt, rt, rb, lb)
+    # 透视变换提取表格图片
+    wrapped_img = extract_table_img(extract_img.copy(), lt, rt, rb, lb)
+#     cv2.imwrite(f"{out_dir}/{file_name}-extract-{i}.jpg", wrapped_img)
+# cv2.imwrite(f"{out_dir}/{file_name}-visualize.jpg", img)
 ```
 
 ## FAQ (Frequently Asked Questions)
-
-1. **问：偏移的图片能够处理吗？**
-    - 答：该项目暂时不支持偏移图片识别，请先修正图片，也欢迎提pr来解决这个问题。
-
-2. **问：识别框丢失了内部文字信息**
+1. **问：识别框丢失了内部文字信息**
    - 答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
    下载更高精度的ocr模型,在执行时传入ocr_result即可
 
@@ -149,8 +158,8 @@ cv2.imwrite(f'img_rotated.jpg', img)
 
 - [x] 图片小角度偏移修正方法补充
 - [x] 增加数据集数量，增加更多评测对比
-- [ ] 补充复杂场景表格检测和提取，解决旋转和透视导致的低识别率
-- [ ] 优化无线表格模型
+- [x] 补充复杂场景表格检测和提取，解决旋转和透视导致的低识别率
+- [ ] 优化表格分类器，优化无线表格模型
 
 ### 处理流程
 
