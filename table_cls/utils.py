@@ -1,12 +1,84 @@
+import traceback
 from io import BytesIO
 from pathlib import Path
-from typing import Union
+from typing import Union, List
 
 import cv2
 import numpy as np
 from PIL import Image, UnidentifiedImageError
+from onnxruntime import InferenceSession
+from onnxruntime.capi.onnxruntime_pybind11_state import (
+    SessionOptions,
+    GraphOptimizationLevel,
+)
 
 InputType = Union[str, np.ndarray, bytes, Path, Image.Image]
+
+
+class OrtInferSession:
+    def __init__(self, model_path: Union[str, Path], num_threads: int = -1):
+        self.verify_exist(model_path)
+
+        self.num_threads = num_threads
+        self._init_sess_opt()
+
+        cpu_ep = "CPUExecutionProvider"
+        cpu_provider_options = {
+            "arena_extend_strategy": "kSameAsRequested",
+        }
+        EP_list = [(cpu_ep, cpu_provider_options)]
+        try:
+            self.session = InferenceSession(
+                str(model_path), sess_options=self.sess_opt, providers=EP_list
+            )
+        except TypeError:
+            # 这里兼容ort 1.5.2
+            self.session = InferenceSession(str(model_path), sess_options=self.sess_opt)
+
+    def _init_sess_opt(self):
+        self.sess_opt = SessionOptions()
+        self.sess_opt.log_severity_level = 4
+        self.sess_opt.enable_cpu_mem_arena = False
+
+        if self.num_threads != -1:
+            self.sess_opt.intra_op_num_threads = self.num_threads
+
+        self.sess_opt.graph_optimization_level = GraphOptimizationLevel.ORT_ENABLE_ALL
+
+    def __call__(self, input_content: List[np.ndarray]) -> np.ndarray:
+        input_dict = dict(zip(self.get_input_names(), input_content))
+        try:
+            return self.session.run(None, input_dict)
+        except Exception as e:
+            error_info = traceback.format_exc()
+            raise ONNXRuntimeError(error_info) from e
+
+    def get_input_names(
+        self,
+    ):
+        return [v.name for v in self.session.get_inputs()]
+
+    def get_output_name(self, output_idx=0):
+        return self.session.get_outputs()[output_idx].name
+
+    def get_metadata(self):
+        meta_dict = self.session.get_modelmeta().custom_metadata_map
+        return meta_dict
+
+    @staticmethod
+    def verify_exist(model_path: Union[Path, str]):
+        if not isinstance(model_path, Path):
+            model_path = Path(model_path)
+
+        if not model_path.exists():
+            raise FileNotFoundError(f"{model_path} does not exist!")
+
+        if not model_path.is_file():
+            raise FileExistsError(f"{model_path} must be a file")
+
+
+class ONNXRuntimeError(Exception):
+    pass
 
 
 class LoadImageError(Exception):
@@ -106,3 +178,19 @@ class LoadImage:
     def verify_exist(file_path: Union[str, Path]):
         if not Path(file_path).exists():
             raise LoadImageError(f"{file_path} does not exist.")
+
+
+def ResizePad(img, target_size):
+    h, w = img.shape[:2]
+    m = max(h, w)
+    ratio = target_size / m
+    new_w, new_h = int(ratio * w), int(ratio * h)
+    img = cv2.resize(img, (new_w, new_h), cv2.INTER_LINEAR)
+    top = (target_size - new_h) // 2
+    bottom = (target_size - new_h) - top
+    left = (target_size - new_w) // 2
+    right = (target_size - new_w) - left
+    img1 = cv2.copyMakeBorder(
+        img, top, bottom, left, right, cv2.BORDER_CONSTANT, value=(114, 114, 114)
+    )
+    return img1, new_w, new_h, left, top

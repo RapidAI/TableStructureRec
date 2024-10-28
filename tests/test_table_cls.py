@@ -15,7 +15,7 @@ table_cls = TableCls()
 
 @pytest.mark.parametrize(
     "img_path, expected",
-    [("wired_table.png", "wired"), ("lineless_table.png", "wireless")],
+    [("wired_table.jpg", "wired"), ("lineless_table.png", "wireless")],
 )
 def test_input_normal(img_path, expected):
     img_path = test_file_dir / img_path
