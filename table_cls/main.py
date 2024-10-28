@@ -13,11 +13,12 @@ yolo_cls_model_path = cur_dir / "models" / "yolo_cls.onnx"
 
 
 class TableCls:
-    def __init__(self, model="yolo"):
-        if model == "yolo":
-            self.table_engine = YoloCls()
+    def __init__(self, model_type="yolo", model_path=yolo_cls_model_path):
+        if model_type == "yolo":
+            self.table_engine = YoloCls(model_path)
         else:
-            self.table_engine = QanythingCls()
+            model_path = q_cls_model_path
+            self.table_engine = QanythingCls(model_path)
         self.load_img = LoadImage()
 
     def __call__(self, content: InputType):
@@ -30,8 +31,8 @@ class TableCls:
 
 
 class QanythingCls:
-    def __init__(self):
-        self.table_cls = OrtInferSession(q_cls_model_path)
+    def __init__(self, model_path):
+        self.table_cls = OrtInferSession(model_path)
         self.inp_h = 224
         self.inp_w = 224
         self.mean = np.array([0.485, 0.456, 0.406], dtype=np.float32)
@@ -60,8 +61,8 @@ class QanythingCls:
 
 
 class YoloCls:
-    def __init__(self):
-        self.table_cls = OrtInferSession(yolo_cls_model_path)
+    def __init__(self, model_path):
+        self.table_cls = OrtInferSession(model_path)
         self.cls = {0: "wireless", 1: "wired"}
 
     def preprocess(self, img):
