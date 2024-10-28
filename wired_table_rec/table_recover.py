@@ -93,14 +93,20 @@ class TableRecover:
                 sorted(range_res.items(), key=lambda x: x[0], reverse=True)
             )
             for k, v in sorted_res.items():
-                if not all(v):
-                    continue
-
-                longest_x = np.insert(longest_x, v[1], cur_row[k])
-                longest_col_points = np.insert(
-                    longest_col_points, v[1], polygons[row_value[k]], axis=0
-                )
-
+                # bugfix: https://github.com/RapidAI/TableStructureRec/discussions/55
+                # 最长列不包含第一列和最后一列的场景需要兼容
+                if all(v) or v[1] == 0:
+                    longest_x = np.insert(longest_x, v[1], cur_row[k])
+                    longest_col_points = np.insert(
+                        longest_col_points, v[1], polygons[row_value[k]], axis=0
+                    )
+                elif v[0] and v[0] + 1 == len(longest_x):
+                    longest_x = np.append(longest_x, cur_row[k])
+                    longest_col_points = np.append(
+                        longest_col_points,
+                        polygons[row_value[k]][np.newaxis, :, :],
+                        axis=0,
+                    )
         # 求出最右侧所有cell的宽，其中最小的作为最后一列宽度
         rightmost_idxs = [v[-1] for v in rows.values()]
         rightmost_boxes = polygons[rightmost_idxs]
