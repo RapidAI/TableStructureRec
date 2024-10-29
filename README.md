@@ -87,9 +87,8 @@ from wired_table_rec import WiredTableRecognition
 
 lineless_engine = LinelessTableRecognition()
 wired_engine = WiredTableRecognition()
-table_cls = TableCls()
-# 分类精度降低，但耗时减少 3/5(0.2s->0.08s)
-# table_cls = TableCls(mode="q")
+# 默认小yolo模型(0.1s)，可切换为精度更高yolox(0.25s),更快的qanything(0.07s)模型
+table_cls = TableCls() # TableCls(mode="yolox"),TableCls(mode="q")
 img_path = f'images/img14.jpg'
 
 cls,elasp = table_cls(img_path)
