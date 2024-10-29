@@ -15,10 +15,11 @@
 ### 最近更新
 - **2024.10.13**
   - 补充最新paddlex-SLANet-plus 测评结果(已集成模型到[RapidTable](https://github.com/RapidAI/RapidTable)仓库)
-- **2024.10.17**
-  - 补充最新surya 表格识别测评结果
 - **2024.10.22**
-  - 补充复杂背景多表格检测提取方案[RapidTableDet](https://github.com/RapidAI/RapidTableDetection)   
+  - 补充复杂背景多表格检测提取方案[RapidTableDet](https://github.com/RapidAI/RapidTableDetection)
+- **2024.10.29**
+  - 使用yolo11重新训练表格分类器，修正wired_table_rec v2逻辑坐标还原错误，并更新测评
+    
 ### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。
 
@@ -57,10 +58,10 @@
 | [deepdoctection(rag-flow)](https://github.com/deepdoctection/deepdoctection?tab=readme-ov-file) |   0.59975   |       0.69918       |
 | [ppstructure_table_master](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)     |   0.61606   |       0.73892       |
 | [ppsturcture_table_engine](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)     |   0.67924   |       0.78653       |
-| table_cls + wired_table_rec v1 + lineless_table_rec                                             |   0.68507   |       0.75140       |
 | [StructEqTable](https://github.com/UniModal4Reasoning/StructEqTable-Deploy)                     |   0.67310   |       0.81210       |
 | [RapidTable(SLANet)](https://github.com/RapidAI/RapidTable)                                     |   0.71654   |       0.81067       |
-| table_cls + wired_table_rec v2 + lineless_table_rec                                             |   0.73702   |       0.80210       |
+| table_cls + wired_table_rec v1 + lineless_table_rec                                             |   0.75288   |       0.82574       |
+| table_cls + wired_table_rec v2 + lineless_table_rec                                             |   0.77676   |       0.84580       |
 | [RapidTable(SLANet-plus)](https://github.com/RapidAI/RapidTable)                                | **0.84481** |     **0.91369**     |
 
 ### 使用建议
@@ -87,6 +88,8 @@ from wired_table_rec import WiredTableRecognition
 lineless_engine = LinelessTableRecognition()
 wired_engine = WiredTableRecognition()
 table_cls = TableCls()
+# 分类精度降低，但耗时减少 3/5(0.2s->0.08s)
+# table_cls = TableCls(mode="q")
 img_path = f'images/img14.jpg'
 
 cls,elasp = table_cls(img_path)
@@ -158,7 +161,8 @@ for i, res in enumerate(result):
 - [x] 图片小角度偏移修正方法补充
 - [x] 增加数据集数量，增加更多评测对比
 - [x] 补充复杂场景表格检测和提取，解决旋转和透视导致的低识别率
-- [ ] 优化表格分类器，优化无线表格模型
+- [x] 优化表格分类器
+- [ ] 优化无线表格模型
 
 ### 处理流程
 

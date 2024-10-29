@@ -158,3 +158,5 @@ long1.jpg
 .DS_Store
 *.npy
 outputs/
+/tests/test_files/standard_dataset/
+/lineless_table_rec/images/
