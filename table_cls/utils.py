@@ -178,35 +178,3 @@ class LoadImage:
     def verify_exist(file_path: Union[str, Path]):
         if not Path(file_path).exists():
             raise LoadImageError(f"{file_path} does not exist.")
-
-
-def resize_and_center_crop(image: np.ndarray, target_size: int):
-    """
-    Resize the image so that the smallest side is equal to the target size,
-    then crop the center of the image to the specified target size.
-
-    Args:
-        image (np.ndarray): Input image as a NumPy array with shape (height, width, channels).
-        target_size (int): Target size for the smallest side of the image and the output size.
-
-    Returns:
-        (np.ndarray): Resized and cropped image as a NumPy array.
-    """
-    # 获取输入图像的尺寸
-    h, w = image.shape[:2]
-
-    # 计算缩放比例
-    scale = target_size / min(h, w)
-    new_h, new_w = int(h * scale), int(w * scale)
-
-    # 缩放图像
-    resized_image = cv2.resize(image, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
-
-    # 计算裁剪的起始位置
-    i = (new_h - target_size) // 2
-    j = (new_w - target_size) // 2
-
-    # 裁剪图像
-    cropped_image = resized_image[i : i + target_size, j : j + target_size]
-
-    return cropped_image
