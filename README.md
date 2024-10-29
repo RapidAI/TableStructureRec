@@ -119,6 +119,19 @@ print(f"elasp: {elasp}")
 ```
 
 #### 表格旋转及透视修正
+##### 1.简单背景，小角度场景
+```python
+import cv2
+
+img_path = f'tests/test_files/wired/squeeze_error.jpeg'
+from wired_table_rec.utils import ImageOrientationCorrector
+
+img_orientation_corrector = ImageOrientationCorrector()
+img = cv2.imread(img_path)
+img = img_orientation_corrector(img)
+cv2.imwrite(f'img_rotated.jpg', img)
+```
+##### 2.复杂背景，多表格场景
 需要gpu或更高精度场景，请参考项目[RapidTableDet](https://github.com/RapidAI/RapidTableDetection)
 ```python
 pip install rapid-table-det
