@@ -5,17 +5,20 @@ import cv2
 import numpy as np
 from PIL import Image
 
-from .utils import InputType, LoadImage, OrtInferSession, ResizePad
+from .utils import InputType, LoadImage, OrtInferSession
 
 cur_dir = Path(__file__).resolve().parent
 q_cls_model_path = cur_dir / "models" / "table_cls.onnx"
 yolo_cls_model_path = cur_dir / "models" / "yolo_cls.onnx"
+yolo_cls_x_model_path = cur_dir / "models" / "yolo_cls_x.onnx"
 
 
 class TableCls:
     def __init__(self, model_type="yolo", model_path=yolo_cls_model_path):
         if model_type == "yolo":
             self.table_engine = YoloCls(model_path)
+        elif model_type == "yolox":
+            self.table_engine = YoloCls(yolo_cls_x_model_path)
         else:
             model_path = q_cls_model_path
             self.table_engine = QanythingCls(model_path)
@@ -66,8 +69,9 @@ class YoloCls:
         self.cls = {0: "wireless", 1: "wired"}
 
     def preprocess(self, img):
-        img, *_ = ResizePad(img, 640)
-        img = np.array(img, dtype=np.float32) / 255.0
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = cv2.resize(img, (640, 640))
+        img = np.array(img, dtype=np.float32) / 255
         img = img.transpose(2, 0, 1)  # HWC to CHW
         img = np.expand_dims(img, axis=0)  # Add batch dimension, only one image
         return img

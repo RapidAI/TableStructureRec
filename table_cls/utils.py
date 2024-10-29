@@ -178,19 +178,3 @@ class LoadImage:
     def verify_exist(file_path: Union[str, Path]):
         if not Path(file_path).exists():
             raise LoadImageError(f"{file_path} does not exist.")
-
-
-def ResizePad(img, target_size):
-    h, w = img.shape[:2]
-    m = max(h, w)
-    ratio = target_size / m
-    new_w, new_h = int(ratio * w), int(ratio * h)
-    img = cv2.resize(img, (new_w, new_h), cv2.INTER_LINEAR)
-    top = (target_size - new_h) // 2
-    bottom = (target_size - new_h) - top
-    left = (target_size - new_w) // 2
-    right = (target_size - new_w) - left
-    img1 = cv2.copyMakeBorder(
-        img, top, bottom, left, right, cv2.BORDER_CONSTANT, value=(114, 114, 114)
-    )
-    return img1, new_w, new_h, left, top
