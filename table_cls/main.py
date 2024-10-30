@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 from PIL import Image
 
-from .utils import InputType, LoadImage, OrtInferSession
+from .utils import InputType, LoadImage, OrtInferSession, resize_and_center_crop
 
 cur_dir = Path(__file__).resolve().parent
 q_cls_model_path = cur_dir / "models" / "table_cls.onnx"
@@ -70,7 +70,7 @@ class YoloCls:
 
     def preprocess(self, img):
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img = cv2.resize(img, (640, 640))
+        img = resize_and_center_crop(img, 640)
         img = np.array(img, dtype=np.float32) / 255
         img = img.transpose(2, 0, 1)  # HWC to CHW
         img = np.expand_dims(img, axis=0)  # Add batch dimension, only one image
