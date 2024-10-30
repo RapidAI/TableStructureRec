@@ -178,3 +178,37 @@ class LoadImage:
     def verify_exist(file_path: Union[str, Path]):
         if not Path(file_path).exists():
             raise LoadImageError(f"{file_path} does not exist.")
+
+
+def resize_and_center_crop(image, output_size=640):
+    """
+    将图片的最小边缩放到指定大小，并进行中心裁剪。
+
+    :param image: 输入的图片数组 (H, W, C)
+    :param output_size: 缩放和裁剪后的图片大小，默认为 640
+    :return: 处理后的图片数组 (output_size, output_size, C)
+    """
+    # 获取图片的高度和宽度
+    height, width = image.shape[:2]
+    # 计算缩放比例
+    if width < height:
+        new_width = output_size
+        new_height = int(output_size * height / width)
+    else:
+        new_width = int(output_size * width / height)
+        new_height = output_size
+
+    # 缩放图片
+    image_resize = cv2.resize(
+        image, (new_width, new_height), interpolation=cv2.INTER_LINEAR
+    )
+
+    # 计算中心裁剪的坐标
+    left = (new_width - output_size) // 2
+    top = (new_height - output_size) // 2
+    right = left + output_size
+    bottom = top + output_size
+
+    # # 中心裁剪
+    image_cropped = image_resize[top:bottom, left:right]
+    return image_cropped

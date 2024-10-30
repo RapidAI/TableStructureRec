@@ -383,7 +383,7 @@ def gather_ocr_list_by_row(ocr_list: List[Any], threhold: float = 0.2) -> List[A
                 cur[0], next[0], axis="y", threhold=threhold
             )
             if c_idx:
-                dis = max(next_box[0] - cur_box[1], 0)
+                dis = max(next_box[0] - cur_box[0], 0)
                 blank_str = int(dis / threshold) * " "
                 cur[1] = cur[1] + blank_str + next[1]
                 xmin = min(cur_box[0], next_box[0])
