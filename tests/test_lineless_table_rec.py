@@ -244,3 +244,39 @@ def test_plot_html_table(logi_points, cell_box_map, expected_html):
     assert (
         html_output == expected_html
     ), f"Expected HTML does not match. Got: {html_output}"
+
+
+@pytest.mark.parametrize(
+    "img_path, table_str_len, td_nums",
+    [
+        ("table.jpg", 2870, 160),
+    ],
+)
+def test_no_rec_again(img_path, table_str_len, td_nums):
+    img_path = test_file_dir / img_path
+    img = cv2.imread(str(img_path))
+
+    table_str, *_ = table_recog(img, rec_again=False)
+
+    assert len(table_str) >= table_str_len
+    assert table_str.count("td") == td_nums
+
+
+@pytest.mark.parametrize(
+    "img_path, html_output, points_len",
+    [
+        ("table.jpg", "", 77),
+        ("lineless_table_recognition.jpg", "", 51),
+    ],
+)
+def test_no_ocr(img_path, html_output, points_len):
+    img_path = test_file_dir / img_path
+
+    html, elasp, polygons, logic_points, ocr_res = table_recog(
+        str(img_path), need_ocr=False
+    )
+    assert len(ocr_res) == 0
+    assert len(polygons) > points_len
+    assert len(logic_points) > points_len
+    assert len(polygons) == len(logic_points)
+    assert html == html_output

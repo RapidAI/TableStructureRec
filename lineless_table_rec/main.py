@@ -51,23 +51,37 @@ class LinelessTableRecognition:
         self,
         content: InputType,
         ocr_result: Optional[List[Union[List[List[float]], str, str]]] = None,
+        **kwargs
     ):
         ss = time.perf_counter()
+        rec_again = True
+        need_ocr = True
+        if kwargs:
+            rec_again = kwargs.get("rec_again", True)
+            need_ocr = kwargs.get("need_ocr", True)
         img = self.load_img(content)
-        if self.ocr is None and ocr_result is None:
-            raise ValueError(
-                "One of two conditions must be met: ocr_result is not empty, or rapidocr_onnxruntime is installed."
-            )
-        if ocr_result is None:
-            ocr_result, _ = self.ocr(img)
         input_info = self.preprocess(img)
         try:
             polygons, slct_logi = self.infer(input_info)
             logi_points = self.filter_logi_points(slct_logi)
+            if not need_ocr:
+                sorted_polygons, idx_list = sorted_ocr_boxes(
+                    [box_4_2_poly_to_box_4_1(box) for box in polygons]
+                )
+                return (
+                    "",
+                    time.perf_counter() - ss,
+                    sorted_polygons,
+                    logi_points[idx_list],
+                    [],
+                )
+
+            if ocr_result is None and need_ocr:
+                ocr_result, _ = self.ocr(img)
             # ocr 结果匹配
             cell_box_det_map, no_match_ocr_det = match_ocr_cell(ocr_result, polygons)
             # 如果有识别框没有ocr结果，直接进行rec补充
-            cell_box_det_map = self.re_rec(img, polygons, cell_box_det_map)
+            cell_box_det_map = self.re_rec(img, polygons, cell_box_det_map, rec_again)
             # 转换为中间格式，修正识别框坐标,将物理识别框，逻辑识别框，ocr识别框整合为dict，方便后续处理
             t_rec_ocr_list = self.transform_res(cell_box_det_map, polygons, logi_points)
             # 拆分包含和重叠的识别框
@@ -81,7 +95,6 @@ class LinelessTableRecognition:
             ]
             # 生成行列对应的二维表格, 合并同行同列识别框中的的ocr识别框
             t_rec_ocr_list, grid = self.handle_overlap_row_col(t_rec_ocr_list)
-            # todo 根据grid 及 not_match_orc_boxes，尝试将ocr识别填入单行单列中
             # 将同一个识别框中的ocr结果排序并同行合并
             t_rec_ocr_list = self.sort_and_gather_ocr_res(t_rec_ocr_list)
             # 渲染为html
@@ -192,11 +205,11 @@ class LinelessTableRecognition:
     def sort_and_gather_ocr_res(self, res):
         for i, dict_res in enumerate(res):
             _, sorted_idx = sorted_ocr_boxes(
-                [ocr_det[0] for ocr_det in dict_res["t_ocr_res"]], threhold=0.5
+                [ocr_det[0] for ocr_det in dict_res["t_ocr_res"]], threhold=0.3
             )
             dict_res["t_ocr_res"] = [dict_res["t_ocr_res"][i] for i in sorted_idx]
             dict_res["t_ocr_res"] = gather_ocr_list_by_row(
-                dict_res["t_ocr_res"], thehold=0.5
+                dict_res["t_ocr_res"], thehold=0.3
             )
         return res
 
@@ -263,11 +276,16 @@ class LinelessTableRecognition:
         img: np.ndarray,
         sorted_polygons: np.ndarray,
         cell_box_map: Dict[int, List[str]],
+        rec_again=True,
     ) -> Dict[int, List[any]]:
         """找到poly对应为空的框，尝试将直接将poly框直接送到识别中"""
         #
         for i in range(sorted_polygons.shape[0]):
             if cell_box_map.get(i):
+                continue
+            if not rec_again:
+                box = sorted_polygons[i]
+                cell_box_map[i] = [[box, "", 1]]
                 continue
             crop_img = get_rotate_crop_image(img, sorted_polygons[i])
             pad_img = cv2.copyMakeBorder(

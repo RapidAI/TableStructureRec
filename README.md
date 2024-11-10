@@ -100,6 +100,12 @@ else:
 html, elasp, polygons, logic_points, ocr_res = table_engine(img_path)
 print(f"elasp: {elasp}")
 
+#仅返回表格物理box和行列逻辑坐标，不进行ocr识别
+#html, elasp, polygons, logic_points, ocr_res = table_engine(img_path, need_ocr=False)  
+
+#默认没有匹配的表格框进行了ocr再识别，取消该行为
+#html, elasp, polygons, logic_points, ocr_res = table_engine(img_path, rec_again=False) 
+
 # 使用其他ocr模型
 #ocr_engine =RapidOCR(det_model_dir="xxx/det_server_infer.onnx",rec_model_dir="xxx/rec_server_infer.onnx")
 #ocr_res, _ = ocr_engine(img_path)
