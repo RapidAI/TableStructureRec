@@ -22,7 +22,7 @@
     
 ### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。\
-[模型评测](#指标结果) [使用建议](#使用建议) [表格旋转及透视修正](#表格旋转及透视修正) [微调入参参考](#核心参数) [FAQ](#FAQ) [更新计划](#更新计划)
+[快速开始](#安装) [模型评测](#指标结果) [使用建议](#使用建议) [表格旋转及透视修正](#表格旋转及透视修正) [微调入参参考](#核心参数) [常见问题](#FAQ) [更新计划](#更新计划)
 #### 特点
 
 ⚡  **快**  采用ONNXRuntime作为推理引擎，cpu下单图推理1-7s
@@ -182,7 +182,7 @@ html, elasp, polygons, logic_points, ocr_res = lineless_table_rec(
 ```
 
 
-## FAQ (Frequently Asked Questions)
+## FAQ
 1. **问：识别框丢失了内部文字信息**
    - 答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
    下载更高精度的ocr模型,在执行时传入ocr_result即可
