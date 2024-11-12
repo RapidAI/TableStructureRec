@@ -18,11 +18,11 @@
 - **2024.10.29**
   - 使用yolo11重新训练表格分类器，修正wired_table_rec v2逻辑坐标还原错误，并更新测评
 - **2024.11.12**
-  - 抽离模型识别和处理过程核心阈值，方便大家进行微调适配自己的场景   
+  - 抽离模型识别和处理过程核心阈值，方便大家进行微调适配自己的场景[微调入参参考](#核心参数)   
     
 ### 简介
-💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。
-
+💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。\
+[模型评测](#指标结果) [使用建议](#使用建议) [表格旋转及透视修正](#表格旋转及透视修正) [微调入参参考](#核心参数) [FAQ](#FAQ) [更新计划](#更新计划)
 #### 特点
 
 ⚡  **快**  采用ONNXRuntime作为推理引擎，cpu下单图推理1-7s
@@ -167,7 +167,9 @@ html, elasp, polygons, logic_points, ocr_res = wired_table_rec(
     version="v2", #默认使用v2线框模型，切换阿里读光模型可改为v1
     morph_close=True, # 是否进行形态学操作,辅助找到更多线框,默认为True
     more_h_lines=True, # 是否基于线框检测结果进行更多水平线检查，辅助找到更小线框, 默认为True
+    h_lines_threshold = 100, # 必须开启more_h_lines, 连接横线检测像素阈值，小于该值会生成新横线，默认为100
     more_v_lines=True, # 是否基于线框检测结果进行更多垂直线检查，辅助找到更小线框, 默认为True
+    v_lines_threshold = 15, # 必须开启more_v_lines, 连接竖线检测像素阈值，小于该值会生成新竖线，默认为15
     extend_line=True, # 是否基于线框检测结果进行线段延长，辅助找到更多线框, 默认为True
     need_ocr=True, # 是否进行OCR识别, 默认为True
     rec_again=True,# 是否针对未识别到文字的表格框,进行单独截取再识别,默认为True
@@ -190,7 +192,7 @@ html, elasp, polygons, logic_points, ocr_res = lineless_table_rec(
       主要耗时在ocr阶段，可以参考 [rapidocr_paddle](https://rapidai.github.io/RapidOCRDocs/install_usage/rapidocr_paddle/usage/#_3)
       加速ocr识别过程
 
-### TODO List
+### 更新计划
 
 - [x] 图片小角度偏移修正方法补充
 - [x] 增加数据集数量，增加更多评测对比
