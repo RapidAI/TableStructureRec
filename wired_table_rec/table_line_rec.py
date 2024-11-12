@@ -36,7 +36,7 @@ class TableLineRecognition:
 
         self.session = OrtInferSession(model_path)
 
-    def __call__(self, img: np.ndarray) -> Optional[np.ndarray]:
+    def __call__(self, img: np.ndarray, **kwargs) -> Optional[np.ndarray]:
         img_info = self.preprocess(img)
         pred = self.infer(img_info)
         polygons = self.postprocess(pred)

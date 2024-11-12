@@ -13,12 +13,12 @@
 </div>
 
 ### 最近更新
-- **2024.10.13**
-  - 补充最新paddlex-SLANet-plus 测评结果(已集成模型到[RapidTable](https://github.com/RapidAI/RapidTable)仓库)
 - **2024.10.22**
   - 补充复杂背景多表格检测提取方案[RapidTableDet](https://github.com/RapidAI/RapidTableDetection)
 - **2024.10.29**
   - 使用yolo11重新训练表格分类器，修正wired_table_rec v2逻辑坐标还原错误，并更新测评
+- **2024.11.12**
+  - 抽离模型识别和处理过程核心阈值，方便大家进行微调适配自己的场景   
     
 ### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。
@@ -68,6 +68,7 @@
 wired_table_rec_v2(有线表格精度最高): 通用场景有线表格(论文，杂志，期刊, 收据，单据，账单)
 
 paddlex-SLANet-plus(综合精度最高): 文档场景表格(论文，杂志，期刊中的表格)
+[微调入参参考](#核心参数)
 
 ### 安装
 
@@ -99,12 +100,6 @@ else:
   
 html, elasp, polygons, logic_points, ocr_res = table_engine(img_path)
 print(f"elasp: {elasp}")
-
-#仅返回表格物理box和行列逻辑坐标，不进行ocr识别
-#html, elasp, polygons, logic_points, ocr_res = table_engine(img_path, need_ocr=False)  
-
-#默认没有匹配的表格框进行了ocr再识别，取消该行为
-#html, elasp, polygons, logic_points, ocr_res = table_engine(img_path, rec_again=False) 
 
 # 使用其他ocr模型
 #ocr_engine =RapidOCR(det_model_dir="xxx/det_server_infer.onnx",rec_model_dir="xxx/rec_server_infer.onnx")
@@ -163,6 +158,27 @@ for i, res in enumerate(result):
 #     cv2.imwrite(f"{out_dir}/{file_name}-extract-{i}.jpg", wrapped_img)
 # cv2.imwrite(f"{out_dir}/{file_name}-visualize.jpg", img)
 ```
+
+### 核心参数
+```python
+wired_table_rec = WiredTableRecognition()
+html, elasp, polygons, logic_points, ocr_res = wired_table_rec(
+    img_path,
+    version="v2", #默认使用v2线框模型，切换阿里读光模型可改为v1
+    morph_close=True, # 是否进行形态学操作,辅助找到更多线框,默认为True
+    more_h_lines=True, # 是否基于线框检测结果进行更多水平线检查，辅助找到更小线框, 默认为True
+    more_v_lines=True, # 是否基于线框检测结果进行更多垂直线检查，辅助找到更小线框, 默认为True
+    extend_line=True, # 是否基于线框检测结果进行线段延长，辅助找到更多线框, 默认为True
+    need_ocr=True, # 是否进行OCR识别, 默认为True
+    rec_again=True,# 是否针对未识别到文字的表格框,进行单独截取再识别,默认为True
+)
+lineless_table_rec = LinelessTableRecognition()
+html, elasp, polygons, logic_points, ocr_res = lineless_table_rec(
+    need_ocr=True, # 是否进行OCR识别, 默认为True
+    rec_again=True,# 是否针对未识别到文字的表格框,进行单独截取再识别,默认为True
+)
+```
+
 
 ## FAQ (Frequently Asked Questions)
 1. **问：识别框丢失了内部文字信息**

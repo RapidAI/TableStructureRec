@@ -267,8 +267,17 @@ def plot_rec_box_with_logic_info(img_path, output_path, logic_points, sorted_pol
 
         cv2.putText(
             img,
-            f"{idx}-{logic_points[idx]}",
-            (x1, y1),
+            f"row:{logic_points[idx][0]}-{logic_points[idx][1]}",
+            (x0 + 1, y0 + 15),
+            cv2.FONT_HERSHEY_PLAIN,
+            font_scale,
+            (0, 0, 255),
+            thickness,
+        )
+        cv2.putText(
+            img,
+            f"col:{logic_points[idx][2]}-{logic_points[idx][3]}",
+            (x0 + 1, y0 + 40),
             cv2.FONT_HERSHEY_PLAIN,
             font_scale,
             (0, 0, 255),
@@ -303,15 +312,15 @@ def plot_rec_box(img_path, output_path, sorted_polygons):
         font_scale = 1.0  # 原先是0.5
         thickness = 2  # 原先是1
 
-        cv2.putText(
-            img,
-            str(idx),
-            (x1, y1),
-            cv2.FONT_HERSHEY_PLAIN,
-            font_scale,
-            (0, 0, 255),
-            thickness,
-        )
+        # cv2.putText(
+        #     img,
+        #     str(idx),
+        #     (x1, y1),
+        #     cv2.FONT_HERSHEY_PLAIN,
+        #     font_scale,
+        #     (0, 0, 255),
+        #     thickness,
+        # )
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     # 保存绘制后的图像
     cv2.imwrite(output_path, img)

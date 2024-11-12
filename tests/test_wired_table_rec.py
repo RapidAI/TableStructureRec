@@ -66,6 +66,22 @@ def test_input_normal(img_path, gt_td_nums, gt2):
 
 
 @pytest.mark.parametrize(
+    "img_path, gt_td_nums",
+    [
+        ("wired_big_box.png", 70),
+    ],
+)
+def test_input_normal(img_path, gt_td_nums):
+    img_path = test_file_dir / img_path
+
+    ocr_result, _ = ocr_engine(img_path)
+    table_str, *_ = table_recog(str(img_path), ocr_result)
+    td_nums = get_td_nums(table_str)
+
+    assert td_nums >= gt_td_nums
+
+
+@pytest.mark.parametrize(
     "box1, box2, threshold, expected",
     [
         # Box1 完全包含在 Box2 内

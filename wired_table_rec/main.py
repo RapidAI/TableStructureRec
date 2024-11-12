@@ -64,7 +64,7 @@ class WiredTableRecognition:
             rec_again = kwargs.get("rec_again", True)
             need_ocr = kwargs.get("need_ocr", True)
         img = self.load_img(img)
-        polygons = self.table_line_rec(img)
+        polygons = self.table_line_rec(img, **kwargs)
         if polygons is None:
             logging.warning("polygons is None.")
             return "", 0.0, None, None, None
