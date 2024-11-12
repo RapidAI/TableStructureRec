@@ -50,6 +50,7 @@ class WiredTableRecognition:
         self,
         img: InputType,
         ocr_result: Optional[List[Union[List[List[float]], str, str]]] = None,
+        **kwargs,
     ) -> Tuple[str, float, Any, Any, Any]:
         if self.ocr is None and ocr_result is None:
             raise ValueError(
@@ -57,9 +58,13 @@ class WiredTableRecognition:
             )
 
         s = time.perf_counter()
-
+        rec_again = True
+        need_ocr = True
+        if kwargs:
+            rec_again = kwargs.get("rec_again", True)
+            need_ocr = kwargs.get("need_ocr", True)
         img = self.load_img(img)
-        polygons = self.table_line_rec(img)
+        polygons = self.table_line_rec(img, **kwargs)
         if polygons is None:
             logging.warning("polygons is None.")
             return "", 0.0, None, None, None
@@ -71,12 +76,22 @@ class WiredTableRecognition:
                 polygons[:, 3, :].copy(),
                 polygons[:, 1, :].copy(),
             )
-            if ocr_result is None:
+            if not need_ocr:
+                sorted_polygons, idx_list = sorted_ocr_boxes(
+                    [box_4_2_poly_to_box_4_1(box) for box in polygons]
+                )
+                return (
+                    "",
+                    time.perf_counter() - s,
+                    sorted_polygons,
+                    logi_points[idx_list],
+                    [],
+                )
+            if ocr_result is None and need_ocr:
                 ocr_result, _ = self.ocr(img)
             cell_box_det_map, not_match_orc_boxes = match_ocr_cell(ocr_result, polygons)
             # 如果有识别框没有ocr结果，直接进行rec补充
-            # cell_box_det_map = self.re_rec_high_precise(img, polygons, cell_box_det_map)
-            cell_box_det_map = self.re_rec(img, polygons, cell_box_det_map)
+            cell_box_det_map = self.re_rec(img, polygons, cell_box_det_map, rec_again)
             # 转换为中间格式，修正识别框坐标,将物理识别框，逻辑识别框，ocr识别框整合为dict，方便后续处理
             t_rec_ocr_list = self.transform_res(cell_box_det_map, polygons, logi_points)
             # 将每个单元格中的ocr识别结果排序和同行合并，输出的html能完整保留文字的换行格式
@@ -139,11 +154,11 @@ class WiredTableRecognition:
     def sort_and_gather_ocr_res(self, res):
         for i, dict_res in enumerate(res):
             _, sorted_idx = sorted_ocr_boxes(
-                [ocr_det[0] for ocr_det in dict_res["t_ocr_res"]], threhold=0.5
+                [ocr_det[0] for ocr_det in dict_res["t_ocr_res"]], threhold=0.3
             )
             dict_res["t_ocr_res"] = [dict_res["t_ocr_res"][i] for i in sorted_idx]
             dict_res["t_ocr_res"] = gather_ocr_list_by_row(
-                dict_res["t_ocr_res"], threhold=0.5
+                dict_res["t_ocr_res"], threhold=0.3
             )
         return res
 
@@ -152,11 +167,15 @@ class WiredTableRecognition:
         img: np.ndarray,
         sorted_polygons: np.ndarray,
         cell_box_map: Dict[int, List[str]],
+        rec_again=True,
     ) -> Dict[int, List[Any]]:
         """找到poly对应为空的框，尝试将直接将poly框直接送到识别中"""
-        #
         for i in range(sorted_polygons.shape[0]):
             if cell_box_map.get(i):
+                continue
+            if not rec_again:
+                box = sorted_polygons[i]
+                cell_box_map[i] = [[box, "", 1]]
                 continue
             crop_img = get_rotate_crop_image(img, sorted_polygons[i])
             pad_img = cv2.copyMakeBorder(

@@ -66,6 +66,22 @@ def test_input_normal(img_path, gt_td_nums, gt2):
 
 
 @pytest.mark.parametrize(
+    "img_path, gt_td_nums",
+    [
+        ("wired_big_box.png", 70),
+    ],
+)
+def test_input_normal(img_path, gt_td_nums):
+    img_path = test_file_dir / img_path
+
+    ocr_result, _ = ocr_engine(img_path)
+    table_str, *_ = table_recog(str(img_path), ocr_result)
+    td_nums = get_td_nums(table_str)
+
+    assert td_nums >= gt_td_nums
+
+
+@pytest.mark.parametrize(
     "box1, box2, threshold, expected",
     [
         # Box1 完全包含在 Box2 内
@@ -264,3 +280,40 @@ def test_plot_html_table(logi_points, cell_box_map, expected_html):
     assert (
         html_output == expected_html
     ), f"Expected HTML does not match. Got: {html_output}"
+
+
+@pytest.mark.parametrize(
+    "img_path, gt_td_nums, gt2",
+    [
+        ("table_recognition.jpg", 35, "d colsp"),
+    ],
+)
+def test_no_rec_again(img_path, gt_td_nums, gt2):
+    img_path = test_file_dir / img_path
+
+    ocr_result, _ = ocr_engine(img_path)
+    table_str, *_ = table_recog(str(img_path), ocr_result, rec_again=False)
+    td_nums = get_td_nums(table_str)
+
+    assert td_nums >= gt_td_nums
+
+
+@pytest.mark.parametrize(
+    "img_path, html_output, points_len",
+    [
+        ("table2.jpg", "", 20),
+        ("row_span.png", "", 14),
+    ],
+)
+def test_no_ocr(img_path, html_output, points_len):
+    img_path = test_file_dir / img_path
+
+    ocr_result, _ = ocr_engine(img_path)
+    html, elasp, polygons, logic_points, ocr_res = table_recog(
+        str(img_path), ocr_result, need_ocr=False
+    )
+    assert len(ocr_res) == 0
+    assert len(polygons) > points_len
+    assert len(logic_points) > points_len
+    assert len(polygons) == len(logic_points)
+    assert html == html_output
