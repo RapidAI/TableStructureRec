@@ -53,18 +53,18 @@
 
    Surya-Tabled 使用内置ocr模块，表格模型为行列识别模型，无法识别单元格合并，导致分数较低
 
-| 方法                                                                                              |    TEDS     | TEDS-only-structure |
-|:------------------------------------------------------------------------------------------------|:-----------:|:-------------------:|
-| [surya-tabled(--skip-detect)](https://github.com/VikParuchuri/tabled)                           |   0.33437   |       0.65865       |
-| [surya-tabled](https://github.com/VikParuchuri/tabled)                                          |   0.33940   |       0.67103       |
-| [deepdoctection(rag-flow)](https://github.com/deepdoctection/deepdoctection?tab=readme-ov-file) |   0.59975   |       0.69918       |
-| [ppstructure_table_master](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)     |   0.61606   |       0.73892       |
-| [ppsturcture_table_engine](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)     |   0.67924   |       0.78653       |
-| [StructEqTable](https://github.com/UniModal4Reasoning/StructEqTable-Deploy)                     |   0.67310   |       0.81210       |
-| [RapidTable(SLANet)](https://github.com/RapidAI/RapidTable)                                     |   0.71654   |       0.81067       |
-| table_cls + wired_table_rec v1 + lineless_table_rec                                             |   0.75288   |       0.82574       |
-| table_cls + wired_table_rec v2 + lineless_table_rec                                             |   0.77676   |       0.84580       |
-| [RapidTable(SLANet-plus)](https://github.com/RapidAI/RapidTable)                                | **0.84481** |     **0.91369**     |
+| 方法                                                                                                       |    TEDS     | TEDS-only-structure |
+|:---------------------------------------------------------------------------------------------------------|:-----------:|:-------------------:|
+| [surya-tabled(--skip-detect)](https://github.com/VikParuchuri/tabled)                                    |   0.33437   |       0.65865       |
+| [surya-tabled](https://github.com/VikParuchuri/tabled)                                                   |   0.33940   |       0.67103       |
+| [deepdoctection(table-transformer)](https://github.com/deepdoctection/deepdoctection?tab=readme-ov-file) |   0.59975   |       0.69918       |
+| [ppstructure_table_master](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)              |   0.61606   |       0.73892       |
+| [ppsturcture_table_engine](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)              |   0.67924   |       0.78653       |
+| [StructEqTable](https://github.com/UniModal4Reasoning/StructEqTable-Deploy)                              |   0.67310   |       0.81210       |
+| [RapidTable(SLANet)](https://github.com/RapidAI/RapidTable)                                              |   0.71654   |       0.81067       |
+| table_cls + wired_table_rec v1 + lineless_table_rec                                                      |   0.75288   |       0.82574       |
+| table_cls + wired_table_rec v2 + lineless_table_rec                                                      |   0.77676   |       0.84580       |
+| [RapidTable(SLANet-plus)](https://github.com/RapidAI/RapidTable)                                         | **0.84481** |     **0.91369**     |
 
 ### 使用建议
 wired_table_rec_v2(有线表格精度最高): 通用场景有线表格(论文，杂志，期刊, 收据，单据，账单)
