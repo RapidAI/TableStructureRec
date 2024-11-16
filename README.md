@@ -10,6 +10,8 @@
   <a href="https://semver.org/"><img alt="SemVer2.0" src="https://img.shields.io/badge/SemVer-2.0-brightgreen"></a>
   <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
   <a href="https://github.com/RapidAI/TableStructureRec/blob/c41bbd23898cb27a957ed962b0ffee3c74dfeff1/LICENSE"><img alt="GitHub" src="https://img.shields.io/badge/license-Apache 2.0-blue"></a>
+
+[English](README_en.md) | 简体中文 
 </div>
 
 ### 最近更新
@@ -185,8 +187,9 @@ html, elasp, polygons, logic_points, ocr_res = lineless_table_rec(
 ## FAQ
 1. **问：识别框丢失了内部文字信息**
    - 答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
-   下载更高精度的ocr模型,在执行时传入ocr_result即可
-
+   下载更高精度的ocr模型,在执行时传入ocr_result即可, 
+   - 或者尝试调节rapid_ocr的参数, 根据在线demo调节参数， [modelscope](https://www.modelscope.cn/studios/liekkas/RapidOCRDemo/summary) [huggingface](https://huggingface.co/spaces/SWHL/RapidOCRDemo)
+     然后在推理时传入即可
 3. **问：模型支持 gpu 加速吗？**
     - 答：目前表格模型的推理非常快，有线表格在100ms级别，无线表格在500ms级别，
       主要耗时在ocr阶段，可以参考 [rapidocr_paddle](https://rapidai.github.io/RapidOCRDocs/install_usage/rapidocr_paddle/usage/#_3)

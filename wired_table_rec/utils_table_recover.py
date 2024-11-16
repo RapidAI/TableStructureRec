@@ -262,13 +262,22 @@ def plot_rec_box_with_logic_info(img_path, output_path, logic_points, sorted_pol
         y1 = round(y1)
         cv2.rectangle(img, (x0, y0), (x1, y1), (0, 0, 255), 1)
         # 增大字体大小和线宽
-        font_scale = 1.0  # 原先是0.5
-        thickness = 2  # 原先是1
-
+        font_scale = 0.7  # 原先是0.5
+        thickness = 1  # 原先是1
+        logic_point = logic_points[idx]
         cv2.putText(
             img,
-            f"{idx}-{logic_points[idx]}",
-            (x1, y1),
+            f"row: {logic_point[0]}-{logic_point[1]}",
+            (x0 + 3, y0 + 8),
+            cv2.FONT_HERSHEY_PLAIN,
+            font_scale,
+            (0, 0, 255),
+            thickness,
+        )
+        cv2.putText(
+            img,
+            f"col: {logic_point[2]}-{logic_point[3]}",
+            (x0 + 3, y0 + 18),
             cv2.FONT_HERSHEY_PLAIN,
             font_scale,
             (0, 0, 255),
