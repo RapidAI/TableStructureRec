@@ -10,6 +10,8 @@
   <a href="https://semver.org/"><img alt="SemVer2.0" src="https://img.shields.io/badge/SemVer-2.0-brightgreen"></a>
   <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
   <a href="https://github.com/RapidAI/TableStructureRec/blob/c41bbd23898cb27a957ed962b0ffee3c74dfeff1/LICENSE"><img alt="GitHub" src="https://img.shields.io/badge/license-Apache 2.0-blue"></a>
+
+[English](README_en.md) | 简体中文 
 </div>
 
 ### 最近更新
@@ -51,18 +53,18 @@
 
    Surya-Tabled 使用内置ocr模块，表格模型为行列识别模型，无法识别单元格合并，导致分数较低
 
-| 方法                                                                                              |    TEDS     | TEDS-only-structure |
-|:------------------------------------------------------------------------------------------------|:-----------:|:-------------------:|
-| [surya-tabled(--skip-detect)](https://github.com/VikParuchuri/tabled)                           |   0.33437   |       0.65865       |
-| [surya-tabled](https://github.com/VikParuchuri/tabled)                                          |   0.33940   |       0.67103       |
-| [deepdoctection(rag-flow)](https://github.com/deepdoctection/deepdoctection?tab=readme-ov-file) |   0.59975   |       0.69918       |
-| [ppstructure_table_master](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)     |   0.61606   |       0.73892       |
-| [ppsturcture_table_engine](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)     |   0.67924   |       0.78653       |
-| [StructEqTable](https://github.com/UniModal4Reasoning/StructEqTable-Deploy)                     |   0.67310   |       0.81210       |
-| [RapidTable(SLANet)](https://github.com/RapidAI/RapidTable)                                     |   0.71654   |       0.81067       |
-| table_cls + wired_table_rec v1 + lineless_table_rec                                             |   0.75288   |       0.82574       |
-| table_cls + wired_table_rec v2 + lineless_table_rec                                             |   0.77676   |       0.84580       |
-| [RapidTable(SLANet-plus)](https://github.com/RapidAI/RapidTable)                                | **0.84481** |     **0.91369**     |
+| 方法                                                                                                       |    TEDS     | TEDS-only-structure |
+|:---------------------------------------------------------------------------------------------------------|:-----------:|:-------------------:|
+| [surya-tabled(--skip-detect)](https://github.com/VikParuchuri/tabled)                                    |   0.33437   |       0.65865       |
+| [surya-tabled](https://github.com/VikParuchuri/tabled)                                                   |   0.33940   |       0.67103       |
+| [deepdoctection(table-transformer)](https://github.com/deepdoctection/deepdoctection?tab=readme-ov-file) |   0.59975   |       0.69918       |
+| [ppstructure_table_master](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)              |   0.61606   |       0.73892       |
+| [ppsturcture_table_engine](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)              |   0.67924   |       0.78653       |
+| [StructEqTable](https://github.com/UniModal4Reasoning/StructEqTable-Deploy)                              |   0.67310   |       0.81210       |
+| [RapidTable(SLANet)](https://github.com/RapidAI/RapidTable)                                              |   0.71654   |       0.81067       |
+| table_cls + wired_table_rec v1 + lineless_table_rec                                                      |   0.75288   |       0.82574       |
+| table_cls + wired_table_rec v2 + lineless_table_rec                                                      |   0.77676   |       0.84580       |
+| [RapidTable(SLANet-plus)](https://github.com/RapidAI/RapidTable)                                         | **0.84481** |     **0.91369**     |
 
 ### 使用建议
 wired_table_rec_v2(有线表格精度最高): 通用场景有线表格(论文，杂志，期刊, 收据，单据，账单)
@@ -185,8 +187,9 @@ html, elasp, polygons, logic_points, ocr_res = lineless_table_rec(
 ## FAQ
 1. **问：识别框丢失了内部文字信息**
    - 答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
-   下载更高精度的ocr模型,在执行时传入ocr_result即可
-
+   下载更高精度的ocr模型,在执行时传入ocr_result即可, 
+   - 或者尝试调节rapid_ocr的参数, 根据在线demo调节参数， [modelscope](https://www.modelscope.cn/studios/liekkas/RapidOCRDemo/summary) [huggingface](https://huggingface.co/spaces/SWHL/RapidOCRDemo)
+     然后在推理时传入即可
 3. **问：模型支持 gpu 加速吗？**
     - 答：目前表格模型的推理非常快，有线表格在100ms级别，无线表格在500ms级别，
       主要耗时在ocr阶段，可以参考 [rapidocr_paddle](https://rapidai.github.io/RapidOCRDocs/install_usage/rapidocr_paddle/usage/#_3)
