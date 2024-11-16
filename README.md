@@ -190,7 +190,7 @@ html, elasp, polygons, logic_points, ocr_res = lineless_table_rec(
    下载更高精度的ocr模型,在执行时传入ocr_result即可, 
    - 或者尝试调节rapid_ocr的参数, 根据在线demo调节参数， [modelscope](https://www.modelscope.cn/studios/liekkas/RapidOCRDemo/summary) [huggingface](https://huggingface.co/spaces/SWHL/RapidOCRDemo)
      然后在推理时传入即可
-2**问：文档扭曲变形怎么处理？**
+2. **问：文档扭曲变形怎么处理？**
     - 答：使用 [RapidUnwrap](https://github.com/Joker1212/RapidUnWrap)
 3. **问：模型支持 gpu 加速吗？**
     - 答：目前表格模型的推理非常快，有线表格在100ms级别，无线表格在500ms级别，

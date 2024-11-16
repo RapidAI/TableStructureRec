@@ -201,7 +201,10 @@ html, elasp, polygons, logic_points, ocr_res = lineless_table_rec(
 ### Processing Workflow
 
 ```mermaid
-A[/Table Image/] --> B([Table Classification table_cls]) B --> C([Wired Table Recognition wired_table_rec]) & D([Wireless Table Recognition lineless_table_rec]) --> E([Text Recognition rapidocr_onnxruntime]) E --> F[/HTML Structured Output/]
+flowchart TD
+    A[/table image/] --> B([table cls table_cls])
+    B --> C([wired_table_rec]) & D([lineless_table_rec]) --> E([rapidocr_onnxruntime])
+    E --> F[/html output/]
 ```
 
 ### Acknowledgments
