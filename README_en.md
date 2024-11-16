@@ -16,16 +16,14 @@
 - **2024.10.22**
     - Added the complex background multi-table detection and extraction solution [RapidTableDet](https://github.com/RapidAI/RapidTableDetection).
 
-- **2024.10.29**
-    - Retrained the table classifier using YOLO11 to fix the logic coordinate restoration error in wired_table_rec v2 and updated evaluations.
-
 - **2024.11.12**
     - Extracted model recognition and processing core thresholds for easier fine-tuning according to specific scenarios. See [Core Parameters](#core-parameters).
-
+- **2024.11.16**
+    - Added document distortion correction solution, which can be used as a pre-processing step [Document Distortion Correction](https://github.com/Joker1212/RapidUnWrap)
 ### Introduction
 💖 This repository serves as an inference library for structured recognition of tables within documents, including models for wired and wireless table recognition from Alibaba DulaLight, a wired table model from llaipython (WeChat), and a built-in table classification model from NetEase Qanything.
 
-[Quick Start](#installation) [Model Evaluation](#evaluation-results) [Usage Recommendations](#usage-recommendations) [Table Rotation & Perspective Correction](#table-rotation-and-perspective-correction) [Fine-tuning Input Parameters Reference](#core-parameters) [Frequently Asked Questions](#faqs) [Update Plan](#update-plan)
+[Quick Start](#installation) [Model Evaluation](#evaluation-results) [Usage Recommendations](#usage-recommendations) [Document Distortion Correction](https://github.com/Joker1212/RapidUnWrap) [Table Rotation & Perspective Correction](#table-rotation-and-perspective-correction) [Fine-tuning Input Parameters Reference](#core-parameters) [Frequently Asked Questions](#faqs) [Update Plan](#update-plan)
 #### Features
 
 ⚡ **Fast:** Uses ONNXRuntime as the inference engine, achieving 1-7 seconds per image on CPU.
@@ -203,7 +201,10 @@ html, elasp, polygons, logic_points, ocr_res = lineless_table_rec(
 ### Processing Workflow
 
 ```mermaid
-A[/Table Image/] --> B([Table Classification table_cls]) B --> C([Wired Table Recognition wired_table_rec]) & D([Wireless Table Recognition lineless_table_rec]) --> E([Text Recognition rapidocr_onnxruntime]) E --> F[/HTML Structured Output/]
+flowchart TD
+    A[/table image/] --> B([table cls table_cls])
+    B --> C([wired_table_rec]) & D([lineless_table_rec]) --> E([rapidocr_onnxruntime])
+    E --> F[/html output/]
 ```
 
 ### Acknowledgments

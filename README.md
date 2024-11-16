@@ -17,14 +17,14 @@
 ### 最近更新
 - **2024.10.22**
   - 补充复杂背景多表格检测提取方案[RapidTableDet](https://github.com/RapidAI/RapidTableDetection)
-- **2024.10.29**
-  - 使用yolo11重新训练表格分类器，修正wired_table_rec v2逻辑坐标还原错误，并更新测评
 - **2024.11.12**
   - 抽离模型识别和处理过程核心阈值，方便大家进行微调适配自己的场景[微调入参参考](#核心参数)   
+- **2024.11.16**
+  - 补充文档扭曲矫正方案，可作为前置处理 [文档扭曲变形修正](https://github.com/Joker1212/RapidUnWrap)
     
 ### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。\
-[快速开始](#安装) [模型评测](#指标结果) [使用建议](#使用建议) [表格旋转及透视修正](#表格旋转及透视修正) [微调入参参考](#核心参数) [常见问题](#FAQ) [更新计划](#更新计划)
+[快速开始](#安装) [模型评测](#指标结果) [使用建议](#使用建议) [文档扭曲变形修正](https://github.com/Joker1212/RapidUnWrap) [表格旋转及透视修正](#表格旋转及透视修正) [微调入参参考](#核心参数) [常见问题](#FAQ) [更新计划](#更新计划)
 #### 特点
 
 ⚡  **快**  采用ONNXRuntime作为推理引擎，cpu下单图推理1-7s
@@ -190,6 +190,8 @@ html, elasp, polygons, logic_points, ocr_res = lineless_table_rec(
    下载更高精度的ocr模型,在执行时传入ocr_result即可, 
    - 或者尝试调节rapid_ocr的参数, 根据在线demo调节参数， [modelscope](https://www.modelscope.cn/studios/liekkas/RapidOCRDemo/summary) [huggingface](https://huggingface.co/spaces/SWHL/RapidOCRDemo)
      然后在推理时传入即可
+2. **问：文档扭曲变形怎么处理？**
+    - 答：使用 [RapidUnwrap](https://github.com/Joker1212/RapidUnWrap)
 3. **问：模型支持 gpu 加速吗？**
     - 答：目前表格模型的推理非常快，有线表格在100ms级别，无线表格在500ms级别，
       主要耗时在ocr阶段，可以参考 [rapidocr_paddle](https://rapidai.github.io/RapidOCRDocs/install_usage/rapidocr_paddle/usage/#_3)
