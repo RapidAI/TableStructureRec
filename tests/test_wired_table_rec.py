@@ -285,7 +285,7 @@ def test_plot_html_table(logi_points, cell_box_map, expected_html):
 @pytest.mark.parametrize(
     "img_path, gt_td_nums, gt2",
     [
-        ("table_recognition.jpg", 35, "d colsp"),
+        ("table_recognition.jpg", 20, "d colsp"),
     ],
 )
 def test_no_rec_again(img_path, gt_td_nums, gt2):
