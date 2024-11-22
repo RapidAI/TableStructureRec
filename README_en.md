@@ -18,7 +18,7 @@
 - **2024.11.16**
     - Added document distortion correction solution, which can be used as a pre-processing step [RapidUnWrap](https://github.com/Joker1212/RapidUnWrap)
 - **2024.11.22**
-    - Support Char Rec, RapidOCR>=1.4.0 [RapidUnWrap](https://github.com/Joker1212/RapidUnWrap)
+    - Support Char Rec, RapidOCR>=1.4.0
 ### Introduction
 💖 This repository serves as an inference library for structured recognition of tables within documents, including models for wired and wireless table recognition from Alibaba DulaLight, a wired table model from llaipython (WeChat), and a built-in table classification model from NetEase Qanything.
 
