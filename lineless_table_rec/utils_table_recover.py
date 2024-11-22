@@ -605,6 +605,19 @@ def format_html(html):
     """
 
 
+def trans_char_ocr_res(ocr_res):
+    word_result = []
+    for res in ocr_res:
+        score = res[2]
+        for word_box, word in zip(res[3], res[4]):
+            word_res = []
+            word_res.append(word_box)
+            word_res.append(word)
+            word_res.append(score)
+            word_result.append(word_res)
+    return word_result
+
+
 def get_rotate_crop_image(img: np.ndarray, points: np.ndarray) -> np.ndarray:
     img_crop_width = int(
         max(

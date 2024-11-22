@@ -13,17 +13,16 @@
 </div>
 
 ### Recent Updates
-- **2024.10.22**
-    - Added the complex background multi-table detection and extraction solution [RapidTableDet](https://github.com/RapidAI/RapidTableDetection).
-
 - **2024.11.12**
     - Extracted model recognition and processing core thresholds for easier fine-tuning according to specific scenarios. See [Core Parameters](#core-parameters).
 - **2024.11.16**
-    - Added document distortion correction solution, which can be used as a pre-processing step [Document Distortion Correction](https://github.com/Joker1212/RapidUnWrap)
+    - Added document distortion correction solution, which can be used as a pre-processing step [RapidUnWrap](https://github.com/Joker1212/RapidUnWrap)
+- **2024.11.22**
+    - Support Char Rec, RapidOCR>=1.4.0 [RapidUnWrap](https://github.com/Joker1212/RapidUnWrap)
 ### Introduction
 💖 This repository serves as an inference library for structured recognition of tables within documents, including models for wired and wireless table recognition from Alibaba DulaLight, a wired table model from llaipython (WeChat), and a built-in table classification model from NetEase Qanything.
 
-[Quick Start](#installation) [Model Evaluation](#evaluation-results) [Usage Recommendations](#usage-recommendations) [Document Distortion Correction](https://github.com/Joker1212/RapidUnWrap) [Table Rotation & Perspective Correction](#table-rotation-and-perspective-correction) [Fine-tuning Input Parameters Reference](#core-parameters) [Frequently Asked Questions](#faqs) [Update Plan](#update-plan)
+[Quick Start](#installation) [Model Evaluation](#evaluation-results) [Char Rec](#Single-Character-OCR-Matching) [Usage Recommendations](#usage-recommendations) [Document Distortion Correction](https://github.com/Joker1212/RapidUnWrap) [Table Rotation & Perspective Correction](#table-rotation-and-perspective-correction) [Input Parameters](#core-parameters) [Frequently Asked Questions](#faqs) [Update Plan](#update-plan)
 #### Features
 
 ⚡ **Fast:** Uses ONNXRuntime as the inference engine, achieving 1-7 seconds per image on CPU.
@@ -121,6 +120,16 @@ print(f"elasp: {elasp}")
 # Visualize OCR recognition boxes
 # plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
 ```
+#### Single Character OCR Matching
+```python
+# Convert single character boxes to the same structure as line recognition
+from rapidocr_onnxruntime import RapidOCR
+from wired_table_rec.utils_table_recover import trans_char_ocr_res
+img_path = "tests/test_files/wired/table4.jpg"
+ocr_engine =RapidOCR()
+ocr_res, _ = ocr_engine(img_path, return_word_box=True)
+ocr_res = trans_char_ocr_res(ocr_res)
+```
 
 #### Table Rotation and Perspective Correction
 ##### 1. Simple Background, Small Angle Scene
@@ -166,21 +175,19 @@ for i, res in enumerate(result):
 ```python
 wired_table_rec = WiredTableRecognition()
 html, elasp, polygons, logic_points, ocr_res = wired_table_rec(
-    img_path,
-    version="v2", # Default to use v2 line model, switch to Alibaba ReadLight model by changing to v1
-    morph_close=True,# Whether to perform morphological operations to find more lines, default is True
-    more_h_lines=True, # Whether to check for more horizontal lines based on line detection results to find smaller lines, default is True
-    h_lines_threshold = 100, # Must enable more_h_lines, threshold for connecting horizontal line detection pixels, new horizontal lines will be generated if below this value, default is 100
-    more_v_lines=True, # Whether to check for more vertical lines based on line detection results to find smaller lines, default is True
-    v_lines_threshold = 15, # Must enable more_v_lines, threshold for connecting vertical line detection pixels, new vertical lines will be generated if below this value, default is 15
-    extend_line=True, # Whether to extend line segments based on line detection results to find more lines, default is True
-    need_ocr=True, # Whether to perform OCR recognition, default is True
-    rec_again=True,# Whether to re-recognize table boxes that were not recognized, default is True
+    img,  # Image Union[str, np.ndarray, bytes, Path, PIL.Image.Image]
+    ocr_result,  # Input rapidOCR recognition result, use internal rapidocr model by default if not provided
+    version="v2",  # Default to using v2 line model, switch to AliDamo model by changing to v1
+    enhance_box_line=True,  # Enhance box line find (turn off to avoid excessive cutting, turn on to reduce missed cuts), default is True
+    need_ocr=True,  # Whether to perform OCR recognition, default is True
+    rec_again=True,  # Whether to re-recognize table boxes without detected text by cropping them separately, default is True
 )
 lineless_table_rec = LinelessTableRecognition()
 html, elasp, polygons, logic_points, ocr_res = lineless_table_rec(
-    need_ocr=True, # Whether to perform OCR recognition, default is True
-    rec_again=True, # Whether to re-recognize table boxes that were not recognized, default is True
+    img,  # Image Union[str, np.ndarray, bytes, Path, PIL.Image.Image]
+    ocr_result,  # Input rapidOCR recognition result, use internal rapidocr model by default if not provided
+    need_ocr=True,  # Whether to perform OCR recognition, default is True
+    rec_again=True,  # Whether to re-recognize table boxes without detected text by cropping them separately, default is True
 )
 ```
 

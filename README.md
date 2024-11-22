@@ -15,16 +15,16 @@
 </div>
 
 ### 最近更新
-- **2024.10.22**
-  - 补充复杂背景多表格检测提取方案[RapidTableDet](https://github.com/RapidAI/RapidTableDetection)
 - **2024.11.12**
-  - 抽离模型识别和处理过程核心阈值，方便大家进行微调适配自己的场景[微调入参参考](#核心参数)   
+  - 抽离模型识别和处理过程核心阈值，方便大家进行微调适配自己的场景[输入参数](#核心参数)   
 - **2024.11.16**
-  - 补充文档扭曲矫正方案，可作为前置处理 [文档扭曲变形修正](https://github.com/Joker1212/RapidUnWrap)
+  - 补充文档扭曲矫正方案，可作为前置处理 [RapidUnwrap](https://github.com/Joker1212/RapidUnWrap)
+- **2024.11.22**
+  - 支持单字符匹配方案，需要RapidOCR>=1.4.0
     
 ### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。\
-[快速开始](#安装) [模型评测](#指标结果) [使用建议](#使用建议) [文档扭曲变形修正](https://github.com/Joker1212/RapidUnWrap) [表格旋转及透视修正](#表格旋转及透视修正) [微调入参参考](#核心参数) [常见问题](#FAQ) [更新计划](#更新计划)
+[快速开始](#安装) [模型评测](#指标结果) [使用建议](#使用建议) [单字匹配](#单字ocr匹配) [文档扭曲修正](https://github.com/Joker1212/RapidUnWrap) [表格旋转及透视修正](#表格旋转及透视修正) [输入参数](#核心参数) [常见问题](#FAQ) [更新计划](#更新计划)
 #### 特点
 
 ⚡  **快**  采用ONNXRuntime作为推理引擎，cpu下单图推理1-7s
@@ -106,7 +106,6 @@ print(f"elasp: {elasp}")
 # 使用其他ocr模型
 #ocr_engine =RapidOCR(det_model_dir="xxx/det_server_infer.onnx",rec_model_dir="xxx/rec_server_infer.onnx")
 #ocr_res, _ = ocr_engine(img_path)
-#html, elasp, polygons, logic_points, ocr_res = table_engine(img_path, ocr_result=ocr_res)  
 
 # output_dir = f'outputs'
 # complete_html = format_html(html)
@@ -119,6 +118,17 @@ print(f"elasp: {elasp}")
 # )
 # # 可视化 ocr 识别框
 # plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
+```
+
+#### 单字ocr匹配
+```python
+# 将单字box转换为行识别同样的结构)
+from rapidocr_onnxruntime import RapidOCR
+from wired_table_rec.utils_table_recover import trans_char_ocr_res
+img_path = "tests/test_files/wired/table4.jpg"
+ocr_engine =RapidOCR()
+ocr_res, _ = ocr_engine(img_path, return_word_box=True)
+ocr_res = trans_char_ocr_res(ocr_res)
 ```
 
 #### 表格旋转及透视修正
@@ -165,19 +175,17 @@ for i, res in enumerate(result):
 ```python
 wired_table_rec = WiredTableRecognition()
 html, elasp, polygons, logic_points, ocr_res = wired_table_rec(
-    img_path,
+    img, # 图片 Union[str, np.ndarray, bytes, Path, PIL.Image.Image]
+    ocr_result, # 输入rapidOCR识别结果，不传默认使用内部rapidocr模型
     version="v2", #默认使用v2线框模型，切换阿里读光模型可改为v1
-    morph_close=True, # 是否进行形态学操作,辅助找到更多线框,默认为True
-    more_h_lines=True, # 是否基于线框检测结果进行更多水平线检查，辅助找到更小线框, 默认为True
-    h_lines_threshold = 100, # 必须开启more_h_lines, 连接横线检测像素阈值，小于该值会生成新横线，默认为100
-    more_v_lines=True, # 是否基于线框检测结果进行更多垂直线检查，辅助找到更小线框, 默认为True
-    v_lines_threshold = 15, # 必须开启more_v_lines, 连接竖线检测像素阈值，小于该值会生成新竖线，默认为15
-    extend_line=True, # 是否基于线框检测结果进行线段延长，辅助找到更多线框, 默认为True
+    enhance_box_line=True, # 识别框切割增强(关闭避免多余切割，开启减少漏切割)，默认为True
     need_ocr=True, # 是否进行OCR识别, 默认为True
     rec_again=True,# 是否针对未识别到文字的表格框,进行单独截取再识别,默认为True
 )
 lineless_table_rec = LinelessTableRecognition()
 html, elasp, polygons, logic_points, ocr_res = lineless_table_rec(
+    img, # 图片 Union[str, np.ndarray, bytes, Path, PIL.Image.Image]
+    ocr_result, # 输入rapidOCR识别结果，不传默认使用内部rapidocr模型
     need_ocr=True, # 是否进行OCR识别, 默认为True
     rec_again=True,# 是否针对未识别到文字的表格框,进行单独截取再识别,默认为True
 )

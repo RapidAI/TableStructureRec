@@ -288,6 +288,19 @@ def plot_rec_box_with_logic_info(img_path, output_path, logic_points, sorted_pol
         cv2.imwrite(output_path, img)
 
 
+def trans_char_ocr_res(ocr_res):
+    word_result = []
+    for res in ocr_res:
+        score = res[2]
+        for word_box, word in zip(res[3], res[4]):
+            word_res = []
+            word_res.append(word_box)
+            word_res.append(word)
+            word_res.append(score)
+            word_result.append(word_res)
+    return word_result
+
+
 def plot_rec_box(img_path, output_path, sorted_polygons):
     """
     :param img_path
