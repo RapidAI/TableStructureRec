@@ -70,7 +70,6 @@
 wired_table_rec_v2(有线表格精度最高): 通用场景有线表格(论文，杂志，期刊, 收据，单据，账单)
 
 paddlex-SLANet-plus(综合精度最高): 文档场景表格(论文，杂志，期刊中的表格)
-[微调入参参考](#核心参数)
 
 ### 安装
 
@@ -106,7 +105,7 @@ print(f"elasp: {elasp}")
 # 使用其他ocr模型
 #ocr_engine =RapidOCR(det_model_dir="xxx/det_server_infer.onnx",rec_model_dir="xxx/rec_server_infer.onnx")
 #ocr_res, _ = ocr_engine(img_path)
-
+#html, elasp, polygons, logic_points, ocr_res = table_engine(img_path, ocr_result=ocr_res)
 # output_dir = f'outputs'
 # complete_html = format_html(html)
 # os.makedirs(os.path.dirname(f"{output_dir}/table.html"), exist_ok=True)

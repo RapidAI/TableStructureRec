@@ -22,7 +22,7 @@
 ### Introduction
 💖 This repository serves as an inference library for structured recognition of tables within documents, including models for wired and wireless table recognition from Alibaba DulaLight, a wired table model from llaipython (WeChat), and a built-in table classification model from NetEase Qanything.
 
-[Quick Start](#installation) [Model Evaluation](#evaluation-results) [Char Rec](#Single-Character-OCR-Matching) [Usage Recommendations](#usage-recommendations) [Document Distortion Correction](https://github.com/Joker1212/RapidUnWrap) [Table Rotation & Perspective Correction](#table-rotation-and-perspective-correction) [Input Parameters](#core-parameters) [Frequently Asked Questions](#faqs) [Update Plan](#update-plan)
+[Quick Start](#installation) [Model Evaluation](#evaluation-results) [Char Rec](#Single-Character-OCR-Matching) [Usage Recommendations](#usage-recommendations) [Document Distortion Correction](https://github.com/Joker1212/RapidUnWrap) [Table Rotation & Perspective Correction](#table-rotation-and-perspective-correction) [Input Parameters](#core-parameters) [Frequently Asked Questions](#FAQ) [Update Plan](#update-plan)
 #### Features
 
 ⚡ **Fast:** Uses ONNXRuntime as the inference engine, achieving 1-7 seconds per image on CPU.
@@ -70,7 +70,7 @@ Surya-Tabled uses its built-in OCR module, which is a row-column recognition mod
 ### Usage Recommendations
 wired_table_rec_v2 (highest precision for wired tables): General scenes for wired tables (papers, magazines, journals, receipts, invoices, bills)
 
-paddlex-SLANet-plus (highest overall precision): Document scene tables (tables in papers, magazines, and journals) [Fine-tuning Input Parameters Reference](#core-parameters)
+paddlex-SLANet-plus (highest overall precision): Document scene tables (tables in papers, magazines, and journals)
 
 ### Installation
 
