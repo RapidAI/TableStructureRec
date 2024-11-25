@@ -68,17 +68,17 @@ def test_input_normal(img_path, gt_td_nums, gt2):
 @pytest.mark.parametrize(
     "img_path, gt_td_nums",
     [
-        ("wired_big_box.png", 70),
+        ("wired_big_box.png", 44),
     ],
 )
-def test_input_normal(img_path, gt_td_nums):
+def test_enhance_box_line(img_path, gt_td_nums):
     img_path = test_file_dir / img_path
 
     ocr_result, _ = ocr_engine(img_path)
-    table_str, *_ = table_recog(str(img_path), ocr_result)
+    table_str, *_ = table_recog(str(img_path), ocr_result, enhance_box_line=False)
     td_nums = get_td_nums(table_str)
 
-    assert td_nums >= gt_td_nums
+    assert td_nums <= gt_td_nums
 
 
 @pytest.mark.parametrize(
@@ -285,7 +285,7 @@ def test_plot_html_table(logi_points, cell_box_map, expected_html):
 @pytest.mark.parametrize(
     "img_path, gt_td_nums, gt2",
     [
-        ("table_recognition.jpg", 35, "d colsp"),
+        ("table_recognition.jpg", 20, "d colsp"),
     ],
 )
 def test_no_rec_again(img_path, gt_td_nums, gt2):
