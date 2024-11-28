@@ -5,7 +5,6 @@ from typing import Optional, Dict, Any, Tuple
 import cv2
 import numpy as np
 from skimage import measure
-import matplotlib.pyplot as plt
 from wired_table_rec.utils import OrtInferSession, resize_img
 from wired_table_rec.utils_table_line_rec import (
     get_table_line,
@@ -143,94 +142,6 @@ class TableLineRecognitionPlus:
             polygons = self.cal_region_boxes(line_img)
             rotated_polygons = polygons.copy()
         return polygons, rotated_polygons
-
-    def find_max_corners(self, line_img):
-        # 找到所有轮廓
-        contours, _ = cv2.findContours(
-            line_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
-        )
-
-        # 如果没有找到轮廓，返回空列表
-        if not contours:
-            return []
-
-        # 找到面积最大的轮廓
-        max_contour = max(contours, key=cv2.contourArea)
-        # 计算最大轮廓的最小外接矩形
-        rect = cv2.minAreaRect(max_contour)
-
-        # 获取最小外接矩形的四个角点
-        box = cv2.boxPoints(rect)
-        box = np.int0(box)
-        #
-        # 对角点进行排序
-        # 计算中心点
-        center = np.mean(box, axis=0)
-
-        # 计算每个点与中心点的角度
-        angles = np.arctan2(box[:, 1] - center[1], box[:, 0] - center[0])
-
-        # 按角度排序
-        sorted_indices = np.argsort(angles)
-        sorted_box = box[sorted_indices]
-
-        # 确保顺序为左上、右上、右下、左下
-        top_left = sorted_box[0]
-        top_right = sorted_box[1]
-        bottom_right = sorted_box[2]
-        bottom_left = sorted_box[3]
-
-        # 创建一个纯黑色背景图像
-        black_img = np.zeros_like(line_img)
-
-        # 可视化最大轮廓和四个角点
-        plt.figure(figsize=(10, 10))
-        plt.imshow(black_img, cmap="gray")
-        plt.title("Max Contour and Corners on Black Background")
-
-        # 绘制最大轮廓
-        max_contour = max_contour.reshape(-1, 2)
-        plt.plot(max_contour[:, 0], max_contour[:, 1], "b-", linewidth=2)
-
-        # 绘制四个角点
-        plt.scatter(
-            [top_left[0], top_right[0], bottom_right[0], bottom_left[0]],
-            [top_left[1], top_right[1], bottom_right[1], bottom_left[1]],
-            c="g",
-            s=100,
-            marker="o",
-        )
-
-        plt.axis("off")
-        plt.show()
-
-        return [top_left, top_right, bottom_right, bottom_left]
-
-    def extend_image_and_adjust_coordinates(self, img, corners, polygons):
-        # 计算扩展边界
-        min_x = min(point[0] for point in corners)
-        min_y = min(point[1] for point in corners)
-        max_x = max(point[0] for point in corners)
-        max_y = max(point[1] for point in corners)
-
-        # 计算扩展的宽度和高度
-        left = -min_x if min_x < 0 else 0
-        top = -min_y if min_y < 0 else 0
-        right = max_x - img.shape[1] if max_x > img.shape[1] else 0
-        bottom = max_y - img.shape[0] if max_y > img.shape[0] else 0
-
-        # 扩展图像
-        new_width = img.shape[1] + left + right
-        new_height = img.shape[0] + top + bottom
-        extended_img = np.zeros((new_height, new_width), dtype=img.dtype)
-        extended_img[top : top + img.shape[0], left : left + img.shape[1]] = img
-
-        # 调整角点和多边形坐标
-        adjusted_corners = [(point[0] + left, point[1] + top) for point in corners]
-        adjusted_polygons = polygons.copy()
-        adjusted_polygons[:, 0::2] += left
-        adjusted_polygons[:, 1::2] += top
-        return extended_img, adjusted_corners, adjusted_polygons
 
     def cal_region_boxes(self, tmp):
         labels = measure.label(tmp < 255, connectivity=2)  # 8连通区域标记
