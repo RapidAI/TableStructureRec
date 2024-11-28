@@ -14,13 +14,13 @@
 [English](README_en.md) | 简体中文 
 </div>
 
-### 最近更新
-- **2024.11.12**
-  - 抽离模型识别和处理过程核心阈值，方便大家进行微调适配自己的场景[输入参数](#核心参数)   
+### 最近更新 
 - **2024.11.16**
   - 补充文档扭曲矫正方案，可作为前置处理 [RapidUnwrap](https://github.com/Joker1212/RapidUnWrap)
 - **2024.11.22**
   - 支持单字符匹配方案，需要RapidOCR>=1.4.0
+- **2024.11.28**
+  - wiredV2模型提升对轻度旋转表格识别准确率，参见[输入参数](#核心参数)     
     
 ### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。\
@@ -132,6 +132,7 @@ ocr_res = trans_char_ocr_res(ocr_res)
 
 #### 表格旋转及透视修正
 ##### 1.简单背景，小角度场景
+最新wiredV2模型自适应小角度旋转
 ```python
 import cv2
 
@@ -178,6 +179,9 @@ html, elasp, polygons, logic_points, ocr_res = wired_table_rec(
     ocr_result, # 输入rapidOCR识别结果，不传默认使用内部rapidocr模型
     version="v2", #默认使用v2线框模型，切换阿里读光模型可改为v1
     enhance_box_line=True, # 识别框切割增强(关闭避免多余切割，开启减少漏切割)，默认为True
+    col_threshold=15, # 识别框左边界x坐标差值小于col_threshold的默认同列
+    row_threshold=10, # 识别框上边界y坐标差值小于row_threshold的默认同行
+    rotated_fix=True, # wiredV2支持，轻度旋转(-45°~45°)矫正，默认为True
     need_ocr=True, # 是否进行OCR识别, 默认为True
     rec_again=True,# 是否针对未识别到文字的表格框,进行单独截取再识别,默认为True
 )

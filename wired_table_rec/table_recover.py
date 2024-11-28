@@ -12,9 +12,13 @@ class TableRecover:
     ):
         pass
 
-    def __call__(self, polygons: np.ndarray) -> Dict[int, Dict]:
-        rows = self.get_rows(polygons)
-        longest_col, each_col_widths, col_nums = self.get_benchmark_cols(rows, polygons)
+    def __call__(
+        self, polygons: np.ndarray, rows_thresh=10, col_thresh=15
+    ) -> Dict[int, Dict]:
+        rows = self.get_rows(polygons, rows_thresh)
+        longest_col, each_col_widths, col_nums = self.get_benchmark_cols(
+            rows, polygons, col_thresh
+        )
         each_row_heights, row_nums = self.get_benchmark_rows(rows, polygons)
         table_res, logic_points_dict = self.get_merge_cells(
             polygons,
@@ -31,7 +35,7 @@ class TableRecover:
         return table_res, logic_points
 
     @staticmethod
-    def get_rows(polygons: np.array) -> Dict[int, List[int]]:
+    def get_rows(polygons: np.array, rows_thresh=10) -> Dict[int, List[int]]:
         """对每个框进行行分类，框定哪个是一行的"""
         y_axis = polygons[:, 0, 1]
         if y_axis.size == 1:
@@ -41,8 +45,7 @@ class TableRecover:
         minus_res = concat_y[:, 1] - concat_y[:, 0]
 
         result = {}
-        thresh = 10.0
-        split_idxs = np.argwhere(abs(minus_res) > thresh).squeeze()
+        split_idxs = np.argwhere(abs(minus_res) > rows_thresh).squeeze()
         # 如果都在一行，则将所有下标设置为同一行
         if split_idxs.size == 0:
             return {0: [i for i in range(len(y_axis))]}
@@ -62,7 +65,7 @@ class TableRecover:
         return result
 
     def get_benchmark_cols(
-        self, rows: Dict[int, List], polygons: np.ndarray
+        self, rows: Dict[int, List], polygons: np.ndarray, col_thresh=15
     ) -> Tuple[np.ndarray, List[float], int]:
         longest_col = max(rows.values(), key=lambda x: len(x))
         longest_col_points = polygons[longest_col]
@@ -70,22 +73,22 @@ class TableRecover:
         longest_x_end = list(longest_col_points[:, 2, 0])
         min_x = longest_x_start[0]
         max_x = longest_x_end[-1]
-        theta = 15
 
         # 根据当前col的起始x坐标，更新col的边界
         def update_longest_col(col_x_list, cur_v, min_x_, max_x_):
             for i, v in enumerate(col_x_list):
-                if cur_v - theta <= v <= cur_v + theta:
+                if cur_v - col_thresh <= v <= cur_v + col_thresh:
                     break
                 if cur_v > v:
                     continue
                 if cur_v < min_x_:
-                    col_x_list.insert(0, cur_v)
+                    # col_x_list.insert(0, cur_v)
                     min_x_ = cur_v
                     break
                 if cur_v > max_x_:
-                    col_x_list.append(max_x_)
+                    # col_x_list.append(max_x_)
                     max_x_ = cur_v
+                    break
                 if cur_v < v:
                     col_x_list.insert(i, cur_v)
                     break
