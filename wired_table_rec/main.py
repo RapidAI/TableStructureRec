@@ -60,17 +60,23 @@ class WiredTableRecognition:
         s = time.perf_counter()
         rec_again = True
         need_ocr = True
+        col_threshold = 15
+        row_threshold = 10
         if kwargs:
             rec_again = kwargs.get("rec_again", True)
             need_ocr = kwargs.get("need_ocr", True)
+            col_threshold = kwargs.get("col_threshold", 15)
+            row_threshold = kwargs.get("row_threshold", 10)
         img = self.load_img(img)
-        polygons = self.table_line_rec(img, **kwargs)
+        polygons, rotated_polygons = self.table_line_rec(img, **kwargs)
         if polygons is None:
             logging.warning("polygons is None.")
             return "", 0.0, None, None, None
 
         try:
-            table_res, logi_points = self.table_recover(polygons)
+            table_res, logi_points = self.table_recover(
+                rotated_polygons, row_threshold, col_threshold
+            )
             # 将坐标由逆时针转为顺时针方向，后续处理与无线表格对齐
             polygons[:, 1, :], polygons[:, 3, :] = (
                 polygons[:, 3, :].copy(),

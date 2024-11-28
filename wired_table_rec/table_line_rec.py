@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 # @Author: SWHL
 # @Contact: liekkaskono@163.com
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 
 import cv2
 import numpy as np
@@ -36,12 +36,14 @@ class TableLineRecognition:
 
         self.session = OrtInferSession(model_path)
 
-    def __call__(self, img: np.ndarray, **kwargs) -> Optional[np.ndarray]:
+    def __call__(
+        self, img: np.ndarray, **kwargs
+    ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
         img_info = self.preprocess(img)
         pred = self.infer(img_info)
         polygons = self.postprocess(pred)
         if polygons.size == 0:
-            return None
+            return None, None
 
         polygons = polygons.reshape(polygons.shape[0], 4, 2)
         del_idxs = filter_duplicated_box(
@@ -53,7 +55,7 @@ class TableLineRecognition:
         )
         polygons = polygons[idx]
         polygons = merge_adjacent_polys(polygons)
-        return polygons
+        return polygons, polygons
 
     def preprocess(self, img) -> Dict[str, Any]:
         height, width = img.shape[:2]
