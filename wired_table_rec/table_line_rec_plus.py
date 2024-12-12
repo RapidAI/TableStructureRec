@@ -81,7 +81,7 @@ class TableLineRecognitionPlus:
         h_lines_threshold = kwargs.get("h_lines_threshold", 100) if kwargs else 100
         v_lines_threshold = kwargs.get("v_lines_threshold", 15) if kwargs else 15
         angle = kwargs.get("angle", 50) if kwargs else 50
-        enhance_box_line = kwargs.get("enhance_box_line") if kwargs else True
+        enhance_box_line = kwargs.get("enhance_box_line", True) if kwargs else True
         morph_close = (
             kwargs.get("morph_close", enhance_box_line) if kwargs else enhance_box_line
         )  # 是否进行闭合运算以找到更多小的框
