@@ -17,10 +17,10 @@
 ### 最近更新
 - **2024.11.22**
   - 支持单字符匹配方案，需要RapidOCR>=1.4.0
-- **2024.11.28**
-  - wiredV2模型提升对轻度旋转表格识别准确率，参见[输入参数](#核心参数)
 - **2024.12.25**
     - 补充文档扭曲矫正/去模糊/去阴影/二值化方案，可作为前置处理 [RapidUnDistort](https://github.com/Joker1212/RapidUnWrap)
+- **2025.1.9**
+  - RapidTable支持了 unitable 模型，精度更高支持torch推理，补充测评数据   
     
 ### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。\
@@ -34,7 +34,7 @@
 🛡️ **稳**: 不依赖任何第三方训练框架，只依赖必要基础库，避免包冲突
 
 ### 在线演示
-[modelscope魔塔](https://www.modelscope.cn/studios/jockerK/TableRec)
+[modelscope魔塔](https://www.modelscope.cn/studios/RapidAI/TableRec)
 [huggingface](https://huggingface.co/spaces/Joker1212/TableDetAndRec)
 ### 效果展示
 
@@ -64,14 +64,15 @@
 | [RapidTable(SLANet)](https://github.com/RapidAI/RapidTable)                                              |   0.71654   |       0.81067       |
 | table_cls + wired_table_rec v1 + lineless_table_rec                                                      |   0.75288   |       0.82574       |
 | table_cls + wired_table_rec v2 + lineless_table_rec                                                      |   0.77676   |       0.84580       |
-| [RapidTable(SLANet-plus)](https://github.com/RapidAI/RapidTable)                                         | **0.84481** |     **0.91369**     |
+| [RapidTable(SLANet-plus)](https://github.com/RapidAI/RapidTable)                                         | 0.84481 |     0.91369     |
+| [RapidTable(unitable)](https://github.com/RapidAI/RapidTable)                                         | **0.86200** |     **0.91813**     |
 
 ### 使用建议
 wired_table_rec_v2(有线表格精度最高): 通用场景有线表格(论文，杂志，期刊, 收据，单据，账单)
 
 wired_table_rec_v2 对1500px内大小的图片效果最好，所以分辨率超过2000px建议等比缩放一下
 
-paddlex-SLANet-plus(综合精度最高): 文档场景表格(论文，杂志，期刊中的表格)
+SLANet-plus/unitable (综合精度最高): 文档场景表格(论文，杂志，期刊中的表格)
 
 ### 安装
 
