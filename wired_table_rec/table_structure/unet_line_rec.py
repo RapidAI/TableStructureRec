@@ -5,21 +5,19 @@ from typing import Optional, Dict, Any, Tuple
 import cv2
 import numpy as np
 from skimage import measure
-from wired_table_rec.utils import OrtInferSession, resize_img
-from wired_table_rec.utils_table_line_rec import (
+from .infer_engine import OrtInferSession
+from .unet_process import (
     get_table_line,
     final_adjust_lines,
     min_area_rect_box,
     draw_lines,
     adjust_lines,
+    resize_img,
 )
-from wired_table_rec.utils_table_recover import (
-    sorted_ocr_boxes,
-    box_4_2_poly_to_box_4_1,
-)
+from .utils import sorted_ocr_boxes, box_4_2_poly_to_box_4_1
 
 
-class TableLineRecognitionPlus:
+class UnetLineRecognition:
     def __init__(self, model_path: Optional[str] = None):
         self.K = 1000
         self.MK = 4000

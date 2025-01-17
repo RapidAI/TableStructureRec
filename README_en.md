@@ -121,12 +121,14 @@ print(f"elasp: {elasp}")
 # plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
 ```
 #### Single Character OCR Matching
+
 ```python
 # Convert single character boxes to the same structure as line recognition
 from rapidocr_onnxruntime import RapidOCR
-from wired_table_rec.utils_table_recover import trans_char_ocr_res
+from wired_table_rec.table_structure.utils_table_recover import trans_char_ocr_res
+
 img_path = "tests/test_files/wired/table4.jpg"
-ocr_engine =RapidOCR()
+ocr_engine = RapidOCR()
 ocr_res, _ = ocr_engine(img_path, return_word_box=True)
 ocr_res = trans_char_ocr_res(ocr_res)
 ```

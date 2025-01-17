@@ -5,9 +5,8 @@ from typing import Any, Dict, Optional, Tuple
 
 import cv2
 import numpy as np
-
-from .utils import OrtInferSession
-from .utils_table_line_rec import (
+from .infer_engine import OrtInferSession
+from .lore_wired_process import (
     bbox_decode,
     bbox_post_process,
     gbox_decode,
@@ -15,16 +14,13 @@ from .utils_table_line_rec import (
     get_affine_transform,
     group_bbox_by_gbox,
     nms,
-)
-from .utils_table_recover import (
-    merge_adjacent_polys,
-    sorted_ocr_boxes,
-    box_4_2_poly_to_box_4_1,
     filter_duplicated_box,
+    merge_adjacent_polys,
 )
+from .utils import sorted_ocr_boxes, box_4_2_poly_to_box_4_1
 
 
-class TableLineRecognition:
+class LoreWiredRecognition:
     def __init__(self, model_path: Optional[str] = None):
         self.K = 1000
         self.MK = 4000

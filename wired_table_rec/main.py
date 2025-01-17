@@ -11,18 +11,18 @@ from typing import List, Optional, Tuple, Union, Dict, Any
 import numpy as np
 import cv2
 
-from wired_table_rec.table_line_rec import TableLineRecognition
-from wired_table_rec.table_line_rec_plus import TableLineRecognitionPlus
-from .table_recover import TableRecover
-from .utils import InputType, LoadImage
-from .utils_table_recover import (
-    match_ocr_cell,
-    plot_html_table,
+from wired_table_rec.table_structure.utils import (
     box_4_2_poly_to_box_4_1,
-    get_rotate_crop_image,
     sorted_ocr_boxes,
-    gather_ocr_list_by_row,
+    is_single_axis_contained,
+    is_box_contained,
+    calculate_iou,
 )
+from .table_structure.lore_wired_rec import LoreWiredRecognition
+from .table_structure.unet_line_rec import UnetLineRecognition
+from .table_match.table_recover import TableRecover
+from .utils.utils import InputType, LoadImage
+
 
 cur_dir = Path(__file__).resolve().parent
 default_model_path = cur_dir / "models" / "cycle_center_net_v1.onnx"
@@ -34,10 +34,10 @@ class WiredTableRecognition:
         self.load_img = LoadImage()
         if version == "v2":
             model_path = table_model_path if table_model_path else default_model_path_v2
-            self.table_line_rec = TableLineRecognitionPlus(str(model_path))
+            self.table_line_rec = UnetLineRecognition(str(model_path))
         else:
             model_path = table_model_path if table_model_path else default_model_path
-            self.table_line_rec = TableLineRecognition(str(model_path))
+            self.table_line_rec = LoreWiredRecognition(str(model_path))
 
         self.table_recover = TableRecover()
 
@@ -95,7 +95,9 @@ class WiredTableRecognition:
                 )
             if ocr_result is None and need_ocr:
                 ocr_result, _ = self.ocr(img)
-            cell_box_det_map, not_match_orc_boxes = match_ocr_cell(ocr_result, polygons)
+            cell_box_det_map, not_match_orc_boxes = self.match_ocr_cell(
+                ocr_result, polygons
+            )
             # 如果有识别框没有ocr结果，直接进行rec补充
             cell_box_det_map = self.re_rec(img, polygons, cell_box_det_map, rec_again)
             # 转换为中间格式，修正识别框坐标,将物理识别框，逻辑识别框，ocr识别框整合为dict，方便后续处理
@@ -108,7 +110,7 @@ class WiredTableRecognition:
                 i: [ocr_box_and_text[1] for ocr_box_and_text in t_box_ocr["t_ocr_res"]]
                 for i, t_box_ocr in enumerate(t_rec_ocr_list)
             }
-            table_str = plot_html_table(logi_points, cell_box_det_map)
+            table_str = self.plot_html_table(logi_points, cell_box_det_map)
             ocr_boxes_res = [
                 box_4_2_poly_to_box_4_1(ori_ocr[0]) for ori_ocr in ocr_result
             ]
@@ -163,10 +165,48 @@ class WiredTableRecognition:
                 [ocr_det[0] for ocr_det in dict_res["t_ocr_res"]], threhold=0.3
             )
             dict_res["t_ocr_res"] = [dict_res["t_ocr_res"][i] for i in sorted_idx]
-            dict_res["t_ocr_res"] = gather_ocr_list_by_row(
+            dict_res["t_ocr_res"] = self.gather_ocr_list_by_row(
                 dict_res["t_ocr_res"], threhold=0.3
             )
         return res
+
+    def gather_ocr_list_by_row(
+        self, ocr_list: List[Any], threhold: float = 0.2
+    ) -> List[Any]:
+        """
+        :param ocr_list: [[[xmin,ymin,xmax,ymax], text]]
+        :return:
+        """
+        threshold = 10
+        for i in range(len(ocr_list)):
+            if not ocr_list[i]:
+                continue
+
+            for j in range(i + 1, len(ocr_list)):
+                if not ocr_list[j]:
+                    continue
+                cur = ocr_list[i]
+                next = ocr_list[j]
+                cur_box = cur[0]
+                next_box = next[0]
+                c_idx = is_single_axis_contained(
+                    cur[0], next[0], axis="y", threhold=threhold
+                )
+                if c_idx:
+                    dis = max(next_box[0] - cur_box[2], 0)
+                    blank_str = int(dis / threshold) * " "
+                    cur[1] = cur[1] + blank_str + next[1]
+                    xmin = min(cur_box[0], next_box[0])
+                    xmax = max(cur_box[2], next_box[2])
+                    ymin = min(cur_box[1], next_box[1])
+                    ymax = max(cur_box[3], next_box[3])
+                    cur_box[0] = xmin
+                    cur_box[1] = ymin
+                    cur_box[2] = xmax
+                    cur_box[3] = ymax
+                    ocr_list[j] = None
+        ocr_list = [x for x in ocr_list if x]
+        return ocr_list
 
     def re_rec(
         self,
@@ -183,7 +223,7 @@ class WiredTableRecognition:
                 box = sorted_polygons[i]
                 cell_box_map[i] = [[box, "", 1]]
                 continue
-            crop_img = get_rotate_crop_image(img, sorted_polygons[i])
+            crop_img = self.get_rotate_crop_image(img, sorted_polygons[i])
             pad_img = cv2.copyMakeBorder(
                 crop_img, 5, 5, 100, 100, cv2.BORDER_CONSTANT, value=(255, 255, 255)
             )
@@ -194,35 +234,148 @@ class WiredTableRecognition:
             cell_box_map[i] = [[box, "".join(text), min(scores)]]
         return cell_box_map
 
-    def re_rec_high_precise(
-        self,
-        img: np.ndarray,
-        sorted_polygons: np.ndarray,
-        cell_box_map: Dict[int, List[str]],
-    ) -> Dict[int, List[any]]:
-        """找到poly对应为空的框，尝试将直接将poly框直接送到识别中"""
-        #
-        cell_box_map = {}
-        for i in range(sorted_polygons.shape[0]):
-            if cell_box_map.get(i):
-                continue
-            crop_img = get_rotate_crop_image(img, sorted_polygons[i])
-            pad_img = cv2.copyMakeBorder(
-                crop_img, 10, 10, 10, 10, cv2.BORDER_CONSTANT, value=(255, 255, 255)
+    def match_ocr_cell(
+        self, dt_rec_boxes: List[List[Union[Any, str]]], pred_bboxes: np.ndarray
+    ):
+        """
+        :param dt_rec_boxes: [[(4.2), text, score]]
+        :param pred_bboxes: shap (4,2)
+        :return:
+        """
+        matched = {}
+        not_match_orc_boxes = []
+        for i, gt_box in enumerate(dt_rec_boxes):
+            for j, pred_box in enumerate(pred_bboxes):
+                pred_box = [
+                    pred_box[0][0],
+                    pred_box[0][1],
+                    pred_box[2][0],
+                    pred_box[2][1],
+                ]
+                ocr_boxes = gt_box[0]
+                # xmin,ymin,xmax,ymax
+                ocr_box = (
+                    ocr_boxes[0][0],
+                    ocr_boxes[0][1],
+                    ocr_boxes[2][0],
+                    ocr_boxes[2][1],
+                )
+                contained = is_box_contained(ocr_box, pred_box, 0.6)
+                if contained == 1 or calculate_iou(ocr_box, pred_box) > 0.8:
+                    if j not in matched:
+                        matched[j] = [gt_box]
+                    else:
+                        matched[j].append(gt_box)
+                else:
+                    not_match_orc_boxes.append(gt_box)
+
+        return matched, not_match_orc_boxes
+
+    def get_rotate_crop_image(self, img: np.ndarray, points: np.ndarray) -> np.ndarray:
+        img_crop_width = int(
+            max(
+                np.linalg.norm(points[0] - points[1]),
+                np.linalg.norm(points[2] - points[3]),
             )
-            rec_res, _ = self.ocr(pad_img, use_det=True, use_cls=True, use_rec=True)
-            if not rec_res:
-                det_boxes = [sorted_polygons[i]]
-                text = [""]
-                scores = [1.0]
-            else:
-                det_boxes = [rec[0] for rec in rec_res]
-                text = [rec[1] for rec in rec_res]
-                scores = [rec[2] for rec in rec_res]
-            cell_box_map[i] = [
-                [box, text, score] for box, text, score in zip(det_boxes, text, scores)
+        )
+        img_crop_height = int(
+            max(
+                np.linalg.norm(points[0] - points[3]),
+                np.linalg.norm(points[1] - points[2]),
+            )
+        )
+        pts_std = np.float32(
+            [
+                [0, 0],
+                [img_crop_width, 0],
+                [img_crop_width, img_crop_height],
+                [0, img_crop_height],
             ]
-        return cell_box_map
+        )
+        M = cv2.getPerspectiveTransform(
+            points.astype(np.float32), pts_std.astype(np.float32)
+        )
+        dst_img = cv2.warpPerspective(
+            img,
+            M,
+            (img_crop_width, img_crop_height),
+            borderMode=cv2.BORDER_REPLICATE,
+            flags=cv2.INTER_CUBIC,
+        )
+        dst_img_height, dst_img_width = dst_img.shape[0:2]
+        if dst_img_height * 1.0 / dst_img_width >= 1.5:
+            dst_img = np.rot90(dst_img)
+        return dst_img
+
+    def plot_html_table(
+        self,
+        logi_points: Union[Union[np.ndarray, List]],
+        cell_box_map: Dict[int, List[str]],
+    ) -> str:
+        # 初始化最大行数和列数
+        max_row = 0
+        max_col = 0
+        # 计算最大行数和列数
+        for point in logi_points:
+            max_row = max(max_row, point[1] + 1)  # 加1是因为结束下标是包含在内的
+            max_col = max(max_col, point[3] + 1)  # 加1是因为结束下标是包含在内的
+
+        # 创建一个二维数组来存储 sorted_logi_points 中的元素
+        grid = [[None] * max_col for _ in range(max_row)]
+
+        valid_start_row = (1 << 16) - 1
+        valid_start_col = (1 << 16) - 1
+        valid_end_col = 0
+        # 将 sorted_logi_points 中的元素填充到 grid 中
+        for i, logic_point in enumerate(logi_points):
+            row_start, row_end, col_start, col_end = (
+                logic_point[0],
+                logic_point[1],
+                logic_point[2],
+                logic_point[3],
+            )
+            ocr_rec_text_list = cell_box_map.get(i)
+            if ocr_rec_text_list and "".join(ocr_rec_text_list):
+                valid_start_row = min(row_start, valid_start_row)
+                valid_start_col = min(col_start, valid_start_col)
+                valid_end_col = max(col_end, valid_end_col)
+            for row in range(row_start, row_end + 1):
+                for col in range(col_start, col_end + 1):
+                    grid[row][col] = (i, row_start, row_end, col_start, col_end)
+
+        # 创建表格
+        table_html = "<html><body><table>"
+
+        # 遍历每行
+        for row in range(max_row):
+            if row < valid_start_row:
+                continue
+            temp = "<tr>"
+            # 遍历每一列
+            for col in range(max_col):
+                if col < valid_start_col or col > valid_end_col:
+                    continue
+                if not grid[row][col]:
+                    temp += "<td></td>"
+                else:
+                    i, row_start, row_end, col_start, col_end = grid[row][col]
+                    if not cell_box_map.get(i):
+                        continue
+                    if row == row_start and col == col_start:
+                        ocr_rec_text = cell_box_map.get(i)
+                        text = "<br>".join(ocr_rec_text)
+                        # 如果是起始单元格
+                        row_span = row_end - row_start + 1
+                        col_span = col_end - col_start + 1
+                        cell_content = (
+                            f"<td rowspan={row_span} colspan={col_span}>{text}</td>"
+                        )
+                        temp += cell_content
+
+            table_html = table_html + temp + "</tr>"
+
+        table_html += "</table></body></html>"
+        return table_html
 
 
 def main():

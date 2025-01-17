@@ -123,12 +123,14 @@ print(f"elasp: {elasp}")
 ```
 
 #### 单字ocr匹配
+
 ```python
 # 将单字box转换为行识别同样的结构)
 from rapidocr_onnxruntime import RapidOCR
-from wired_table_rec.utils_table_recover import trans_char_ocr_res
+from wired_table_rec.table_structure.utils_table_recover import trans_char_ocr_res
+
 img_path = "tests/test_files/wired/table4.jpg"
-ocr_engine =RapidOCR()
+ocr_engine = RapidOCR()
 ocr_res, _ = ocr_engine(img_path, return_word_box=True)
 ocr_res = trans_char_ocr_res(ocr_res)
 ```
