@@ -75,18 +75,18 @@ class TableRecover:
         max_x = longest_x_end[-1]
 
         # 根据当前col的起始x坐标，更新col的边界
-        def update_longest_col(col_x_list, cur_v, min_x_, max_x_):
+        # 2025.2.22 --- 解决最长列可能漏掉最后一列的问题
+        def update_longest_col(col_x_list, cur_v, min_x_, max_x_, insert_last):
             for i, v in enumerate(col_x_list):
                 if cur_v - col_thresh <= v <= cur_v + col_thresh:
                     break
-                if cur_v > v:
-                    continue
                 if cur_v < min_x_:
-                    # col_x_list.insert(0, cur_v)
+                    col_x_list.insert(0, cur_v)
                     min_x_ = cur_v
                     break
                 if cur_v > max_x_:
-                    # col_x_list.append(max_x_)
+                    if insert_last:
+                        col_x_list.append(cur_v)
                     max_x_ = cur_v
                     break
                 if cur_v < v:
@@ -101,10 +101,10 @@ class TableRecover:
                 zip(cur_row_start, cur_row_end)
             ):
                 min_x, max_x = update_longest_col(
-                    longest_x_start, cur_v_start, min_x, max_x
+                    longest_x_start, cur_v_start, min_x, max_x, True
                 )
                 min_x, max_x = update_longest_col(
-                    longest_x_start, cur_v_end, min_x, max_x
+                    longest_x_start, cur_v_end, min_x, max_x, False
                 )
 
         longest_x_start = np.array(longest_x_start)
