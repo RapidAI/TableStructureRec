@@ -6,16 +6,19 @@ import importlib
 import logging
 import time
 import traceback
+from dataclasses import dataclass, asdict
+from enum import Enum
 from pathlib import Path
-from typing import List, Optional, Tuple, Union, Dict, Any
+from typing import List, Optional, Union, Dict, Any
 import numpy as np
 import cv2
 
-from wired_table_rec.table_line_rec import TableLineRecognition
-from wired_table_rec.table_line_rec_plus import TableLineRecognitionPlus
+from wired_table_rec.table_structure_cycle_center_net import TSRCycleCenterNet
+from wired_table_rec.table_structure_unet import TSRUnet
+from wired_table_rec.utils.download_model import DownloadModel
 from .table_recover import TableRecover
-from .utils import InputType, LoadImage
-from .utils_table_recover import (
+from .utils.utils import InputType, LoadImage
+from wired_table_rec.utils.utils_table_recover import (
     match_ocr_cell,
     plot_html_table,
     box_4_2_poly_to_box_4_1,
@@ -24,20 +27,51 @@ from .utils_table_recover import (
     gather_ocr_list_by_row,
 )
 
-cur_dir = Path(__file__).resolve().parent
-default_model_path = cur_dir / "models" / "cycle_center_net_v1.onnx"
-default_model_path_v2 = cur_dir / "models" / "cycle_center_net_v2.onnx"
+
+class ModelType(Enum):
+    CYCLE_CENTER_NET = "cycle_center_net"
+    UNET = "unet"
+
+
+ROOT_URL = "https://www.modelscope.cn/models/RapidAI/RapidTable/resolve/master/"
+KEY_TO_MODEL_URL = {
+    ModelType.CYCLE_CENTER_NET.value: f"{ROOT_URL}/cycle_center_net.onnx",
+    ModelType.UNET.value: f"{ROOT_URL}/unet.onnx",
+}
+
+
+@dataclass
+class RapidTableInput:
+    model_type: Optional[str] = ModelType.UNET.value
+    model_path: Union[str, Path, None, Dict[str, str]] = None
+    use_cuda: bool = False
+    device: str = "cpu"
+
+
+@dataclass
+class RapidTableOutput:
+    pred_html: Optional[str] = None
+    cell_bboxes: Optional[np.ndarray] = None
+    logic_points: Optional[np.ndarray] = None
+    elapse: Optional[float] = None
 
 
 class WiredTableRecognition:
-    def __init__(self, table_model_path: Union[str, Path] = None, version="v2"):
-        self.load_img = LoadImage()
-        if version == "v2":
-            model_path = table_model_path if table_model_path else default_model_path_v2
-            self.table_line_rec = TableLineRecognitionPlus(str(model_path))
+    def __init__(self, config: RapidTableInput):
+        self.model_type = config.model_type
+        if self.model_type not in KEY_TO_MODEL_URL:
+            model_list = ",".join(KEY_TO_MODEL_URL)
+            raise ValueError(
+                f"{self.model_type} is not supported. The currently supported models are {model_list}."
+            )
+
+        config.model_path = self.get_model_path(config.model_type, config.model_path)
+        if self.model_type == ModelType.CYCLE_CENTER_NET.value:
+            self.table_structure = TSRCycleCenterNet(asdict(config))
         else:
-            model_path = table_model_path if table_model_path else default_model_path
-            self.table_line_rec = TableLineRecognition(str(model_path))
+            self.table_structure = TSRUnet(asdict(config))
+
+        self.load_img = LoadImage()
 
         self.table_recover = TableRecover()
 
@@ -51,12 +85,7 @@ class WiredTableRecognition:
         img: InputType,
         ocr_result: Optional[List[Union[List[List[float]], str, str]]] = None,
         **kwargs,
-    ) -> Tuple[str, float, Any, Any, Any]:
-        if self.ocr is None and ocr_result is None:
-            raise ValueError(
-                "One of two conditions must be met: ocr_result is not empty, or rapidocr_onnxruntime is installed."
-            )
-
+    ) -> RapidTableOutput:
         s = time.perf_counter()
         rec_again = True
         need_ocr = True
@@ -68,10 +97,10 @@ class WiredTableRecognition:
             col_threshold = kwargs.get("col_threshold", 15)
             row_threshold = kwargs.get("row_threshold", 10)
         img = self.load_img(img)
-        polygons, rotated_polygons = self.table_line_rec(img, **kwargs)
+        polygons, rotated_polygons = self.table_structure(img, **kwargs)
         if polygons is None:
             logging.warning("polygons is None.")
-            return "", 0.0, None, None, None
+            return RapidTableOutput("", None, None, 0.0)
 
         try:
             table_res, logi_points = self.table_recover(
@@ -86,12 +115,11 @@ class WiredTableRecognition:
                 sorted_polygons, idx_list = sorted_ocr_boxes(
                     [box_4_2_poly_to_box_4_1(box) for box in polygons]
                 )
-                return (
+                return RapidTableOutput(
                     "",
-                    time.perf_counter() - s,
                     sorted_polygons,
                     logi_points[idx_list],
-                    [],
+                    time.perf_counter() - s,
                 )
             if ocr_result is None and need_ocr:
                 ocr_result, _ = self.ocr(img)
@@ -108,25 +136,15 @@ class WiredTableRecognition:
                 i: [ocr_box_and_text[1] for ocr_box_and_text in t_box_ocr["t_ocr_res"]]
                 for i, t_box_ocr in enumerate(t_rec_ocr_list)
             }
-            table_str = plot_html_table(logi_points, cell_box_det_map)
-            ocr_boxes_res = [
-                box_4_2_poly_to_box_4_1(ori_ocr[0]) for ori_ocr in ocr_result
-            ]
-            sorted_ocr_boxes_res, _ = sorted_ocr_boxes(ocr_boxes_res)
-            sorted_polygons = [box_4_2_poly_to_box_4_1(box) for box in polygons]
-            sorted_logi_points = logi_points
-            table_elapse = time.perf_counter() - s
+            pred_html = plot_html_table(logi_points, cell_box_det_map)
+            polygons = polygons.reshape(-1, 8)
+            logi_points = np.array(logi_points)
+            elapse = time.perf_counter() - s
 
         except Exception:
             logging.warning(traceback.format_exc())
-            return "", 0.0, None, None, None
-        return (
-            table_str,
-            table_elapse,
-            sorted_polygons,
-            sorted_logi_points,
-            sorted_ocr_boxes_res,
-        )
+            return RapidTableOutput("", None, None, 0.0)
+        return RapidTableOutput(pred_html, polygons, logi_points, elapse)
 
     def transform_res(
         self,
@@ -223,6 +241,28 @@ class WiredTableRecognition:
                 [box, text, score] for box, text, score in zip(det_boxes, text, scores)
             ]
         return cell_box_map
+
+    @staticmethod
+    def get_model_path(
+        model_type: str, model_path: Union[str, Path, None]
+    ) -> Union[str, Dict[str, str]]:
+        if model_path is not None:
+            return model_path
+
+        model_url = KEY_TO_MODEL_URL.get(model_type, None)
+        if isinstance(model_url, str):
+            model_path = DownloadModel.download(model_url)
+            return model_path
+
+        if isinstance(model_url, dict):
+            model_paths = {}
+            for k, url in model_url.items():
+                model_paths[k] = DownloadModel.download(
+                    url, save_model_name=f"{model_type}_{Path(url).name}"
+                )
+            return model_paths
+
+        raise ValueError(f"Model URL: {type(model_url)} is not between str and dict.")
 
 
 def main():

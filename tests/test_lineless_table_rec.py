@@ -10,7 +10,7 @@ root_dir = cur_dir.parent
 
 sys.path.append(str(root_dir))
 
-from lineless_table_rec.utils_table_recover import *
+from lineless_table_rec.utils.utils_table_recover import *
 from lineless_table_rec import LinelessTableRecognition
 
 test_file_dir = cur_dir / "test_files"
