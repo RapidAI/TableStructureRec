@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from wired_table_rec.utils_table_line_rec import (
+from wired_table_rec.utils.utils_table_line_rec import (
     _order_points,
     calculate_center_rotate_angle,
     fit_line,

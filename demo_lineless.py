@@ -3,30 +3,45 @@
 # @Contact: liekkaskono@163.com
 from pathlib import Path
 
+from rapidocr_onnxruntime import RapidOCR
+
 from lineless_table_rec import LinelessTableRecognition
-from lineless_table_rec.utils_table_recover import (
-    format_html,
-    plot_rec_box,
-    plot_rec_box_with_logic_info,
-)
+from lineless_table_rec.main import RapidTableInput
+from lineless_table_rec.utils.utils import VisTable
 
 output_dir = Path("outputs")
 output_dir.mkdir(parents=True, exist_ok=True)
+input_args = RapidTableInput()
+table_engine = LinelessTableRecognition(input_args)
+ocr_engine = RapidOCR()
+viser = VisTable()
 
-img_path = "tests/test_files/lineless_table_recognition.jpg"
-table_rec = LinelessTableRecognition()
+if __name__ == "__main__":
+    img_path = "tests/test_files/lineless_table_recognition.jpg"
 
-html, elasp, polygons, logic_points, ocr_res = table_rec(img_path)
-print(f"cost: {elasp:.5f}")
+    ocr_result, _ = ocr_engine(img_path)
+    boxes, txts, scores = list(zip(*ocr_result))
 
-complete_html = format_html(html)
+    # Table Rec
+    table_results = table_engine(img_path)
+    table_html_str, table_cell_bboxes = (
+        table_results.pred_html,
+        table_results.cell_bboxes,
+    )
 
-save_table_path = output_dir / "table.html"
-with open(save_table_path, "w", encoding="utf-8") as file:
-    file.write(complete_html)
+    # Save
+    save_dir = Path("outputs")
+    save_dir.mkdir(parents=True, exist_ok=True)
 
-plot_rec_box_with_logic_info(
-    img_path, f"{output_dir}/table_rec_box.jpg", logic_points, polygons
-)
-plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
-print(f"The results has been saved under {output_dir}")
+    save_html_path = f"outputs/{Path(img_path).stem}.html"
+    save_drawed_path = f"outputs/{Path(img_path).stem}_table_vis{Path(img_path).suffix}"
+    save_logic_path = (
+        f"outputs/{Path(img_path).stem}_table_vis_logic{Path(img_path).suffix}"
+    )
+
+    # Visualize table rec result
+    vis_imged = viser(
+        img_path, table_results, save_html_path, save_drawed_path, save_logic_path
+    )
+
+    print(f"The results has been saved under {output_dir}")

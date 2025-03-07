@@ -1,19 +1,22 @@
 # -*- encoding: utf-8 -*-
 # @Author: SWHL
 # @Contact: liekkaskono@163.com
+import importlib
 import logging
 import time
 import traceback
+from dataclasses import dataclass, asdict
+from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Tuple, Union, Optional
+from typing import Dict, List, Union, Optional
 
 import cv2
 import numpy as np
-from rapidocr_onnxruntime import RapidOCR
 
-from .process import DetProcess, get_affine_transform_upper_left
-from .utils import InputType, LoadImage, OrtInferSession
-from .utils_table_recover import (
+from .table_structure_lore import TSRLore
+from .utils.download_model import DownloadModel
+from .utils.utils import InputType, LoadImage
+from lineless_table_rec.utils.utils_table_recover import (
     box_4_2_poly_to_box_4_1,
     filter_duplicated_box,
     gather_ocr_list_by_row,
@@ -23,57 +26,76 @@ from .utils_table_recover import (
     sorted_ocr_boxes,
 )
 
-cur_dir = Path(__file__).resolve().parent
-detect_model_path = cur_dir / "models" / "lore_detect.onnx"
-process_model_path = cur_dir / "models" / "lore_process.onnx"
+
+class ModelType(Enum):
+    LORE = "lore"
+
+
+ROOT_URL = "https://www.modelscope.cn/models/RapidAI/RapidTable/resolve/master/"
+KEY_TO_MODEL_URL = {
+    ModelType.LORE.value: {
+        "lore_detect": f"{ROOT_URL}/lore/detect.onnx",
+        "lore_process": f"{ROOT_URL}/lore/process.onnx",
+    },
+}
+
+
+@dataclass
+class RapidTableInput:
+    model_type: Optional[str] = ModelType.LORE.value
+    model_path: Union[str, Path, None, Dict[str, str]] = None
+    use_cuda: bool = False
+    device: str = "cpu"
+
+
+@dataclass
+class RapidTableOutput:
+    pred_html: Optional[str] = None
+    cell_bboxes: Optional[np.ndarray] = None
+    logic_points: Optional[np.ndarray] = None
+    elapse: Optional[float] = None
 
 
 class LinelessTableRecognition:
-    def __init__(
-        self,
-        detect_model_path: Union[str, Path] = detect_model_path,
-        process_model_path: Union[str, Path] = process_model_path,
-    ):
-        self.mean = np.array([0.408, 0.447, 0.470], dtype=np.float32).reshape(1, 1, 3)
-        self.std = np.array([0.289, 0.274, 0.278], dtype=np.float32).reshape(1, 1, 3)
+    def __init__(self, config: RapidTableInput):
+        self.model_type = config.model_type
+        if self.model_type not in KEY_TO_MODEL_URL:
+            model_list = ",".join(KEY_TO_MODEL_URL)
+            raise ValueError(
+                f"{self.model_type} is not supported. The currently supported models are {model_list}."
+            )
 
-        self.inp_h = 768
-        self.inp_w = 768
-
-        self.det_session = OrtInferSession(detect_model_path)
-        self.process_session = OrtInferSession(process_model_path)
-
+        config.model_path = self.get_model_path(config.model_type, config.model_path)
+        self.table_structure = TSRLore(asdict(config))
         self.load_img = LoadImage()
-        self.det_process = DetProcess()
-        self.ocr = RapidOCR()
+        try:
+            self.ocr = importlib.import_module("rapidocr_onnxruntime").RapidOCR()
+        except ModuleNotFoundError:
+            self.ocr = None
 
     def __call__(
         self,
         content: InputType,
         ocr_result: Optional[List[Union[List[List[float]], str, str]]] = None,
-        **kwargs
-    ):
-        ss = time.perf_counter()
+        **kwargs,
+    ) -> RapidTableOutput:
+        s = time.perf_counter()
         rec_again = True
         need_ocr = True
         if kwargs:
             rec_again = kwargs.get("rec_again", True)
-            need_ocr = kwargs.get("need_ocr", True)
         img = self.load_img(content)
-        input_info = self.preprocess(img)
         try:
-            polygons, slct_logi = self.infer(input_info)
-            logi_points = self.filter_logi_points(slct_logi)
+            polygons, logi_points = self.table_structure(img)
             if not need_ocr:
                 sorted_polygons, idx_list = sorted_ocr_boxes(
                     [box_4_2_poly_to_box_4_1(box) for box in polygons]
                 )
-                return (
+                return RapidTableOutput(
                     "",
-                    time.perf_counter() - ss,
                     sorted_polygons,
                     logi_points[idx_list],
-                    [],
+                    time.perf_counter() - s,
                 )
 
             if ocr_result is None and need_ocr:
@@ -103,32 +125,19 @@ class LinelessTableRecognition:
                 i: [ocr_box_and_text[1] for ocr_box_and_text in t_box_ocr["t_ocr_res"]]
                 for i, t_box_ocr in enumerate(t_rec_ocr_list)
             }
-            table_str = plot_html_table(logi_points, cell_box_det_map)
+            pred_html = plot_html_table(logi_points, cell_box_det_map)
 
             # 输出可视化排序,用于验证结果，生产版本可以去掉
             _, idx_list = sorted_ocr_boxes(
                 [t_box_ocr["t_box"] for t_box_ocr in t_rec_ocr_list]
             )
-            t_rec_ocr_list = [t_rec_ocr_list[i] for i in idx_list]
-            sorted_polygons = [t_box_ocr["t_box"] for t_box_ocr in t_rec_ocr_list]
-            sorted_logi_points = [
-                t_box_ocr["t_logic_box"] for t_box_ocr in t_rec_ocr_list
-            ]
-            ocr_boxes_res = [
-                box_4_2_poly_to_box_4_1(ori_ocr[0]) for ori_ocr in ocr_result
-            ]
-            sorted_ocr_boxes_res, _ = sorted_ocr_boxes(ocr_boxes_res)
-            table_elapse = time.perf_counter() - ss
-            return (
-                table_str,
-                table_elapse,
-                sorted_polygons,
-                sorted_logi_points,
-                sorted_ocr_boxes_res,
-            )
+            polygons = polygons.reshape(-1, 8)
+            logi_points = np.array(logi_points)
+            elapse = time.perf_counter() - s
         except Exception:
             logging.warning(traceback.format_exc())
-            return "", 0.0, None, None, None
+            return RapidTableOutput("", None, None, 0.0)
+        return RapidTableOutput(pred_html, polygons, logi_points, elapse)
 
     def transform_res(
         self,
@@ -159,48 +168,27 @@ class LinelessTableRecognition:
             res.append(dict_res)
         return res
 
-    def preprocess(self, img: np.ndarray) -> Dict[str, Any]:
-        height, width = img.shape[:2]
-        resized_image = cv2.resize(img, (width, height))
+    @staticmethod
+    def get_model_path(
+        model_type: str, model_path: Union[str, Path, None]
+    ) -> Union[str, Dict[str, str]]:
+        if model_path is not None:
+            return model_path
 
-        c = np.array([0, 0], dtype=np.float32)
-        s = max(height, width) * 1.0
-        trans_input = get_affine_transform_upper_left(c, s, [self.inp_w, self.inp_h])
+        model_url = KEY_TO_MODEL_URL.get(model_type, None)
+        if isinstance(model_url, str):
+            model_path = DownloadModel.download(model_url)
+            return model_path
 
-        inp_image = cv2.warpAffine(
-            resized_image, trans_input, (self.inp_w, self.inp_h), flags=cv2.INTER_LINEAR
-        )
-        inp_image = ((inp_image / 255.0 - self.mean) / self.std).astype(np.float32)
+        if isinstance(model_url, dict):
+            model_paths = {}
+            for k, url in model_url.items():
+                model_paths[k] = DownloadModel.download(
+                    url, save_model_name=f"{model_type}_{Path(url).name}"
+                )
+            return model_paths
 
-        images = inp_image.transpose(2, 0, 1).reshape(1, 3, self.inp_h, self.inp_w)
-        meta = {
-            "c": c,
-            "s": s,
-            "out_height": self.inp_h // 4,
-            "out_width": self.inp_w // 4,
-        }
-        return {"img": images, "meta": meta}
-
-    def infer(self, input_content: Dict[str, Any]) -> Tuple[np.ndarray, np.ndarray]:
-        hm, st, wh, ax, cr, reg = self.det_session([input_content["img"]])
-        output = {
-            "hm": hm,
-            "st": st,
-            "wh": wh,
-            "ax": ax,
-            "cr": cr,
-            "reg": reg,
-        }
-        slct_logi_feat, slct_dets_feat, slct_output_dets = self.det_process(
-            output, input_content["meta"]
-        )
-
-        slct_output_dets = slct_output_dets.reshape(-1, 4, 2)
-
-        _, slct_logi = self.process_session(
-            [slct_logi_feat, slct_dets_feat.astype(np.int64)]
-        )
-        return slct_output_dets, slct_logi
+        raise ValueError(f"Model URL: {type(model_url)} is not between str and dict.")
 
     def sort_and_gather_ocr_res(self, res):
         for i, dict_res in enumerate(res):
@@ -253,23 +241,6 @@ class LinelessTableRecognition:
         #  去掉重叠框
         res = [res[i] for i in range(len(res)) if i not in deleted_idx]
         return res, grid
-
-    @staticmethod
-    def filter_logi_points(slct_logi: np.ndarray) -> List[np.ndarray]:
-        for logic_points in slct_logi[0]:
-            # 修正坐标接近导致的r_e > r_s 或 c_e > c_s
-            if abs(logic_points[0] - logic_points[1]) < 0.2:
-                row = (logic_points[0] + logic_points[1]) / 2
-                logic_points[0] = row
-                logic_points[1] = row
-            if abs(logic_points[2] - logic_points[3]) < 0.2:
-                col = (logic_points[2] + logic_points[3]) / 2
-                logic_points[2] = col
-                logic_points[3] = col
-        logi_floor = np.floor(slct_logi)
-        dev = slct_logi - logi_floor
-        slct_logi = np.where(dev > 0.5, logi_floor + 1, logi_floor)
-        return slct_logi[0].astype(np.int32)
 
     def re_rec(
         self,

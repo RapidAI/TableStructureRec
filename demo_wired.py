@@ -3,32 +3,44 @@
 # @Contact: liekkaskono@163.com
 from pathlib import Path
 
+from rapidocr_onnxruntime import RapidOCR
+
 from wired_table_rec import WiredTableRecognition
-from wired_table_rec.utils_table_recover import (
-    format_html,
-    plot_rec_box,
-    plot_rec_box_with_logic_info,
-)
+from wired_table_rec.main import RapidTableInput, ModelType
+from wired_table_rec.utils.utils import VisTable
 
 output_dir = Path("outputs")
 output_dir.mkdir(parents=True, exist_ok=True)
+input_args = RapidTableInput(model_type=ModelType.CYCLE_CENTER_NET.value)
+table_engine = WiredTableRecognition(input_args)
+ocr_engine = RapidOCR()
+viser = VisTable()
+if __name__ == "__main__":
+    img_path = "tests/test_files/wired/bad_case_1.png"
 
-table_rec = WiredTableRecognition()
+    ocr_result, _ = ocr_engine(img_path)
+    boxes, txts, scores = list(zip(*ocr_result))
 
-img_path = "tests/test_files/wired/table1.png"
-html, elasp, polygons, logic_points, ocr_res = table_rec(img_path)
+    # Table Rec
+    table_results = table_engine(img_path)
+    table_html_str, table_cell_bboxes = (
+        table_results.pred_html,
+        table_results.cell_bboxes,
+    )
 
-print(f"cost: {elasp:.5f}")
+    # Save
+    save_dir = Path("outputs")
+    save_dir.mkdir(parents=True, exist_ok=True)
 
-complete_html = format_html(html)
+    save_html_path = f"outputs/{Path(img_path).stem}.html"
+    save_drawed_path = f"outputs/{Path(img_path).stem}_table_vis{Path(img_path).suffix}"
+    save_logic_path = (
+        f"outputs/{Path(img_path).stem}_table_vis_logic{Path(img_path).suffix}"
+    )
 
-save_table_path = output_dir / "table.html"
-with open(save_table_path, "w", encoding="utf-8") as file:
-    file.write(complete_html)
+    # Visualize table rec result
+    vis_imged = viser(
+        img_path, table_results, save_html_path, save_drawed_path, save_logic_path
+    )
 
-plot_rec_box_with_logic_info(
-    img_path, f"{output_dir}/table_rec_box.jpg", logic_points, polygons
-)
-plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
-
-print(f"The results has been saved under {output_dir}")
+    print(f"The results has been saved under {output_dir}")

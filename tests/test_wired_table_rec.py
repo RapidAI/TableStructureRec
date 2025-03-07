@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from rapidocr_onnxruntime import RapidOCR
 
 from wired_table_rec.utils import rescale_size
-from wired_table_rec.utils_table_recover import (
+from wired_table_rec.utils.utils_table_recover import (
     plot_html_table,
     is_single_axis_contained,
     gather_ocr_list_by_row,
