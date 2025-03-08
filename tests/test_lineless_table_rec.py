@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 import pytest
 
-from lineless_table_rec.main import RapidTableInput, ModelType
+from lineless_table_rec.main import LinelessTableInput, ModelType
 
 cur_dir = Path(__file__).resolve().parent
 root_dir = cur_dir.parent
@@ -16,7 +16,7 @@ from lineless_table_rec.utils.utils_table_recover import *
 from lineless_table_rec import LinelessTableRecognition
 
 test_file_dir = cur_dir / "test_files"
-input_args = RapidTableInput(model_type=ModelType.LORE.value)
+input_args = LinelessTableInput(model_type=ModelType.LORE.value)
 table_recog = LinelessTableRecognition(input_args)
 
 

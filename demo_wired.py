@@ -6,12 +6,12 @@ from pathlib import Path
 from rapidocr_onnxruntime import RapidOCR
 
 from wired_table_rec import WiredTableRecognition
-from wired_table_rec.main import RapidTableInput, ModelType
+from wired_table_rec.main import WiredTableInput
 from wired_table_rec.utils.utils import VisTable
 
 output_dir = Path("outputs")
 output_dir.mkdir(parents=True, exist_ok=True)
-input_args = RapidTableInput(model_type=ModelType.CYCLE_CENTER_NET.value)
+input_args = WiredTableInput()
 table_engine = WiredTableRecognition(input_args)
 ocr_engine = RapidOCR()
 viser = VisTable()

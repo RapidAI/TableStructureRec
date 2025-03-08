@@ -6,12 +6,12 @@ from pathlib import Path
 from rapidocr_onnxruntime import RapidOCR
 
 from lineless_table_rec import LinelessTableRecognition
-from lineless_table_rec.main import RapidTableInput
+from lineless_table_rec.main import LinelessTableInput
 from lineless_table_rec.utils.utils import VisTable
 
 output_dir = Path("outputs")
 output_dir.mkdir(parents=True, exist_ok=True)
-input_args = RapidTableInput()
+input_args = LinelessTableInput()
 table_engine = LinelessTableRecognition(input_args)
 ocr_engine = RapidOCR()
 viser = VisTable()
