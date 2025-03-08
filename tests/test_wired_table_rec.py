@@ -8,7 +8,8 @@ import pytest
 from bs4 import BeautifulSoup
 from rapidocr_onnxruntime import RapidOCR
 
-from wired_table_rec.utils import rescale_size
+from wired_table_rec.main import RapidTableInput, ModelType
+from wired_table_rec.utils.utils import rescale_size
 from wired_table_rec.utils.utils_table_recover import (
     plot_html_table,
     is_single_axis_contained,
@@ -25,8 +26,8 @@ sys.path.append(str(root_dir))
 from wired_table_rec import WiredTableRecognition
 
 test_file_dir = cur_dir / "test_files" / "wired"
-
-table_recog = WiredTableRecognition()
+input_args = RapidTableInput(model_type=ModelType.UNET.value)
+table_recog = WiredTableRecognition(input_args)
 ocr_engine = RapidOCR()
 
 
@@ -40,9 +41,13 @@ def get_td_nums(html: str) -> int:
 
 def test_squeeze_bug():
     img_path = test_file_dir / "squeeze_error.jpeg"
-    ocr_result, _ = ocr_engine(img_path)
-    table_str, *_ = table_recog(str(img_path), ocr_result)
-    td_nums = get_td_nums(table_str)
+    ocr_result, _ = ocr_engine(str(img_path))
+    table_results = table_recog(str(img_path))
+    table_html_str, table_cell_bboxes = (
+        table_results.pred_html,
+        table_results.cell_bboxes,
+    )
+    td_nums = get_td_nums(table_html_str)
     assert td_nums >= 160
 
 
@@ -58,9 +63,13 @@ def test_squeeze_bug():
 def test_input_normal(img_path, gt_td_nums, gt2):
     img_path = test_file_dir / img_path
 
-    ocr_result, _ = ocr_engine(img_path)
-    table_str, *_ = table_recog(str(img_path), ocr_result)
-    td_nums = get_td_nums(table_str)
+    ocr_result, _ = ocr_engine(str(img_path))
+    table_results = table_recog(str(img_path))
+    table_html_str, table_cell_bboxes = (
+        table_results.pred_html,
+        table_results.cell_bboxes,
+    )
+    td_nums = get_td_nums(table_html_str)
 
     assert td_nums >= gt_td_nums
 
@@ -74,9 +83,13 @@ def test_input_normal(img_path, gt_td_nums, gt2):
 def test_enhance_box_line(img_path, gt_td_nums):
     img_path = test_file_dir / img_path
 
-    ocr_result, _ = ocr_engine(img_path)
-    table_str, *_ = table_recog(str(img_path), ocr_result, enhance_box_line=False)
-    td_nums = get_td_nums(table_str)
+    ocr_result, _ = ocr_engine(str(img_path))
+    table_results = table_recog(str(img_path), enhance_box_line=False)
+    table_html_str, table_cell_bboxes = (
+        table_results.pred_html,
+        table_results.cell_bboxes,
+    )
+    td_nums = get_td_nums(table_html_str)
 
     assert td_nums <= gt_td_nums
 
@@ -291,10 +304,13 @@ def test_plot_html_table(logi_points, cell_box_map, expected_html):
 def test_no_rec_again(img_path, gt_td_nums, gt2):
     img_path = test_file_dir / img_path
 
-    ocr_result, _ = ocr_engine(img_path)
-    table_str, *_ = table_recog(str(img_path), ocr_result, rec_again=False)
-    td_nums = get_td_nums(table_str)
-
+    ocr_result, _ = ocr_engine(str(img_path))
+    table_results = table_recog(str(img_path), rec_again=False)
+    table_html_str, table_cell_bboxes = (
+        table_results.pred_html,
+        table_results.cell_bboxes,
+    )
+    td_nums = get_td_nums(table_html_str)
     assert td_nums >= gt_td_nums
 
 
@@ -308,12 +324,15 @@ def test_no_rec_again(img_path, gt_td_nums, gt2):
 def test_no_ocr(img_path, html_output, points_len):
     img_path = test_file_dir / img_path
 
-    ocr_result, _ = ocr_engine(img_path)
-    html, elasp, polygons, logic_points, ocr_res = table_recog(
-        str(img_path), ocr_result, need_ocr=False
+    ocr_result, _ = ocr_engine(str(img_path))
+    table_results = table_recog(str(img_path), need_ocr=False)
+    table_html_str, table_cell_bboxes, table_logic_points = (
+        table_results.pred_html,
+        table_results.cell_bboxes,
+        table_results.logic_points,
     )
-    assert len(ocr_res) == 0
-    assert len(polygons) > points_len
-    assert len(logic_points) > points_len
-    assert len(polygons) == len(logic_points)
-    assert html == html_output
+
+    assert len(table_cell_bboxes) > points_len
+    assert len(table_logic_points) > points_len
+    assert len(table_cell_bboxes) == len(table_logic_points)
+    assert table_html_str == html_output
