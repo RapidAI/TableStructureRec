@@ -8,7 +8,7 @@ import pytest
 from bs4 import BeautifulSoup
 from rapidocr_onnxruntime import RapidOCR
 
-from wired_table_rec.main import RapidTableInput, ModelType
+from wired_table_rec.main import WiredTableInput, ModelType
 from wired_table_rec.utils.utils import rescale_size
 from wired_table_rec.utils.utils_table_recover import (
     plot_html_table,
@@ -26,7 +26,7 @@ sys.path.append(str(root_dir))
 from wired_table_rec import WiredTableRecognition
 
 test_file_dir = cur_dir / "test_files" / "wired"
-input_args = RapidTableInput(model_type=ModelType.UNET.value)
+input_args = WiredTableInput(model_type=ModelType.UNET.value)
 table_recog = WiredTableRecognition(input_args)
 ocr_engine = RapidOCR()
 

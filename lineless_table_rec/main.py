@@ -24,6 +24,7 @@ from lineless_table_rec.utils.utils_table_recover import (
     match_ocr_cell,
     plot_html_table,
     sorted_ocr_boxes,
+    box_4_1_poly_to_box_4_2,
 )
 
 
@@ -41,7 +42,7 @@ KEY_TO_MODEL_URL = {
 
 
 @dataclass
-class RapidTableInput:
+class LinelessTableInput:
     model_type: Optional[str] = ModelType.LORE.value
     model_path: Union[str, Path, None, Dict[str, str]] = None
     use_cuda: bool = False
@@ -49,7 +50,7 @@ class RapidTableInput:
 
 
 @dataclass
-class RapidTableOutput:
+class LinelessTableOutput:
     pred_html: Optional[str] = None
     cell_bboxes: Optional[np.ndarray] = None
     logic_points: Optional[np.ndarray] = None
@@ -57,7 +58,7 @@ class RapidTableOutput:
 
 
 class LinelessTableRecognition:
-    def __init__(self, config: RapidTableInput):
+    def __init__(self, config: LinelessTableInput):
         self.model_type = config.model_type
         if self.model_type not in KEY_TO_MODEL_URL:
             model_list = ",".join(KEY_TO_MODEL_URL)
@@ -78,7 +79,7 @@ class LinelessTableRecognition:
         content: InputType,
         ocr_result: Optional[List[Union[List[List[float]], str, str]]] = None,
         **kwargs,
-    ) -> RapidTableOutput:
+    ) -> LinelessTableOutput:
         s = time.perf_counter()
         rec_again = True
         need_ocr = True
@@ -92,7 +93,7 @@ class LinelessTableRecognition:
                 sorted_polygons, idx_list = sorted_ocr_boxes(
                     [box_4_2_poly_to_box_4_1(box) for box in polygons]
                 )
-                return RapidTableOutput(
+                return LinelessTableOutput(
                     "",
                     sorted_polygons,
                     logi_points[idx_list],
@@ -121,6 +122,10 @@ class LinelessTableRecognition:
             # 将同一个识别框中的ocr结果排序并同行合并
             t_rec_ocr_list = self.sort_and_gather_ocr_res(t_rec_ocr_list)
             # 渲染为html
+            polygons = [
+                box_4_1_poly_to_box_4_2(t_box_ocr["t_box"])
+                for t_box_ocr in t_rec_ocr_list
+            ]
             logi_points = [t_box_ocr["t_logic_box"] for t_box_ocr in t_rec_ocr_list]
             cell_box_det_map = {
                 i: [ocr_box_and_text[1] for ocr_box_and_text in t_box_ocr["t_ocr_res"]]
@@ -132,13 +137,13 @@ class LinelessTableRecognition:
             _, idx_list = sorted_ocr_boxes(
                 [t_box_ocr["t_box"] for t_box_ocr in t_rec_ocr_list]
             )
-            polygons = polygons.reshape(-1, 8)
+            polygons = np.array(polygons).reshape(-1, 8)
             logi_points = np.array(logi_points)
             elapse = time.perf_counter() - s
         except Exception:
             logging.warning(traceback.format_exc())
-            return RapidTableOutput("", None, None, 0.0)
-        return RapidTableOutput(pred_html, polygons, logi_points, elapse)
+            return LinelessTableOutput("", None, None, 0.0)
+        return LinelessTableOutput(pred_html, polygons, logi_points, elapse)
 
     def transform_res(
         self,

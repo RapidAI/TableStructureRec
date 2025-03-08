@@ -41,7 +41,7 @@ KEY_TO_MODEL_URL = {
 
 
 @dataclass
-class RapidTableInput:
+class WiredTableInput:
     model_type: Optional[str] = ModelType.UNET.value
     model_path: Union[str, Path, None, Dict[str, str]] = None
     use_cuda: bool = False
@@ -49,7 +49,7 @@ class RapidTableInput:
 
 
 @dataclass
-class RapidTableOutput:
+class WiredTableOutput:
     pred_html: Optional[str] = None
     cell_bboxes: Optional[np.ndarray] = None
     logic_points: Optional[np.ndarray] = None
@@ -57,7 +57,7 @@ class RapidTableOutput:
 
 
 class WiredTableRecognition:
-    def __init__(self, config: RapidTableInput):
+    def __init__(self, config: WiredTableInput):
         self.model_type = config.model_type
         if self.model_type not in KEY_TO_MODEL_URL:
             model_list = ",".join(KEY_TO_MODEL_URL)
@@ -85,7 +85,7 @@ class WiredTableRecognition:
         img: InputType,
         ocr_result: Optional[List[Union[List[List[float]], str, str]]] = None,
         **kwargs,
-    ) -> RapidTableOutput:
+    ) -> WiredTableOutput:
         s = time.perf_counter()
         rec_again = True
         need_ocr = True
@@ -100,7 +100,7 @@ class WiredTableRecognition:
         polygons, rotated_polygons = self.table_structure(img, **kwargs)
         if polygons is None:
             logging.warning("polygons is None.")
-            return RapidTableOutput("", None, None, 0.0)
+            return WiredTableOutput("", None, None, 0.0)
 
         try:
             table_res, logi_points = self.table_recover(
@@ -115,7 +115,7 @@ class WiredTableRecognition:
                 sorted_polygons, idx_list = sorted_ocr_boxes(
                     [box_4_2_poly_to_box_4_1(box) for box in polygons]
                 )
-                return RapidTableOutput(
+                return WiredTableOutput(
                     "",
                     sorted_polygons,
                     logi_points[idx_list],
@@ -137,14 +137,14 @@ class WiredTableRecognition:
                 for i, t_box_ocr in enumerate(t_rec_ocr_list)
             }
             pred_html = plot_html_table(logi_points, cell_box_det_map)
-            polygons = polygons.reshape(-1, 8)
+            polygons = np.array(polygons).reshape(-1, 8)
             logi_points = np.array(logi_points)
             elapse = time.perf_counter() - s
 
         except Exception:
             logging.warning(traceback.format_exc())
-            return RapidTableOutput("", None, None, 0.0)
-        return RapidTableOutput(pred_html, polygons, logi_points, elapse)
+            return WiredTableOutput("", None, None, 0.0)
+        return WiredTableOutput(pred_html, polygons, logi_points, elapse)
 
     def transform_res(
         self,
@@ -276,12 +276,12 @@ def main():
         raise ModuleNotFoundError(
             "Please install the rapidocr_onnxruntime by pip install rapidocr_onnxruntime."
         ) from exc
-
-    table_rec = WiredTableRecognition()
+    input_args = WiredTableInput()
+    table_rec = WiredTableRecognition(input_args)
     ocr_result, _ = ocr_engine(args.img_path)
-    table_str, elapse = table_rec(args.img_path, ocr_result)
-    print(table_str)
-    print(f"cost: {elapse:.5f}")
+    table_results = table_rec(args.img_path, ocr_result)
+    print(table_results.pred_html)
+    print(f"cost: {table_results.elapse:.5f}")
 
 
 if __name__ == "__main__":
