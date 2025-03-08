@@ -84,6 +84,7 @@ class LinelessTableRecognition:
         need_ocr = True
         if kwargs:
             rec_again = kwargs.get("rec_again", True)
+            need_ocr = kwargs.get("need_ocr", True)
         img = self.load_img(content)
         try:
             polygons, logi_points = self.table_structure(img)
