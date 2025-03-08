@@ -13,12 +13,14 @@
 </div>
 
 ### Recent Updates
-- **2024.11.16**
-    - Added document distortion correction solution, which can be used as a pre-processing step [RapidUnWrap](https://github.com/Joker1212/RapidUnWrap)
-- **2024.11.22**
-    - Support Char Rec, RapidOCR>=1.4.0
 - **2024.12.25**
     - Add document preprocessing solutions for distortion correction, deblurring, shadow removal, and binarization. [RapidUnDistort](https://github.com/Joker1212/RapidUnWrap)
+- **2025.1.9**
+  - RapidTable now supports the Unitable model, Evaluation data has been added.
+- **2025.3.9**
+  - Align input and output formats with RapidTable
+  - support automatic model downloading
+  - introduce a new table classification model from [PaddleOCR](https://github.com/PaddlePaddle/PaddleX/blob/release/3.0-rc/docs/module_usage/tutorials/ocr_modules/table_classification.en.md).
 ### Introduction
 💖 This repository serves as an inference library for structured recognition of tables within documents, including models for wired and wireless table recognition from Alibaba DulaLight, a wired table model from llaipython (WeChat), and a built-in table classification model from NetEase Qanything.
 
@@ -79,55 +81,62 @@ pip install wired_table_rec lineless_table_rec table_cls
 ```
 
 ### Quick start
+> ⚠️：`wired_table_rec/table_cls`>=1.2.0` `lineless_table_rec` > 0.1.0 ，the input and output format are same with `RapidTable`
 
 ``` python {linenos=table}
-import os
+from pathlib import Path
 
-from lineless_table_rec import LinelessTableRecognition
-from lineless_table_rec.utils_table_recover import format_html, plot_rec_box_with_logic_info, plot_rec_box
+from wired_table_rec.utils.utils import VisTable
 from table_cls import TableCls
-from wired_table_rec import WiredTableRecognition
-from rapidocr_onnxruntime import RapidOCR 
+from wired_table_rec.main import WiredTableInput, WiredTableRecognition
+from lineless_table_rec.main import LinelessTableInput, LinelessTableRecognition
+from rapidocr_onnxruntime import RapidOCR, VisRes
 
-lineless_engine = LinelessTableRecognition()
-wired_engine = WiredTableRecognition()
-# Default small YOLO model (0.1s), can switch to higher precision YOLOX (0.25s), or faster QAnything (0.07s) model
-table_cls = TableCls() # TableCls(model_type="yolox"),TableCls(model_type="q")
-img_path = f'images/img14.jpg'
+# init engine
+wired_input = WiredTableInput()
+lineless_input = LinelessTableInput()
+wired_engine = WiredTableRecognition(wired_input)
+lineless_engine = LinelessTableRecognition(lineless_input)
+#The default model is a small YOLO model (0.1s inference time), which can be switched to higher-precision YOLOX (0.25s), faster QAnything (0.07s), or PaddlePaddle models (0.03s).
+table_cls = TableCls()
+img_path = f'tests/test_files/table.jpg'
 
 cls,elasp = table_cls(img_path)
 if cls == 'wired':
     table_engine = wired_engine
 else:
     table_engine = lineless_engine
-  
-html, elasp, polygons, logic_points, ocr_res = table_engine(img_path)
-print(f"elasp: {elasp}")
 
-# Use other OCR models
-#ocr_engine =RapidOCR(det_model_path="xxx/det_server_infer.onnx",rec_model_path="xxx/rec_server_infer.onnx")
-#ocr_res, _ = ocr_engine(img_path)
-#html, elasp, polygons, logic_points, ocr_res = table_engine(img_path, ocr_result=ocr_res)  
+table_results = table_engine(img_path, enhance_box_line=False)
+# use rapidOCR for as input
+# ocr_engine = RapidOCR()
+# ocr_result, _ = ocr_engine(img_path)
+# table_results = table_engine(img_path, ocr_result=ocr_result)
 
-# output_dir = f'outputs'
-# complete_html = format_html(html)
-# os.makedirs(os.path.dirname(f"{output_dir}/table.html"), exist_ok=True)
-# with open(f"{output_dir}/table.html", "w", encoding="utf-8") as file:
-#     file.write(complete_html)
-# Visualize table recognition boxes + logical row and column information
-# plot_rec_box_with_logic_info(
-#     img_path, f"{output_dir}/table_rec_box.jpg", logic_points, polygons
+# Visualize and store the results, including detection bounding boxes and row/column coordinates.
+# save_dir = Path("outputs")
+# save_dir.mkdir(parents=True, exist_ok=True)
+#
+# save_html_path = f"outputs/{Path(img_path).stem}.html"
+# save_drawed_path = f"outputs/{Path(img_path).stem}_table_vis{Path(img_path).suffix}"
+# save_logic_path = (
+#     f"outputs/{Path(img_path).stem}_table_vis_logic{Path(img_path).suffix}"
 # )
-# Visualize OCR recognition boxes
-# plot_rec_box(img_path, f"{output_dir}/ocr_box.jpg", ocr_res)
+# 
+# vis_table = VisTable()
+# vis_imged = vis_table(
+#     img_path, table_results, save_html_path, save_drawed_path, save_logic_path
+# )
 ```
 #### Single Character OCR Matching
+
 ```python
 # Convert single character boxes to the same structure as line recognition
 from rapidocr_onnxruntime import RapidOCR
-from wired_table_rec.utils_table_recover import trans_char_ocr_res
+from wired_table_rec.utils.utils_table_recover import trans_char_ocr_res
+
 img_path = "tests/test_files/wired/table4.jpg"
-ocr_engine =RapidOCR()
+ocr_engine = RapidOCR()
 ocr_res, _ = ocr_engine(img_path, return_word_box=True)
 ocr_res = trans_char_ocr_res(ocr_res)
 ```
@@ -174,11 +183,39 @@ for i, res in enumerate(result):
 
 ### Core Parameters
 ```python
+@dataclass
+class WiredTableInput:
+    model_type: Optional[str] = "unet" #unet/cycle_center_net
+    model_path: Union[str, Path, None, Dict[str, str]] = None
+    use_cuda: bool = False
+    device: str = "cpu"
+    
+@dataclass
+class LinelessTableInput:
+    model_type: Optional[str] = "lore" #lore
+    model_path: Union[str, Path, None, Dict[str, str]] = None
+    use_cuda: bool = False
+    device: str = "cpu"
+    
+@dataclass
+class WiredTableOutput:
+    pred_html: Optional[str] = None
+    cell_bboxes: Optional[np.ndarray] = None
+    logic_points: Optional[np.ndarray] = None
+    elapse: Optional[float] = None
+    
+@dataclass
+class LinelessTableOutput:
+    pred_html: Optional[str] = None
+    cell_bboxes: Optional[np.ndarray] = None
+    logic_points: Optional[np.ndarray] = None
+    elapse: Optional[float] = None
+```
+```python
 wired_table_rec = WiredTableRecognition()
 html, elasp, polygons, logic_points, ocr_res = wired_table_rec(
     img,  # Image Union[str, np.ndarray, bytes, Path, PIL.Image.Image]
     ocr_result,  # Input rapidOCR recognition result, use internal rapidocr model by default if not provided
-    version="v2",  # Default to using v2 line model, switch to AliDamo model by changing to v1
     enhance_box_line=True,  # Enhance box line find (turn off to avoid excessive cutting, turn on to reduce missed cuts), default is True
     need_ocr=True,  # Whether to perform OCR recognition, default is True
     rec_again=True,  # Whether to re-recognize table boxes without detected text by cropping them separately, default is True

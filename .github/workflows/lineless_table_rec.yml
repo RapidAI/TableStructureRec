@@ -30,10 +30,6 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-          wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/lineless_table_rec_models.zip
-          unzip lineless_table_rec_models.zip
-          mv lineless_table_rec_models/*.onnx lineless_table_rec/models/
-
           pytest tests/test_lineless_table_rec.py
 
   GenerateWHL_PushPyPi:
@@ -54,10 +50,6 @@ jobs:
           pip install -r requirements.txt
           python -m pip install --upgrade pip
           pip install wheel get_pypi_latest_version
-
-          wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/lineless_table_rec_models.zip
-          unzip lineless_table_rec_models.zip
-          mv lineless_table_rec_models/*.onnx lineless_table_rec/models/
 
           python setup_lineless.py bdist_wheel "${{ github.ref_name }}"
 
