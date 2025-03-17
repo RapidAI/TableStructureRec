@@ -87,6 +87,7 @@ from lineless_table_rec import LinelessTableRecognition
 from lineless_table_rec.utils_table_recover import format_html, plot_rec_box_with_logic_info, plot_rec_box
 from table_cls import TableCls
 from wired_table_rec import WiredTableRecognition
+from rapidocr_onnxruntime import RapidOCR 
 
 lineless_engine = LinelessTableRecognition()
 wired_engine = WiredTableRecognition()
@@ -104,7 +105,7 @@ html, elasp, polygons, logic_points, ocr_res = table_engine(img_path)
 print(f"elasp: {elasp}")
 
 # Use other OCR models
-#ocr_engine =RapidOCR(det_model_dir="xxx/det_server_infer.onnx",rec_model_dir="xxx/rec_server_infer.onnx")
+#ocr_engine =RapidOCR(det_model_path="xxx/det_server_infer.onnx",rec_model_path="xxx/rec_server_infer.onnx")
 #ocr_res, _ = ocr_engine(img_path)
 #html, elasp, polygons, logic_points, ocr_res = table_engine(img_path, ocr_result=ocr_res)  
 
