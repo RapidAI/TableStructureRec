@@ -6,8 +6,8 @@ from typing import Any, Dict, Optional, Tuple
 import cv2
 import numpy as np
 
-from .utils import OrtInferSession
-from .utils_table_line_rec import (
+from .utils.utils import OrtInferSession
+from wired_table_rec.utils.utils_table_line_rec import (
     bbox_decode,
     bbox_post_process,
     gbox_decode,
@@ -16,7 +16,7 @@ from .utils_table_line_rec import (
     group_bbox_by_gbox,
     nms,
 )
-from .utils_table_recover import (
+from wired_table_rec.utils.utils_table_recover import (
     merge_adjacent_polys,
     sorted_ocr_boxes,
     box_4_2_poly_to_box_4_1,
@@ -24,8 +24,8 @@ from .utils_table_recover import (
 )
 
 
-class TableLineRecognition:
-    def __init__(self, model_path: Optional[str] = None):
+class TSRCycleCenterNet:
+    def __init__(self, config: Dict):
         self.K = 1000
         self.MK = 4000
         self.mean = np.array([0.408, 0.447, 0.470], dtype=np.float32).reshape(1, 1, 3)
@@ -34,7 +34,7 @@ class TableLineRecognition:
         self.inp_height = 1024
         self.inp_width = 1024
 
-        self.session = OrtInferSession(model_path)
+        self.session = OrtInferSession(config)
 
     def __call__(
         self, img: np.ndarray, **kwargs

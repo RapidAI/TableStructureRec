@@ -5,22 +5,22 @@ from typing import Optional, Dict, Any, Tuple
 import cv2
 import numpy as np
 from skimage import measure
-from wired_table_rec.utils import OrtInferSession, resize_img
-from wired_table_rec.utils_table_line_rec import (
+from .utils.utils import OrtInferSession, resize_img
+from .utils.utils_table_line_rec import (
     get_table_line,
     final_adjust_lines,
     min_area_rect_box,
     draw_lines,
     adjust_lines,
 )
-from wired_table_rec.utils_table_recover import (
+from wired_table_rec.utils.utils_table_recover import (
     sorted_ocr_boxes,
     box_4_2_poly_to_box_4_1,
 )
 
 
-class TableLineRecognitionPlus:
-    def __init__(self, model_path: Optional[str] = None):
+class TSRUnet:
+    def __init__(self, config: Dict):
         self.K = 1000
         self.MK = 4000
         self.mean = np.array([123.675, 116.28, 103.53], dtype=np.float32)
@@ -28,7 +28,7 @@ class TableLineRecognitionPlus:
         self.inp_height = 1024
         self.inp_width = 1024
 
-        self.session = OrtInferSession(model_path)
+        self.session = OrtInferSession(config)
 
     def __call__(
         self, img: np.ndarray, **kwargs
