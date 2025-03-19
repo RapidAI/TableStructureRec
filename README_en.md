@@ -67,7 +67,10 @@ Surya-Tabled uses its built-in OCR module, which is a row-column recognition mod
 | [RapidTable(SLANet)](https://github.com/RapidAI/RapidTable)                                     |   0.71654   |       0.81067       |
 | table_cls + wired_table_rec v1 + lineless_table_rec                                             |   0.75288   |       0.82574       |
 | table_cls + wired_table_rec v2 + lineless_table_rec                                             |   0.77676   |       0.84580       |
+| [PaddleX(SLANetXt+RT-DERT)](https://github.com/PaddlePaddle/PaddleX)                                                                            |   0.79900   |       **0.92222**     |
 | [RapidTable(SLANet-plus)](https://github.com/RapidAI/RapidTable)                                | **0.84481** |     **0.91369**     |
+| [RapidTable(unitable)](https://github.com/RapidAI/RapidTable)                                            | **0.86200** |     0.91813     |
+
 
 ### Usage Recommendations
 wired_table_rec_v2 (highest precision for wired tables): General scenes for wired tables (papers, magazines, journals, receipts, invoices, bills)
