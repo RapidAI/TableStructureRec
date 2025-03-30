@@ -3,7 +3,7 @@
 # @Contact: liekkaskono@163.com
 from pathlib import Path
 
-from rapidocr_onnxruntime import RapidOCR
+from rapidocr import RapidOCR
 
 from lineless_table_rec import LinelessTableRecognition
 from lineless_table_rec.main import LinelessTableInput
@@ -19,11 +19,17 @@ viser = VisTable()
 if __name__ == "__main__":
     img_path = "tests/test_files/lineless_table_recognition.jpg"
 
-    ocr_result, _ = ocr_engine(img_path)
-    boxes, txts, scores = list(zip(*ocr_result))
+    rapid_ocr_output = ocr_engine(img_path, return_word_box=True)
+    ocr_result = list(
+        zip(rapid_ocr_output.boxes, rapid_ocr_output.txts, rapid_ocr_output.scores)
+    )
+
+    # 使用单字识别
+    # word_results = rapid_ocr_output.word_results
+    # ocr_result = [[word_result[2], word_result[0], word_result[1]] for word_result in word_results]
 
     # Table Rec
-    table_results = table_engine(img_path)
+    table_results = table_engine(img_path, ocr_result=ocr_result)
     table_html_str, table_cell_bboxes = (
         table_results.pred_html,
         table_results.cell_bboxes,

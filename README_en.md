@@ -17,10 +17,11 @@
     - Add document preprocessing solutions for distortion correction, deblurring, shadow removal, and binarization. [RapidUnDistort](https://github.com/Joker1212/RapidUnWrap)
 - **2025.1.9**
   - RapidTable now supports the Unitable model, Evaluation data has been added.
-- **2025.3.9**
+- **2025.3.30**
   - Align input and output formats with RapidTable
   - support automatic model downloading
   - introduce a new table classification model from [PaddleOCR](https://github.com/PaddlePaddle/PaddleX/blob/release/3.0-rc/docs/module_usage/tutorials/ocr_modules/table_classification.en.md).
+  - sup rapidocr2
 ### Introduction
 💖 This repository serves as an inference library for structured recognition of tables within documents, including models for wired and wireless table recognition from Alibaba DulaLight, a wired table model from llaipython (WeChat), and a built-in table classification model from NetEase Qanything.
 
@@ -81,6 +82,7 @@ paddlex-SLANet-plus (highest overall precision): Document scene tables (tables i
 
 ```python
 pip install wired_table_rec lineless_table_rec table_cls
+pip install rapidocr
 ```
 
 ### Quick start
@@ -89,59 +91,75 @@ pip install wired_table_rec lineless_table_rec table_cls
 ``` python {linenos=table}
 from pathlib import Path
 
-from wired_table_rec.utils.utils import VisTable
+from demo_wired import viser
 from table_cls import TableCls
 from wired_table_rec.main import WiredTableInput, WiredTableRecognition
 from lineless_table_rec.main import LinelessTableInput, LinelessTableRecognition
-from rapidocr_onnxruntime import RapidOCR, VisRes
+from rapidocr import RapidOCR
 
-# init engine
-wired_input = WiredTableInput()
-lineless_input = LinelessTableInput()
-wired_engine = WiredTableRecognition(wired_input)
-lineless_engine = LinelessTableRecognition(lineless_input)
-#The default model is a small YOLO model (0.1s inference time), which can be switched to higher-precision YOLOX (0.25s), faster QAnything (0.07s), or PaddlePaddle models (0.03s).
-table_cls = TableCls()
-img_path = f'tests/test_files/table.jpg'
 
-cls,elasp = table_cls(img_path)
-if cls == 'wired':
-    table_engine = wired_engine
-else:
-    table_engine = lineless_engine
+if __name__ == "__main__":
+    # Init
+    wired_input = WiredTableInput()
+    lineless_input = LinelessTableInput()
+    wired_engine = WiredTableRecognition(wired_input)
+    lineless_engine = LinelessTableRecognition(lineless_input)
+    # yolo(0.1s)，yolox(0.25s),qanything(0.07s) paddle(0.03s)
+    table_cls = TableCls()
+    img_path = f"tests/test_files/table.jpg"
 
-table_results = table_engine(img_path, enhance_box_line=False)
-# use rapidOCR for as input
-# ocr_engine = RapidOCR()
-# ocr_result, _ = ocr_engine(img_path)
-# table_results = table_engine(img_path, ocr_result=ocr_result)
+    cls, elasp = table_cls(img_path)
+    if cls == "wired":
+        table_engine = wired_engine
+    else:
+        table_engine = lineless_engine
 
-# Visualize and store the results, including detection bounding boxes and row/column coordinates.
-# save_dir = Path("outputs")
-# save_dir.mkdir(parents=True, exist_ok=True)
-#
-# save_html_path = f"outputs/{Path(img_path).stem}.html"
-# save_drawed_path = f"outputs/{Path(img_path).stem}_table_vis{Path(img_path).suffix}"
-# save_logic_path = (
-#     f"outputs/{Path(img_path).stem}_table_vis_logic{Path(img_path).suffix}"
-# )
-# 
-# vis_table = VisTable()
-# vis_imged = vis_table(
-#     img_path, table_results, save_html_path, save_drawed_path, save_logic_path
-# )
+    # use rapid ocr as input
+    ocr_engine = RapidOCR()
+    rapid_ocr_output = ocr_engine(img_path, return_word_box=True)
+    ocr_result = list(zip(rapid_ocr_output.boxes, rapid_ocr_output.txts, rapid_ocr_output.scores))
+    table_results = table_engine(
+        img_path, ocr_result=ocr_result, enhance_box_line=False
+    )
+    
+    
+    # use word rec ocr
+    # word_results = rapid_ocr_output.word_results
+    # ocr_result = [
+    #     [word_result[2], word_result[0], word_result[1]] for word_result in word_results
+    # ]
+    # table_results = table_engine(
+    #     img_path, ocr_result=ocr_result, enhance_box_line=False
+    # )
+
+    # Save
+    # save_dir = Path("outputs")
+    # save_dir.mkdir(parents=True, exist_ok=True)
+    # 
+    # save_html_path = f"outputs/{Path(img_path).stem}.html"
+    # save_drawed_path = f"outputs/{Path(img_path).stem}_table_vis{Path(img_path).suffix}"
+    # save_logic_path = (
+    #     f"outputs/{Path(img_path).stem}_table_vis_logic{Path(img_path).suffix}"
+    # )
+
+    # Visualize table rec result
+    # vis_imged = viser(
+    #     img_path, table_results, save_html_path, save_drawed_path, save_logic_path
+    # )
+
 ```
 #### Single Character OCR Matching
 
 ```python
 # Convert single character boxes to the same structure as line recognition
-from rapidocr_onnxruntime import RapidOCR
-from wired_table_rec.utils.utils_table_recover import trans_char_ocr_res
-
+from rapidocr import RapidOCR
 img_path = "tests/test_files/wired/table4.jpg"
 ocr_engine = RapidOCR()
-ocr_res, _ = ocr_engine(img_path, return_word_box=True)
-ocr_res = trans_char_ocr_res(ocr_res)
+rapid_ocr_output = ocr_engine(img_path, return_word_box=True)
+word_results = rapid_ocr_output.word_results
+ocr_result = [
+    [word_result[2], word_result[0], word_result[1]] for word_result in word_results
+]
 ```
 
 #### Table Rotation and Perspective Correction
@@ -251,7 +269,7 @@ html, elasp, polygons, logic_points, ocr_res = lineless_table_rec(
 ```mermaid
 flowchart TD
     A[/table image/] --> B([table cls table_cls])
-    B --> C([wired_table_rec]) & D([lineless_table_rec]) --> E([rapidocr_onnxruntime])
+    B --> C([wired_table_rec]) & D([lineless_table_rec]) --> E([rapidocr])
     E --> F[/html output/]
 ```
 

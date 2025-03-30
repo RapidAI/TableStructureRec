@@ -19,11 +19,12 @@
     - 补充文档扭曲矫正/去模糊/去阴影/二值化方案，可作为前置处理 [RapidUnDistort](https://github.com/Joker1212/RapidUnWrap)
 - **2025.1.9**
   - RapidTable支持了 unitable 模型，精度更高支持torch推理，补充测评数据
-- **2025.3.9**
+- **2025.3.30**
     - 输入输出格式对齐RapidTable
     - 支持模型自动下载
     - 增加来自paddle的新表格分类模型
     - 增加最新PaddleX表格识别模型测评值
+    - 支持 rapidocr 2.0 取消重复ocr检测
     
 ### 简介
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。\
@@ -79,9 +80,10 @@ wired_table_rec_v2 对1500px内大小的图片效果最好，所以分辨率超�
 SLANet-plus/unitable (综合精度最高): 文档场景表格(论文，杂志，期刊中的表格)
 
 ### 安装
-
+rapidocr2.0以上版本支持torch,onnx,paddle,openvino等多引擎切换，详情参考[rapidocr文档](https://rapidai.github.io/RapidOCRDocs/main/install_usage/rapidocr/usage/)
 ``` python {linenos=table}
 pip install wired_table_rec lineless_table_rec table_cls
+pip install rapidocr 
 ```
 
 ### 快速使用
@@ -89,47 +91,63 @@ pip install wired_table_rec lineless_table_rec table_cls
 ``` python {linenos=table}
 from pathlib import Path
 
-from wired_table_rec.utils.utils import VisTable
+from demo_wired import viser
 from table_cls import TableCls
 from wired_table_rec.main import WiredTableInput, WiredTableRecognition
 from lineless_table_rec.main import LinelessTableInput, LinelessTableRecognition
-from rapidocr_onnxruntime import RapidOCR, VisRes
+from rapidocr import RapidOCR
 
-# 初始化引擎
-wired_input = WiredTableInput()
-lineless_input = LinelessTableInput()
-wired_engine = WiredTableRecognition(wired_input)
-lineless_engine = LinelessTableRecognition(lineless_input)
-# 默认小yolo模型(0.1s)，可切换为精度更高yolox(0.25s),更快的qanything(0.07s)模型或paddle模型(0.03s)
-table_cls = TableCls()
-img_path = f'tests/test_files/table.jpg'
 
-cls,elasp = table_cls(img_path)
-if cls == 'wired':
-    table_engine = wired_engine
-else:
-    table_engine = lineless_engine
+if __name__ == "__main__":
+    # Init
+    wired_input = WiredTableInput()
+    lineless_input = LinelessTableInput()
+    wired_engine = WiredTableRecognition(wired_input)
+    lineless_engine = LinelessTableRecognition(lineless_input)
+    # 默认小yolo模型(0.1s)，可切换为精度更高yolox(0.25s),更快的qanything(0.07s)模型或paddle模型(0.03s)
+    table_cls = TableCls()
+    img_path = f"tests/test_files/table.jpg"
 
-table_results = table_engine(img_path, enhance_box_line=False)
-# 使用RapidOCR输入
-# ocr_engine = RapidOCR()
-# ocr_result, _ = ocr_engine(img_path)
-# table_results = table_engine(img_path, ocr_result=ocr_result)
+    cls, elasp = table_cls(img_path)
+    if cls == "wired":
+        table_engine = wired_engine
+    else:
+        table_engine = lineless_engine
 
-# 可视化并存储结果，包含识别框+行列坐标
-# save_dir = Path("outputs")
-# save_dir.mkdir(parents=True, exist_ok=True)
-#
-# save_html_path = f"outputs/{Path(img_path).stem}.html"
-# save_drawed_path = f"outputs/{Path(img_path).stem}_table_vis{Path(img_path).suffix}"
-# save_logic_path = (
-#     f"outputs/{Path(img_path).stem}_table_vis_logic{Path(img_path).suffix}"
-# )
-# 
-# vis_table = VisTable()
-# vis_imged = vis_table(
-#     img_path, table_results, save_html_path, save_drawed_path, save_logic_path
-# )
+    # 使用RapidOCR输入
+    ocr_engine = RapidOCR()
+    rapid_ocr_output = ocr_engine(img_path, return_word_box=True)
+    ocr_result = list(zip(rapid_ocr_output.boxes, rapid_ocr_output.txts, rapid_ocr_output.scores))
+    table_results = table_engine(
+        img_path, ocr_result=ocr_result, enhance_box_line=False
+    )
+    
+    
+    # 使用单字识别
+    # word_results = rapid_ocr_output.word_results
+    # ocr_result = [
+    #     [word_result[2], word_result[0], word_result[1]] for word_result in word_results
+    # ]
+    # table_results = table_engine(
+    #     img_path, ocr_result=ocr_result, enhance_box_line=False
+    # )
+
+    # Save
+    # save_dir = Path("outputs")
+    # save_dir.mkdir(parents=True, exist_ok=True)
+    # 
+    # save_html_path = f"outputs/{Path(img_path).stem}.html"
+    # save_drawed_path = f"outputs/{Path(img_path).stem}_table_vis{Path(img_path).suffix}"
+    # save_logic_path = (
+    #     f"outputs/{Path(img_path).stem}_table_vis_logic{Path(img_path).suffix}"
+    # )
+
+    # Visualize table rec result
+    # vis_imged = viser(
+    #     img_path, table_results, save_html_path, save_drawed_path, save_logic_path
+    # )
+
+
 
 ```
 
@@ -137,13 +155,14 @@ table_results = table_engine(img_path, enhance_box_line=False)
 
 ```python
 # 将单字box转换为行识别同样的结构)
-from rapidocr_onnxruntime import RapidOCR
-from wired_table_rec.utils.utils_table_recover import trans_char_ocr_res
-
+from rapidocr import RapidOCR
 img_path = "tests/test_files/wired/table4.jpg"
 ocr_engine = RapidOCR()
-ocr_res, _ = ocr_engine(img_path, return_word_box=True)
-ocr_res = trans_char_ocr_res(ocr_res)
+rapid_ocr_output = ocr_engine(img_path, return_word_box=True)
+word_results = rapid_ocr_output.word_results
+ocr_result = [
+    [word_result[2], word_result[0], word_result[1]] for word_result in word_results
+]
 ```
 
 #### 表格旋转及透视修正
@@ -230,14 +249,12 @@ table_results = wired_table_rec(
     row_threshold=10, # 识别框上边界y坐标差值小于row_threshold的默认同行
     rotated_fix=True, # wiredV2支持，轻度旋转(-45°~45°)矫正，默认为True
     need_ocr=True, # 是否进行OCR识别, 默认为True
-    rec_again=True,# 是否针对未识别到文字的表格框,进行单独截取再识别,默认为True
 )
 lineless_table_rec = LinelessTableRecognition(LinelessTableInput())
 table_results = lineless_table_rec(
     img, # 图片 Union[str, np.ndarray, bytes, Path, PIL.Image.Image]
     ocr_result, # 输入rapidOCR识别结果，不传默认使用内部rapidocr模型
     need_ocr=True, # 是否进行OCR识别, 默认为True
-    rec_again=True,# 是否针对未识别到文字的表格框,进行单独截取再识别,默认为True
 )
 ```
 
@@ -268,7 +285,7 @@ table_results = lineless_table_rec(
 ```mermaid
 flowchart TD
     A[/表格图片/] --> B([表格分类 table_cls])
-    B --> C([有线表格识别 wired_table_rec]) & D([无线表格识别 lineless_table_rec]) --> E([文字识别 rapidocr_onnxruntime])
+    B --> C([有线表格识别 wired_table_rec]) & D([无线表格识别 lineless_table_rec]) --> E([文字识别 rapidocr])
     E --> F[/html结构化输出/]
 ```
 

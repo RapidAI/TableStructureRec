@@ -75,11 +75,6 @@ class WiredTableRecognition:
 
         self.table_recover = TableRecover()
 
-        try:
-            self.ocr = importlib.import_module("rapidocr_onnxruntime").RapidOCR()
-        except ModuleNotFoundError:
-            self.ocr = None
-
     def __call__(
         self,
         img: InputType,
@@ -87,12 +82,10 @@ class WiredTableRecognition:
         **kwargs,
     ) -> WiredTableOutput:
         s = time.perf_counter()
-        rec_again = True
         need_ocr = True
         col_threshold = 15
         row_threshold = 10
         if kwargs:
-            rec_again = kwargs.get("rec_again", True)
             need_ocr = kwargs.get("need_ocr", True)
             col_threshold = kwargs.get("col_threshold", 15)
             row_threshold = kwargs.get("row_threshold", 10)
@@ -121,11 +114,9 @@ class WiredTableRecognition:
                     logi_points[idx_list],
                     time.perf_counter() - s,
                 )
-            if ocr_result is None and need_ocr:
-                ocr_result, _ = self.ocr(img)
             cell_box_det_map, not_match_orc_boxes = match_ocr_cell(ocr_result, polygons)
             # 如果有识别框没有ocr结果，直接进行rec补充
-            cell_box_det_map = self.re_rec(img, polygons, cell_box_det_map, rec_again)
+            cell_box_det_map = self.fill_blank_rec(img, polygons, cell_box_det_map)
             # 转换为中间格式，修正识别框坐标,将物理识别框，逻辑识别框，ocr识别框整合为dict，方便后续处理
             t_rec_ocr_list = self.transform_res(cell_box_det_map, polygons, logi_points)
             # 将每个单元格中的ocr识别结果排序和同行合并，输出的html能完整保留文字的换行格式
@@ -186,30 +177,19 @@ class WiredTableRecognition:
             )
         return res
 
-    def re_rec(
+    def fill_blank_rec(
         self,
         img: np.ndarray,
         sorted_polygons: np.ndarray,
         cell_box_map: Dict[int, List[str]],
-        rec_again=True,
     ) -> Dict[int, List[Any]]:
         """找到poly对应为空的框，尝试将直接将poly框直接送到识别中"""
         for i in range(sorted_polygons.shape[0]):
             if cell_box_map.get(i):
                 continue
-            if not rec_again:
-                box = sorted_polygons[i]
-                cell_box_map[i] = [[box, "", 1]]
-                continue
-            crop_img = get_rotate_crop_image(img, sorted_polygons[i])
-            pad_img = cv2.copyMakeBorder(
-                crop_img, 5, 5, 100, 100, cv2.BORDER_CONSTANT, value=(255, 255, 255)
-            )
-            rec_res, _ = self.ocr(pad_img, use_det=False, use_cls=True, use_rec=True)
             box = sorted_polygons[i]
-            text = [rec[0] for rec in rec_res]
-            scores = [rec[1] for rec in rec_res]
-            cell_box_map[i] = [[box, "".join(text), min(scores)]]
+            cell_box_map[i] = [[box, "", 1]]
+            continue
         return cell_box_map
 
     def re_rec_high_precise(
@@ -271,10 +251,10 @@ def main():
     args = parser.parse_args()
 
     try:
-        ocr_engine = importlib.import_module("rapidocr_onnxruntime").RapidOCR()
+        ocr_engine = importlib.import_module("rapidocr").RapidOCR()
     except ModuleNotFoundError as exc:
         raise ModuleNotFoundError(
-            "Please install the rapidocr_onnxruntime by pip install rapidocr_onnxruntime."
+            "Please install the rapidocr by pip install rapidocr."
         ) from exc
     input_args = WiredTableInput()
     table_rec = WiredTableRecognition(input_args)

@@ -4,6 +4,7 @@
 import sys
 from pathlib import Path
 import pytest
+from rapidocr import RapidOCR
 
 from lineless_table_rec.main import LinelessTableInput, ModelType
 
@@ -18,6 +19,7 @@ from lineless_table_rec import LinelessTableRecognition
 test_file_dir = cur_dir / "test_files"
 input_args = LinelessTableInput(model_type=ModelType.LORE.value)
 table_recog = LinelessTableRecognition(input_args)
+ocr_engine = RapidOCR()
 
 
 @pytest.mark.parametrize(
@@ -29,8 +31,11 @@ table_recog = LinelessTableRecognition(input_args)
 )
 def test_input_normal(img_path, table_str_len, td_nums):
     img_path = test_file_dir / img_path
-
-    table_results = table_recog(str(img_path))
+    rapid_ocr_output = ocr_engine(img_path, return_word_box=True)
+    ocr_result = list(
+        zip(rapid_ocr_output.boxes, rapid_ocr_output.txts, rapid_ocr_output.scores)
+    )
+    table_results = table_recog(str(img_path), ocr_result=ocr_result)
     table_html_str, table_cell_bboxes = (
         table_results.pred_html,
         table_results.cell_bboxes,
@@ -259,8 +264,11 @@ def test_plot_html_table(logi_points, cell_box_map, expected_html):
 )
 def test_no_rec_again(img_path, table_str_len, td_nums):
     img_path = test_file_dir / img_path
-
-    table_results = table_recog(str(img_path), rec_again=False)
+    rapid_ocr_output = ocr_engine(img_path, return_word_box=True)
+    ocr_result = list(
+        zip(rapid_ocr_output.boxes, rapid_ocr_output.txts, rapid_ocr_output.scores)
+    )
+    table_results = table_recog(str(img_path), ocr_result=ocr_result)
     table_html_str, table_cell_bboxes = (
         table_results.pred_html,
         table_results.cell_bboxes,

@@ -28,6 +28,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install pytest beautifulsoup4
+          pip install rapidocr
           pytest tests/test_wired_table_rec.py
 
   GenerateWHL_PushPyPi:
@@ -48,6 +49,7 @@ jobs:
           pip install -r requirements.txt
           python -m pip install --upgrade pip
           pip install wheel get_pypi_latest_version
+          pip install rapidocr
           python setup_wired.py bdist_wheel "${{ github.ref_name }}"
 
       - name: Publish distribution 📦 to PyPI
