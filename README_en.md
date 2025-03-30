@@ -91,7 +91,7 @@ pip install rapidocr
 ``` python {linenos=table}
 from pathlib import Path
 
-from demo_wired import viser
+from wired_table_rec.utils.utils import VisTable
 from table_cls import TableCls
 from wired_table_rec.main import WiredTableInput, WiredTableRecognition
 from lineless_table_rec.main import LinelessTableInput, LinelessTableRecognition
@@ -104,7 +104,8 @@ if __name__ == "__main__":
     lineless_input = LinelessTableInput()
     wired_engine = WiredTableRecognition(wired_input)
     lineless_engine = LinelessTableRecognition(lineless_input)
-    # yolo(0.1s)，yolox(0.25s),qanything(0.07s) paddle(0.03s)
+    viser = VisTable()
+    # 默认小yolo模型(0.1s)，可切换为精度更高yolox(0.25s),更快的qanything(0.07s)模型或paddle模型(0.03s)
     table_cls = TableCls()
     img_path = f"tests/test_files/table.jpg"
 
@@ -114,16 +115,17 @@ if __name__ == "__main__":
     else:
         table_engine = lineless_engine
 
-    # use rapid ocr as input
+    # 使用RapidOCR输入
     ocr_engine = RapidOCR()
     rapid_ocr_output = ocr_engine(img_path, return_word_box=True)
-    ocr_result = list(zip(rapid_ocr_output.boxes, rapid_ocr_output.txts, rapid_ocr_output.scores))
-    table_results = table_engine(
-        img_path, ocr_result=ocr_result, enhance_box_line=False
+    ocr_result = list(
+        zip(rapid_ocr_output.boxes, rapid_ocr_output.txts, rapid_ocr_output.scores)
     )
-    
-    
-    # use word rec ocr
+    table_results = table_engine(
+        img_path, ocr_result=ocr_result
+    )
+
+    # 使用单字识别
     # word_results = rapid_ocr_output.word_results
     # ocr_result = [
     #     [word_result[2], word_result[0], word_result[1]] for word_result in word_results
@@ -133,19 +135,19 @@ if __name__ == "__main__":
     # )
 
     # Save
-    # save_dir = Path("outputs")
-    # save_dir.mkdir(parents=True, exist_ok=True)
-    # 
-    # save_html_path = f"outputs/{Path(img_path).stem}.html"
-    # save_drawed_path = f"outputs/{Path(img_path).stem}_table_vis{Path(img_path).suffix}"
-    # save_logic_path = (
-    #     f"outputs/{Path(img_path).stem}_table_vis_logic{Path(img_path).suffix}"
-    # )
+    #save_dir = Path("outputs")
+    #save_dir.mkdir(parents=True, exist_ok=True)
+
+    #save_html_path = f"outputs/{Path(img_path).stem}.html"
+    #save_drawed_path = f"outputs/{Path(img_path).stem}_table_vis{Path(img_path).suffix}"
+    #save_logic_path = (
+    #    f"outputs/{Path(img_path).stem}_table_vis_logic{Path(img_path).suffix}"
+    #)
 
     # Visualize table rec result
-    # vis_imged = viser(
-    #     img_path, table_results, save_html_path, save_drawed_path, save_logic_path
-    # )
+    #vis_imged = viser(
+    #    img_path, table_results, save_html_path, save_drawed_path, save_logic_path
+    #)
 
 ```
 #### Single Character OCR Matching
