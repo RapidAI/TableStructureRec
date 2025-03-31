@@ -4,18 +4,22 @@
 import sys
 from pathlib import Path
 import pytest
+from rapidocr import RapidOCR
+
+from lineless_table_rec.main import LinelessTableInput, ModelType
 
 cur_dir = Path(__file__).resolve().parent
 root_dir = cur_dir.parent
 
 sys.path.append(str(root_dir))
 
-from lineless_table_rec.utils_table_recover import *
+from lineless_table_rec.utils.utils_table_recover import *
 from lineless_table_rec import LinelessTableRecognition
 
 test_file_dir = cur_dir / "test_files"
-
-table_recog = LinelessTableRecognition()
+input_args = LinelessTableInput(model_type=ModelType.LORE.value)
+table_recog = LinelessTableRecognition(input_args)
+ocr_engine = RapidOCR()
 
 
 @pytest.mark.parametrize(
@@ -27,12 +31,18 @@ table_recog = LinelessTableRecognition()
 )
 def test_input_normal(img_path, table_str_len, td_nums):
     img_path = test_file_dir / img_path
-    img = cv2.imread(str(img_path))
+    rapid_ocr_output = ocr_engine(img_path, return_word_box=True)
+    ocr_result = list(
+        zip(rapid_ocr_output.boxes, rapid_ocr_output.txts, rapid_ocr_output.scores)
+    )
+    table_results = table_recog(str(img_path), ocr_result=ocr_result)
+    table_html_str, table_cell_bboxes = (
+        table_results.pred_html,
+        table_results.cell_bboxes,
+    )
 
-    table_str, *_ = table_recog(img)
-
-    assert len(table_str) >= table_str_len
-    assert table_str.count("td") == td_nums
+    assert len(table_html_str) >= table_str_len
+    assert table_html_str.count("td") == td_nums
 
 
 @pytest.mark.parametrize(
@@ -254,12 +264,18 @@ def test_plot_html_table(logi_points, cell_box_map, expected_html):
 )
 def test_no_rec_again(img_path, table_str_len, td_nums):
     img_path = test_file_dir / img_path
-    img = cv2.imread(str(img_path))
+    rapid_ocr_output = ocr_engine(img_path, return_word_box=True)
+    ocr_result = list(
+        zip(rapid_ocr_output.boxes, rapid_ocr_output.txts, rapid_ocr_output.scores)
+    )
+    table_results = table_recog(str(img_path), ocr_result=ocr_result)
+    table_html_str, table_cell_bboxes = (
+        table_results.pred_html,
+        table_results.cell_bboxes,
+    )
 
-    table_str, *_ = table_recog(img, rec_again=False)
-
-    assert len(table_str) >= table_str_len
-    assert table_str.count("td") == td_nums
+    assert len(table_html_str) >= table_str_len
+    assert table_html_str.count("td") == td_nums
 
 
 @pytest.mark.parametrize(
@@ -271,12 +287,14 @@ def test_no_rec_again(img_path, table_str_len, td_nums):
 )
 def test_no_ocr(img_path, html_output, points_len):
     img_path = test_file_dir / img_path
-
-    html, elasp, polygons, logic_points, ocr_res = table_recog(
-        str(img_path), need_ocr=False
+    table_results = table_recog(str(img_path), need_ocr=False)
+    table_html_str, table_cell_bboxes, table_logic_points = (
+        table_results.pred_html,
+        table_results.cell_bboxes,
+        table_results.logic_points,
     )
-    assert len(ocr_res) == 0
-    assert len(polygons) > points_len
-    assert len(logic_points) > points_len
-    assert len(polygons) == len(logic_points)
-    assert html == html_output
+
+    assert len(table_cell_bboxes) > points_len
+    assert len(table_logic_points) > points_len
+    assert len(table_cell_bboxes) == len(table_logic_points)
+    assert table_html_str == html_output

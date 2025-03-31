@@ -28,11 +28,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install pytest beautifulsoup4
-
-          wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/wired_table_rec_models.zip
-          unzip wired_table_rec_models.zip
-          mv wired_table_rec_models/*.onnx wired_table_rec/models/
-
+          pip install rapidocr
           pytest tests/test_wired_table_rec.py
 
   GenerateWHL_PushPyPi:
@@ -53,11 +49,7 @@ jobs:
           pip install -r requirements.txt
           python -m pip install --upgrade pip
           pip install wheel get_pypi_latest_version
-
-          wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/wired_table_rec_models.zip
-          unzip wired_table_rec_models.zip
-          mv wired_table_rec_models/*.onnx wired_table_rec/models/
-
+          pip install rapidocr
           python setup_wired.py bdist_wheel "${{ github.ref_name }}"
 
       - name: Publish distribution 📦 to PyPI

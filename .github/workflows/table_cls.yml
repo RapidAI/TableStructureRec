@@ -29,10 +29,6 @@ jobs:
           pip install -r requirements.txt
           pip install pytest beautifulsoup4
 
-          wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/table_cls_models.zip
-          unzip table_cls_models.zip
-          mv table_cls_models/*.onnx table_cls/models/
-
           pytest tests/test_table_cls.py
 
   GenerateWHL_PushPyPi:
@@ -53,10 +49,6 @@ jobs:
           pip install -r requirements.txt
           python -m pip install --upgrade pip
           pip install wheel get_pypi_latest_version
-
-          wget https://github.com/RapidAI/TableStructureRec/releases/download/v0.0.0/table_cls_models.zip
-          unzip table_cls_models.zip
-          mv table_cls_models/*.onnx table_cls/models/
 
           python setup_table_cls.py bdist_wheel "${{ github.ref_name }}"
 
