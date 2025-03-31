@@ -4,3 +4,4 @@ opencv_python
 scipy
 scikit-image
 Shapely
+requests
