@@ -11,24 +11,27 @@
   <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
   <a href="https://github.com/RapidAI/TableStructureRec/blob/c41bbd23898cb27a957ed962b0ffee3c74dfeff1/LICENSE"><img alt="GitHub" src="https://img.shields.io/badge/license-Apache 2.0-blue"></a>
 
-[English](README_en.md) | 简体中文 
+[English](README_en.md) | 简体中文
 </div>
 
 ### 最近更新
+
 - **2024.12.25**
     - 补充文档扭曲矫正/去模糊/去阴影/二值化方案，可作为前置处理 [RapidUnDistort](https://github.com/Joker1212/RapidUnWrap)
 - **2025.1.9**
-  - RapidTable支持了 unitable 模型，精度更高支持torch推理，补充测评数据
+    - RapidTable支持了 unitable 模型，精度更高支持torch推理，补充测评数据
 - **2025.3.30**
     - 输入输出格式对齐RapidTable
     - 支持模型自动下载
     - 增加来自paddle的新表格分类模型
     - 增加最新PaddleX表格识别模型测评值
     - 支持 rapidocr 2.0 取消重复ocr检测
-    
+
 ### 简介
+
 💖该仓库是用来对文档中表格做结构化识别的推理库，包括来自阿里读光有线和无线表格识别模型，llaipython(微信)贡献的有线表格模型，网易Qanything内置表格分类模型等。\
-[快速开始](#安装) [模型评测](#指标结果) [使用建议](#使用建议) [单字匹配](#单字ocr匹配) [文档扭曲修正](https://github.com/Joker1212/RapidUnWrap) [表格旋转及透视修正](#表格旋转及透视修正) [输入参数](#核心参数) [常见问题](#FAQ) [更新计划](#更新计划)
+[快速开始](#安装) [模型评测](#指标结果) [使用建议](#使用建议) [单字匹配](#单字ocr匹配) [文档扭曲修正](https://github.com/Joker1212/RapidUnWrap) [表格旋转及透视修正](#表格旋转及透视修正) [输入参数](#核心参数) [常见问题](#faq) [更新计划](#更新计划)
+
 #### 特点
 
 ⚡  **快**  采用ONNXRuntime作为推理引擎，cpu下单图推理1-7s
@@ -38,8 +41,10 @@
 🛡️ **稳**: 不依赖任何第三方训练框架，只依赖必要基础库，避免包冲突
 
 ### 在线演示
+
 [modelscope魔塔](https://www.modelscope.cn/studios/RapidAI/TableRec)
 [huggingface](https://huggingface.co/spaces/Joker1212/TableDetAndRec)
+
 ### 效果展示
 
 <div align="center">
@@ -50,7 +55,7 @@
 
 [TableRecognitionMetric 评测工具](https://github.com/SWHL/TableRecognitionMetric) [huggingface数据集](https://huggingface.co/datasets/SWHL/table_rec_test_dataset) [modelscope 数据集](https://www.modelscope.cn/datasets/jockerK/TEDS_TEST/files) [Rapid OCR](https://github.com/RapidAI/RapidOCR)
 
-测试环境: ubuntu 20.04 python 3.10.10 opencv-python 4.10.0.84 
+测试环境: ubuntu 20.04 python 3.10.10 opencv-python 4.10.0.84
 
 注:
    StructEqTable 输出为 latex，只取成功转换为html并去除样式标签后进行测评
@@ -73,21 +78,33 @@
 | [RapidTable(unitable)](https://github.com/RapidAI/RapidTable)                                            | **0.86200** |     0.91813     |
 
 ### 使用建议
+
 wired_table_rec_v2(有线表格精度最高): 通用场景有线表格(论文，杂志，期刊, 收据，单据，账单)
 
 wired_table_rec_v2 对1500px内大小的图片效果最好，所以分辨率超过2000px建议等比缩放一下
 
 SLANet-plus/unitable (综合精度最高): 文档场景表格(论文，杂志，期刊中的表格)
 
+### 版本依赖关系
+
+|库|版本|`rapidocr`|
+|:---|:---|:---|
+|`wired_table_rec`|`v1.2.0`|`rapidocr>1.0.0,<3.0.0`|
+|`lineless_table_rec`|`v0.1.0`|`rapidocr>1.0.0,<3.0.0`|
+
 ### 安装
+
 rapidocr2.0以上版本支持torch,onnx,paddle,openvino等多引擎切换，详情参考[rapidocr文档](https://rapidai.github.io/RapidOCRDocs/main/install_usage/rapidocr/usage/)
+
 ``` python {linenos=table}
 pip install wired_table_rec lineless_table_rec table_cls
-pip install rapidocr 
+pip install rapidocr
 ```
 
 ### 快速使用
+>
 > ⚠️注意：在`wired_table_rec/table_cls`>=1.2.0` `lineless_table_rec` > 0.1.0 后，采用同RapidTable完全一致格式的输入输出
+
 ``` python {linenos=table}
 from pathlib import Path
 
@@ -137,7 +154,7 @@ if __name__ == "__main__":
     # Save
     # save_dir = Path("outputs")
     # save_dir.mkdir(parents=True, exist_ok=True)
-    # 
+    #
     # save_html_path = f"outputs/{Path(img_path).stem}.html"
     # save_drawed_path = f"outputs/{Path(img_path).stem}_table_vis{Path(img_path).suffix}"
     # save_logic_path = (
@@ -170,8 +187,11 @@ ocr_result = [
 ```
 
 #### 表格旋转及透视修正
+
 ##### 1.简单背景，小角度场景
+
 最新wiredV2模型自适应小角度旋转
+
 ```python
 import cv2
 
@@ -183,11 +203,15 @@ img = cv2.imread(img_path)
 img = img_orientation_corrector(img)
 cv2.imwrite(f'img_rotated.jpg', img)
 ```
+
 ##### 2.复杂背景，多表格场景
+
 需要gpu或更高精度场景，请参考项目[RapidTableDet](https://github.com/RapidAI/RapidTableDetection)
+
 ```python
 pip install rapid-table-det
 ```
+
 ```python
 import os
 import cv2
@@ -211,6 +235,7 @@ for i, res in enumerate(result):
 ```
 
 ### 核心参数
+
 ```python
 # 输入(WiredTableInput/LinelessTableInput)
 @dataclass
@@ -219,14 +244,14 @@ class WiredTableInput:
     model_path: Union[str, Path, None, Dict[str, str]] = None
     use_cuda: bool = False
     device: str = "cpu"
-    
+
 @dataclass
 class LinelessTableInput:
     model_type: Optional[str] = "lore" #lore
     model_path: Union[str, Path, None, Dict[str, str]] = None
     use_cuda: bool = False
     device: str = "cpu"
-    
+
 # 输出(WiredTableOutput/LinelessTableOutput)
 @dataclass
 class WiredTableOutput:
@@ -234,7 +259,7 @@ class WiredTableOutput:
     cell_bboxes: Optional[np.ndarray] = None
     logic_points: Optional[np.ndarray] = None
     elapse: Optional[float] = None
-    
+
 @dataclass
 class LinelessTableOutput:
     pred_html: Optional[str] = None
@@ -262,11 +287,11 @@ table_results = lineless_table_rec(
 )
 ```
 
-
 ## FAQ
+
 1. **问：识别框丢失了内部文字信息**
    - 答：默认使用的rapidocr小模型，如果需要更高精度的效果，可以从 [模型列表](https://rapidai.github.io/RapidOCRDocs/model_list/#_1)
-   下载更高精度的ocr模型,在执行时传入ocr_result即可, 
+   下载更高精度的ocr模型,在执行时传入ocr_result即可,
    - 或者尝试调节rapid_ocr的参数, 根据在线demo调节参数， [modelscope](https://www.modelscope.cn/studios/liekkas/RapidOCRDemo/summary) [huggingface](https://huggingface.co/spaces/SWHL/RapidOCRDemo)
      然后在推理时传入即可
 2. **问：文档扭曲变形怎么处理？**
